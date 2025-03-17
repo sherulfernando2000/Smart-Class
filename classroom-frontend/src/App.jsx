@@ -8,6 +8,8 @@ import IndexClass from "./components/Indexclass";
 
 import ClassPage from "./components/pages/ClassPage";
 import HomePage from "./components/pages/HomePage";
+import AllStudent from "./components/AllStudent";
+import UserSetting from "./components/UserSetting";
 
 
 
@@ -32,7 +34,11 @@ const App = () => {
         <Route path="/indexclass/*" element={<IndexClass />}>
           <Route index element={<HomePage />} />
           <Route path="class/:id" element={<ClassPage />} />
+          <Route path="allstudent" element={<AllStudent/>}></Route>
+          <Route path="usersetting" element={<UserSetting/>}></Route>
         </Route>
+
+        
 
 
         </Routes>
