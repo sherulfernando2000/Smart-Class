@@ -23,17 +23,17 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String name;
-   private LocalDateTime created_at;
+    private String role;
 
     public User() {
     }
 
-    public User(UUID uid, String email, String password, String name, LocalDateTime created_at) {
+    public User(UUID uid, String email, String password, String name, String role) {
         this.uid = uid;
         this.email = email;
         this.password = password;
         this.name = name;
-        this.created_at = created_at;
+        this.role = role;
     }
 
     public UUID getUid() {
@@ -68,11 +68,22 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public String getRole() {
+        return role;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid=" + uid +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

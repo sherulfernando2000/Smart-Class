@@ -63,8 +63,9 @@ public class WebSecurityConfig {
                                 "/api/v1/auth/authenticate",
                                 "/api/v1/user/register",
                                 "/api/v1/auth/refreshToken",
-                                "api/v1/customer/get",
-                                "api/v1/item/get",
+                                "/api/v1/student/getAll",
+                                "/api/v1/student/get/{id}",
+
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()

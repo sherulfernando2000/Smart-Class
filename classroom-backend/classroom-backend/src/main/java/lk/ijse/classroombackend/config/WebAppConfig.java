@@ -3,6 +3,8 @@ package lk.ijse.classroombackend.config;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
 public class WebAppConfig {
@@ -11,6 +13,11 @@ public class WebAppConfig {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
+    @Bean
+    public JavaMailSender javaMailSender(){
+        return new JavaMailSenderImpl();
+    };
 
    /* @Bean
     public CorsFilter corsFilter() {

@@ -66,7 +66,7 @@ public class JwtUtil implements Serializable {
     //generate token for user
     public String generateToken(UserDTO userDTO) {
         Map<String, Object> claims = new HashMap<>();
-//        claims.put("role",userDTO.getRole());
+        claims.put("role",userDTO.getRole());
         return doGenerateToken(claims, userDTO.getEmail());
     }
 

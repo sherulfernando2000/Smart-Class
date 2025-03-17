@@ -12,16 +12,17 @@ public class UserDTO {
     private String email;
     private String password;
     private String name;
+    private String role;
 
 
     public UserDTO() {
     }
 
-    public UserDTO(String email, String password, String name) {
+    public UserDTO(String email, String password, String name, String role) {
         this.email = email;
         this.password = password;
         this.name = name;
-
+        this.role = role;
     }
 
     public String getEmail() {
@@ -48,7 +49,13 @@ public class UserDTO {
         this.name = name;
     }
 
+    public String getRole() {
+        return role;
+    }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     @Override
     public String toString() {
@@ -56,7 +63,7 @@ public class UserDTO {
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
-
+                ", role='" + role + '\'' +
                 '}';
     }
 }
