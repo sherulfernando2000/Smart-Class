@@ -10,6 +10,9 @@ import ClassPage from "./components/pages/ClassPage";
 import HomePage from "./components/pages/HomePage";
 import AllStudent from "./components/AllStudent";
 import UserSetting from "./components/UserSetting";
+import AllTeacher from "./components/AllTeacher";
+import TeacherEnrollment from "./components/TeacherEnrollment";
+import StudentEnrollment from "./components/StudentEnrollment";
 
 
 
@@ -35,9 +38,12 @@ const App = () => {
           <Route index element={<HomePage />} />
           <Route path="class/:id" element={<ClassPage />} />
           <Route path="allstudent" element={<AllStudent/>}></Route>
+          <Route path="allteacher" element={<AllTeacher/>}></Route>
+          <Route path="studentenrollment" element={<StudentEnrollment/>}></Route>
+          <Route path="teacherenrollment" element={<TeacherEnrollment/>}></Route>
           <Route path="usersetting" element={<UserSetting/>}></Route>
         </Route>
-
+        
         
 
 

@@ -53,6 +53,28 @@ const Sidebar = () => {
         </div>
 
         <NavLink
+          to="/indexclass/allteacher"
+          className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
+        >
+          Teachers
+        </NavLink>
+
+        <NavLink
+          to="/indexclass/studentenrollment"
+          className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
+        >
+          Student Enrollment
+        </NavLink>
+
+        <NavLink
+          to="/indexclass/teacherenrollment"
+          className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
+        >
+          Teacher Enrollment
+        </NavLink>
+
+
+        <NavLink
           to="/indexclass/usersetting"
           className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
         >

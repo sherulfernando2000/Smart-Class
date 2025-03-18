@@ -2,6 +2,7 @@ package lk.ijse.classroombackend.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,6 +22,9 @@ public class Student {
     @JoinColumn(name = "user_id", referencedColumnName = "uid", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "student")
+    private List<Enrollment> enrollments;
+
    /* @PrePersist
     public void generateStudentId() {
         if (this.studentId == null) {
@@ -28,21 +32,7 @@ public class Student {
         }
     }*/
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public Student() {
     }
@@ -133,6 +123,30 @@ public class Student {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
     }
 
     @Override

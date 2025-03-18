@@ -12,6 +12,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Login attempted with:', { email, password });
+    navigate("/indexclass");
     // Add your login logic here (e.g., API call)
   };
 

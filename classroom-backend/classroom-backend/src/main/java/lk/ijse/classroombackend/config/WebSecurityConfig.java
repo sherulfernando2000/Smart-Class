@@ -65,6 +65,10 @@ public class WebSecurityConfig {
                                 "/api/v1/auth/refreshToken",
                                 "/api/v1/student/getAll",
                                 "/api/v1/student/get/{id}",
+                                "/api/v1/teacher/get",
+                                "/api/v1/teacher/getAll",
+
+
 
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
