@@ -10,7 +10,8 @@ import java.util.List;
 @Entity
 public class Teacher {
     @Id
-   private String teacher_id;
+
+   private String teacherId;
    private String full_name;
    private String address;
    private String contact;
@@ -27,8 +28,13 @@ public class Teacher {
 
     }
 
+
+    public void setClassTeachers(List<ClassTeacher> classTeachers) {
+        this.classTeachers = classTeachers;
+    }
+
     public Teacher(String teacher_id, String full_name, String address, String contact, String email, String specialization) {
-        this.teacher_id = teacher_id;
+        this.teacherId = teacher_id;
         this.full_name = full_name;
         this.address = address;
         this.contact = contact;
@@ -37,7 +43,7 @@ public class Teacher {
     }
 
     public Teacher(String teacher_id, String full_name, String address, String contact, String email, String specialization, User user) {
-        this.teacher_id = teacher_id;
+        this.teacherId = teacher_id;
         this.full_name = full_name;
         this.address = address;
         this.contact = contact;
@@ -46,12 +52,12 @@ public class Teacher {
         this.user = user;
     }
 
-    public String getTeacher_id() {
-        return teacher_id;
+    public String getTeacherId() {
+        return teacherId;
     }
 
-    public void setTeacher_id(String teacher_id) {
-        this.teacher_id = teacher_id;
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getFull_name() {
@@ -102,12 +108,17 @@ public class Teacher {
         this.user = user;
     }
 
+    public List<ClassTeacher> getClassTeachers() {
+        return classTeachers;
+    }
+
+
 
 
     @Override
     public String toString() {
         return "Teacher{" +
-                "teacher_id='" + teacher_id + '\'' +
+                "teacher_id='" + teacherId + '\'' +
                 ", full_name='" + full_name + '\'' +
                 ", address='" + address + '\'' +
                 ", contact='" + contact + '\'' +

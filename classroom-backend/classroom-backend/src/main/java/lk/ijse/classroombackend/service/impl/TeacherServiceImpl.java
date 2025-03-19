@@ -15,6 +15,7 @@ import lk.ijse.classroombackend.util.TeacherIdGenerator;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,7 +51,10 @@ public class TeacherServiceImpl implements TeacherService {
         //create and save user
         User user = new User();
         user.setEmail(teacherDTO.getEmail());
-        user.setPassword(randomPass);  // Save raw password
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(randomPass));
+
         user.setName(teacherDTO.getFull_name());
         user.setRole("TEACHER");
 
@@ -63,12 +67,12 @@ public class TeacherServiceImpl implements TeacherService {
                 teacherDTO.getEmail(), teacherDTO.getSpecialization(), user);
 
         teacherRepo.save(teacher);
-        return new UserDTO(user.getEmail(), user.getPassword(), user.getName(), user.getRole());
+        return new UserDTO(user.getEmail(), randomPass, user.getName(), user.getRole());
     }
 
     @Override
     public void updateTeacher(TeacherDTO teacherDTO) {
-        if (teacherRepo.existsByTeacher_id(teacherDTO.getTeacher_id())) {
+        if (teacherRepo.existsByTeacherId(teacherDTO.getTeacher_id())) {
             teacherRepo.save(modelMapper.map(teacherDTO, Teacher.class));
         }
         throw new RuntimeException("Teacher does not exist");
@@ -76,7 +80,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void deleteTeacher(String id) {
-        if (teacherRepo.existsByTeacher_id(id)) {
+        if (teacherRepo.existsByTeacherId(id)) {
             teacherRepo.deleteById(id);
         }
         throw new RuntimeException("Teacher does not exist");

@@ -10,7 +10,7 @@ public class Enrollment {
     private String enrollment_id;
 
     @ManyToOne
-    private Class aClass;
+    private CourseClass aCourseClass;
 
     @ManyToOne
     private Student student;
@@ -20,11 +20,19 @@ public class Enrollment {
     public Enrollment() {
     }
 
-    public Enrollment(String enrollment_id, Class aClass, Student student, String enrollment_date) {
+    public Enrollment(String enrollment_id, CourseClass aCourseClass, Student student, String enrollment_date) {
         this.enrollment_id = enrollment_id;
-        this.aClass = aClass;
+        this.aCourseClass = aCourseClass;
         this.student = student;
         this.enrollment_date = enrollment_date;
+    }
+
+    public CourseClass getaCourseClass() {
+        return aCourseClass;
+    }
+
+    public void setaCourseClass(CourseClass aCourseClass) {
+        this.aCourseClass = aCourseClass;
     }
 
     public String getEnrollment_id() {
@@ -35,12 +43,12 @@ public class Enrollment {
         this.enrollment_id = enrollment_id;
     }
 
-    public Class getaClass() {
-        return aClass;
+    public CourseClass getaClass() {
+        return aCourseClass;
     }
 
-    public void setaClass(Class aClass) {
-        this.aClass = aClass;
+    public void setaClass(CourseClass aCourseClass) {
+        this.aCourseClass = aCourseClass;
     }
 
     public Student getStudent() {
@@ -63,7 +71,7 @@ public class Enrollment {
     public String toString() {
         return "Enrollment{" +
                 "enrollment_id='" + enrollment_id + '\'' +
-                ", aClass=" + aClass +
+                ", aClass=" + aCourseClass +
                 ", student=" + student +
                 ", enrollment_date='" + enrollment_date + '\'' +
                 '}';

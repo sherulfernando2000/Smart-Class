@@ -3,18 +3,60 @@ import InputField from './LoginComponents/InputField';
 import SocialLogin from './LoginComponents/SocialLogin';
 import './Login.css';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     console.log('Login attempted with:', { email, password });
-    navigate("/indexclass");
-    // Add your login logic here (e.g., API call)
-  };
+    const data = {
+       email,
+      password
+    }
+
+   
+
+    try{
+      
+      const response = await axios.post("http://localhost:8080/api/v1/auth/authenticate",data);
+      console.log("after response");
+      if(response.data.status === 200){
+        console.log("in if")
+        const{role,token} = response.data.data
+        console.log("role",role);
+  
+        localStorage.setItem("token",token);
+        if(role==="ADMIN"){
+          navigate("/indexclass");
+  
+        }else if(role==="TEACHER"){
+          navigate("/teacherindexclass")
+        }else{
+          setError("Unauthorized access!");
+        }
+      }else if(response.status == 401){
+        setError("Invalid email or password.");
+        console.error("Login error:", err);
+      }
+
+    }catch (err) {
+        setError("Invalid email or password.");
+        console.error("Login error:", err);
+    }
+
+  }
+
+    // // api call check role and token
+    // console.log('Login attempted with:', { email, password });
+    // navigate("/indexclass");
+    // // Add your login logic here (e.g., API call)
+
 
   return (
     <section className="loginbody">
@@ -42,7 +84,7 @@ function Login() {
         <a href="#" className="forgot-password-link">
           Forgot password?
         </a>
-        <button type="submit" className="login-button">
+        <button  className="login-button">
           Log In
         </button>
       </form>
@@ -56,6 +98,7 @@ function Login() {
     </section>
   );
 }
+
 
 export default Login;
 

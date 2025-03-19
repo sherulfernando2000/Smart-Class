@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TeacherRepo extends JpaRepository<Teacher,String> {
 
-    @Query("SELECT t.teacher_id FROM Teacher t WHERE t.teacher_id LIKE CONCAT('T'+:year, '%') ORDER BY t.teacher_id DESC LIMIT 1")
+    @Query("SELECT t.teacherId FROM Teacher t WHERE t.teacherId LIKE CONCAT('T'+:year, '%') ORDER BY t.teacherId DESC LIMIT 1")
     String findLastTeacherId(String year);
 
-    boolean existsByTeacher_id(String teacherId);
+    boolean existsByTeacherId(String teacherId);
 }

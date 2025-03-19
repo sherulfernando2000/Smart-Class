@@ -3,7 +3,6 @@ package lk.ijse.classroombackend.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,7 +12,7 @@ public class ClassTeacher {
     private UUID class_teacher_id;
 
     @ManyToOne
-    private Class aClass;
+    private CourseClass aCourseClass;
 
     @ManyToOne
     private Teacher teacher;
@@ -23,13 +22,12 @@ public class ClassTeacher {
     public ClassTeacher() {
     }
 
-    public ClassTeacher(UUID class_teacher_id, Class aClass, Teacher teacher, Date date) {
+    public ClassTeacher(UUID class_teacher_id, CourseClass aCourseClass, Teacher teacher, Date date) {
         this.class_teacher_id = class_teacher_id;
-        this.aClass = aClass;
+        this.aCourseClass = aCourseClass;
         this.teacher = teacher;
         this.date = date;
     }
-
 
     public UUID getClass_teacher_id() {
         return class_teacher_id;
@@ -39,12 +37,12 @@ public class ClassTeacher {
         this.class_teacher_id = class_teacher_id;
     }
 
-    public Class getaClass() {
-        return aClass;
+    public CourseClass getaCourseClass() {
+        return aCourseClass;
     }
 
-    public void setaClass(Class aClass) {
-        this.aClass = aClass;
+    public void setaCourseClass(CourseClass aCourseClass) {
+        this.aCourseClass = aCourseClass;
     }
 
     public Teacher getTeacher() {
@@ -67,7 +65,7 @@ public class ClassTeacher {
     public String toString() {
         return "ClassTeacher{" +
                 "class_teacher_id=" + class_teacher_id +
-                ", aClass=" + aClass +
+                ", aClass=" + aCourseClass +
                 ", teacher=" + teacher +
                 ", date=" + date +
                 '}';

@@ -14,6 +14,13 @@ import AllTeacher from "./components/AllTeacher";
 import TeacherEnrollment from "./components/TeacherEnrollment";
 import StudentEnrollment from "./components/StudentEnrollment";
 
+import TeacherIndexClass from "./teacher/TeacherIndexClass";
+import TeacherHomePage from "./teacher/teacherpages/TeacherHomePage";
+import TeacherClassPage from "./teacher/teacherpages/TeacherClassPage";
+import TeacherAllStudent from "./teacher/othermain/TeacherAllStudent";
+import TeacherStudentEnrollment from "./teacher/othermain/TeacherStudentEnrollment";
+import TeacherUserSetting from "./teacher/othermain/TeacherUserSetting";
+
 
 
 const App = () => {
@@ -42,6 +49,17 @@ const App = () => {
           <Route path="studentenrollment" element={<StudentEnrollment/>}></Route>
           <Route path="teacherenrollment" element={<TeacherEnrollment/>}></Route>
           <Route path="usersetting" element={<UserSetting/>}></Route>
+        </Route>
+
+      {/* Teacher DashBoard */}
+        <Route path="/teacherindexclass/*" element={<TeacherIndexClass/>}>
+          <Route index element={<TeacherHomePage/>} />
+          <Route path="teacherclass/:id" element={<TeacherClassPage />} />
+          <Route path="teacherallstudent" element={<TeacherAllStudent/>}></Route>
+          <Route path="teacherstudentenrollment" element={<TeacherStudentEnrollment/>}></Route>
+          <Route path="teacherusersetting" element={<TeacherUserSetting/>}></Route>
+        
+        
         </Route>
         
         
