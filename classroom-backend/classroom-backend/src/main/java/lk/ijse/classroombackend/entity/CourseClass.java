@@ -1,9 +1,6 @@
 package lk.ijse.classroombackend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
@@ -11,6 +8,7 @@ import java.util.List;
 @Entity
 public class CourseClass {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
    private String class_id;
     private String className;
    private String subject;
@@ -22,6 +20,14 @@ public class CourseClass {
    @OneToMany(mappedBy = "aCourseClass")
     private List<Enrollment> enrollments;
 
+   @OneToMany(mappedBy = "assignmentId")
+   private List<Assignment> assignments;
+
+    @OneToMany(mappedBy = "announcementId")
+    private List<Announcement> annoncements;
+
+
+
     public CourseClass() {
     }
 
@@ -32,6 +38,17 @@ public class CourseClass {
         this.created_at = created_at;
         this.classTeacher = classTeacher;
         this.enrollments = enrollments;
+    }
+
+    public CourseClass(String class_id, String className, String subject, Date created_at, List<ClassTeacher> classTeacher, List<Enrollment> enrollments, List<Assignment> assignments, List<Announcement> annoncements) {
+        this.class_id = class_id;
+        this.className = className;
+        this.subject = subject;
+        this.created_at = created_at;
+        this.classTeacher = classTeacher;
+        this.enrollments = enrollments;
+        this.assignments = assignments;
+        this.annoncements = annoncements;
     }
 
     public String getClass_id() {
@@ -81,6 +98,22 @@ public class CourseClass {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
+    }
+
+    public List<Announcement> getAnnoncements() {
+        return annoncements;
+    }
+
+    public void setAnnoncements(List<Announcement> annoncements) {
+        this.annoncements = annoncements;
     }
 
     @Override

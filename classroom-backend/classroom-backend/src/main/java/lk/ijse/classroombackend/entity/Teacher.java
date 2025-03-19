@@ -21,6 +21,9 @@ public class Teacher {
      @OneToMany(mappedBy = "teacher")
      private List<ClassTeacher> classTeachers;
 
+     @OneToMany(mappedBy = "uploadedBy")
+     private List<Assignment> assignments;
+
     @OneToOne
     private User user;
 
@@ -28,6 +31,13 @@ public class Teacher {
 
     }
 
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
+    }
 
     public void setClassTeachers(List<ClassTeacher> classTeachers) {
         this.classTeachers = classTeachers;

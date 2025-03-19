@@ -12,7 +12,7 @@ public interface StudentRepo extends JpaRepository<Student, String> {
     @Query("SELECT s.studentId FROM Student s WHERE s.studentId LIKE CONCAT(:year, '%') ORDER BY s.studentId DESC LIMIT 1")
     String findLastStudentId(@Param("year") String year);
 
-    Student findByStudentId(String id);
+    Student findByStudentId(String studentId);
 
     boolean existsByStudentId(String studentId);
 

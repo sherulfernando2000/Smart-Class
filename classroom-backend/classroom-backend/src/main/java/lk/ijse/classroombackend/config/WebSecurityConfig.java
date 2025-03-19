@@ -25,12 +25,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 
-/**
- * @author udarasan
- * @TimeStamp 2023-07-15 15:00
- * @ProjectDetails invoice_service
- */
-
 
 
 @EnableWebSecurity

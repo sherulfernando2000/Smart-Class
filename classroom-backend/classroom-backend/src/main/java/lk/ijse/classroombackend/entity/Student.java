@@ -25,6 +25,15 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<Enrollment> enrollments;
 
+    @OneToMany(mappedBy = "studentId")
+    private List<Submission> submissions;
+
+    @OneToMany(mappedBy = "studentId")
+    private List<Attendance> attendances;
+
+    @OneToMany(mappedBy = "paymentId")
+    private List<Payment> payments;
+
    /* @PrePersist
     public void generateStudentId() {
         if (this.studentId == null) {
@@ -59,6 +68,23 @@ public class Student {
         this.parent_name = parent_name;
         this.parent_contact = parent_contact;
         this.image_url = image_url;
+    }
+
+    public Student(String studentId, String full_name, String contact, String gender, String address, String parent_name, String parent_contact, String image_url, String email, User user, List<Enrollment> enrollments, List<Submission> submissions, List<Attendance> attendances, List<Payment> payments) {
+        this.studentId = studentId;
+        this.full_name = full_name;
+        this.contact = contact;
+        this.gender = gender;
+        this.address = address;
+        this.parent_name = parent_name;
+        this.parent_contact = parent_contact;
+        this.image_url = image_url;
+        this.email = email;
+        this.user = user;
+        this.enrollments = enrollments;
+        this.submissions = submissions;
+        this.attendances = attendances;
+        this.payments = payments;
     }
 
     public String getStudentId() {
@@ -149,6 +175,30 @@ public class Student {
         this.enrollments = enrollments;
     }
 
+    public List<Submission> getSubmissions() {
+        return submissions;
+    }
+
+    public void setSubmissions(List<Submission> submissions) {
+        this.submissions = submissions;
+    }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -162,6 +212,10 @@ public class Student {
                 ", image_url='" + image_url + '\'' +
                 ", email='" + email + '\'' +
                 ", user=" + user +
+                ", enrollments=" + enrollments +
+                ", submissions=" + submissions +
+                ", attendances=" + attendances +
+                ", payments=" + payments +
                 '}';
     }
 }

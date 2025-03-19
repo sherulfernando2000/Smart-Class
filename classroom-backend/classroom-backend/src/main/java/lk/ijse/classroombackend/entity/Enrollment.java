@@ -1,12 +1,11 @@
 package lk.ijse.classroombackend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Enrollment {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
     private String enrollment_id;
 
     @ManyToOne
