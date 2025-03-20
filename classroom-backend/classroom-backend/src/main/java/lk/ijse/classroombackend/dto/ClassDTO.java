@@ -6,7 +6,7 @@ import java.util.Date;
 public class ClassDTO {
 
     private String class_id;
-    private String class_name;
+    private String className;
     private String subject;
     private Date created_at;
 
@@ -15,7 +15,7 @@ public class ClassDTO {
 
     public ClassDTO(String class_id, String class_name, String subject, Date created_at) {
         this.class_id = class_id;
-        this.class_name = class_name;
+        this.className = class_name;
         this.subject = subject;
         this.created_at = created_at;
     }
@@ -28,12 +28,12 @@ public class ClassDTO {
         this.class_id = class_id;
     }
 
-    public String getClass_name() {
-        return class_name;
+    public String getClassName() {
+        return className;
     }
 
-    public void setClass_name(String class_name) {
-        this.class_name = class_name;
+    public void setClassName(String class_name) {
+        this.className = class_name;
     }
 
     public String getSubject() {
@@ -56,7 +56,7 @@ public class ClassDTO {
     public String toString() {
         return "ClassDTO{" +
                 "class_id='" + class_id + '\'' +
-                ", class_name='" + class_name + '\'' +
+                ", class_name='" + className + '\'' +
                 ", subject='" + subject + '\'' +
                 ", created_at=" + created_at +
                 '}';

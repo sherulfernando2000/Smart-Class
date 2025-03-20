@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/class")
@@ -28,6 +29,10 @@ public class ClassController {
     @PostMapping("save")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseUtil save(@RequestBody ClassDTO classDTO){
+        String classId = "C-" + UUID.randomUUID().toString();
+
+        classDTO.setClass_id(classId);
+        System.out.println(classDTO.getClassName());
         ClassDTO classDTO1 = classService.saveClass(classDTO);
         return new ResponseUtil(201,"Class saved.",classDTO1);
     }

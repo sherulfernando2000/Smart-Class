@@ -16,4 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AnnouncementRepo extends JpaRepository<Announcement,String> {
 
+    boolean existsByAnnouncementId(String announcementId);
+
+    void deleteByAnnouncementId(String id);
 }

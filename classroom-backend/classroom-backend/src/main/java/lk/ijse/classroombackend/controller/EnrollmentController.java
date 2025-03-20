@@ -14,7 +14,7 @@ public class EnrollmentController {
     private EnrollementService enrollmentService;
 
     @PostMapping("/student/enroll")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
     public String enrollStudent(@RequestParam String email, @RequestParam String className) {
         enrollmentService.enrollStudent(email, className);
         return "Student enrolled successfully!";

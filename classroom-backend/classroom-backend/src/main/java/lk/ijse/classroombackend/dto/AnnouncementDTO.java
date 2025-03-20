@@ -85,4 +85,5 @@ public class AnnouncementDTO {
                 ", postedBy=" + postedBy +
                 '}';
     }
+
 }

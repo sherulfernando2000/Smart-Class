@@ -15,4 +15,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubmissionRepo extends JpaRepository<Submission,String> {
+    boolean existsBySubmissionId(String submissionId);
+
+    void deleteBySubmissionId(String submissionId);
 }

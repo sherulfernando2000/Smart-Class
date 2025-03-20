@@ -8,7 +8,6 @@ import java.util.List;
 @Entity
 public class CourseClass {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
    private String class_id;
     private String className;
    private String subject;
