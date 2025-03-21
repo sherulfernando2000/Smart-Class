@@ -1,7 +1,7 @@
 import { Email } from "@mui/icons-material";
 import axios from "axios";
-import React, { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+// import { ToastContainer, toast } from 'react-toastify';
 
 
 function AllStudent() {
@@ -19,6 +19,7 @@ function AllStudent() {
   const [parentContact, setParentContact] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
+  const [students,setStudents] = useState([]);
 
   const handleAddStudent = () => {
     setShowPopup(true);
@@ -105,24 +106,36 @@ function AllStudent() {
       );
       console.log("response"+response);
       if (response.data.code === 201) {
-        alert("message:" + response.data.msg + " email:" + response.data.data.email + " password:" + response.data.data.password);
+        alert("message:" + response.data.msg + "  \nemail:" + response.data.data.email + "  \npassword:" + response.data.data.password);
         setShowPopup(false);
-        toast.success( "message:" + response.data.msg + "   email:" + response.data.data.email + " password:" + response.data.data.password, {
-          position: "top-center",
-          autoClose: 100000,
-          
-          });
         // Reset fields after submission
         emptyFields();
       } else {
         alert("Failed to add student.");
-        alert("message:" + response.data.msg + " email:" + response.data.data.email + " password:" + response.data.data.password);
+        
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error submitting form.");
+      
     }
   };
+
+  //get student in initialize
+  useEffect(() => {
+    fetchStudent();
+  },[])
+
+  const fetchStudent = async () =>{
+    try{
+      const reponse = await axios.get("http://localhost:8080/api/v1/student/getAll")
+      console.log("response",reponse.data);
+      setStudents(reponse.data);
+
+    }catch(error){
+        alert("Failed to fetch student.");
+  }
+  }
+
 
   return (
     <div className="p-4">
@@ -132,7 +145,7 @@ function AllStudent() {
       <div className="flex justify-between mb-4">
         <input
           type="text"
-          placeholder="Search student..."
+          placeholder="🔎 Search student..."
           className="border p-2 rounded w-3/4"
         />
         <button
@@ -320,27 +333,35 @@ function AllStudent() {
           <h3 className="w-1/4 text-center">Edit</h3>
         </div>
 
+
+
+       
         <div className="students">
-          <div className="student flex items-center p-4 border rounded-lg mb-2 hover:bg-gray-200">
-            <div className="w-1/4 flex justify-center">
-              <img className="w-10 h-10 rounded-full" src={preview} alt="Student" />
+          {students.map((student) => (
+            <div key={student.studentId} className="student flex items-center p-4 border rounded-lg mb-2 hover:bg-gray-200">
+              <div className="w-1/5 flex justify-center">
+                <img
+                  className="w-10 h-10 rounded-full"
+                  src={student.image_url || "https://via.placeholder.com/40"}
+                  alt={student.full_name}
+                />
+              </div>
+              <div className="w-1/5 text-center">{student.studentId}</div>
+              <div className="w-1/5 text-center">{student.full_name}</div>
+              <div className="w-1/5 text-center">{student.contact}</div>
+              <div className="w-1/5 text-center">
+                <button className="bg-blue-500 text-white px-4 py-1 rounded mr-2">View</button>
+                <button className="bg-red-500 text-white px-4 py-1 rounded">Delete</button>
+              </div>
             </div>
-            <div className="w-1/4 text-center">20251001</div>
-            <div className="w-1/4 text-center">Sherul</div>
-            <div className="w-1/4 text-center">0778626300</div>
-            <div className="w-1/4 text-center">
-              <button className="bg-blue-500 text-white px-4 py-1 rounded mr-2">
-                View
-              </button>
-              <button className="bg-red-500 text-white px-4 py-1 rounded" onClick={handleSubmit}>
-                Delete
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
+
+
       </div>
     </div>
   );
 }
+
 
 export default AllStudent;
