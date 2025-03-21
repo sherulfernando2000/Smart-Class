@@ -5,7 +5,7 @@ import { BsStarFill } from "react-icons/bs";
 
 const ReviewCard = (props) => {
   return (
-    <div className=" flex flex-col w-full lg:w-2/6 bg-white p-3 rounded-lg gap-5">
+    <div className=" flex flex-col w-full lg:w-2/6 bg-blue-100 p-3 rounded-lg gap-5">
       <div className=" flex flex-row items-center lg:justify-start justify-center">
         <div className="w-1/4">
           <img className=" rounded-full" src={props.img} alt="img" />

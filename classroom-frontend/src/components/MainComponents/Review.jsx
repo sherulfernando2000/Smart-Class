@@ -6,7 +6,7 @@ import img3 from "../../assets/img/pic3.png";
 
 const Review = () => {
   return (
-    <div className=" min-h-screen flex flex-col justify-center lg:px-32 px-5 bg-backgroundColor ">
+    <div className=" min-h-screen flex flex-col justify-center lg:px-32 px-5 bg-white">
       <h1 className=" font-semibold text-center text-4xl lg:mt-14 mt-24 ">
         Customer's Reviews
       </h1>

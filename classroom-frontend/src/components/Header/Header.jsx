@@ -19,6 +19,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import AddIcon from "@mui/icons-material/Add";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import logo from "../../assets/img/classlogo.png";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -79,6 +80,8 @@ export default function Header() {
           <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
+
+          <img className="rounded w-7 h-7 relative row-auto m-2" src={logo} alt="img1" />
           <Typography variant="h6" noWrap sx={{ display: { xs: "none", sm: "block" } }}>
             SMART CLASS
           </Typography>

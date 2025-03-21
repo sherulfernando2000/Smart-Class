@@ -17,7 +17,7 @@ function Main() {
                 <div id="hero">
                   <Hero />
                 </div>
-                <div id="menu">
+                {/* <div id="menu">
                   <Menu />
                 </div>
                 <div id="about">
@@ -25,7 +25,7 @@ function Main() {
                 </div>
                 <div id="products">
                   <Product />
-                </div>
+                </div> */}
                 <div id="review">
                   <Review />
                 </div>

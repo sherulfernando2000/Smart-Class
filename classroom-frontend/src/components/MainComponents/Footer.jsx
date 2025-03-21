@@ -2,14 +2,12 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className=" bg-gradient-to-r from-[#FFDCAB] to-[#AB6B2E] text-black rounded-t-3xl mt-8 md:mt-0">
+    <div className=" bg-gradient-to-r from-[#ffffff] to-[#39a7e7] text-black rounded-t-3xl mt-8 md:mt-0">
       <div className="flex flex-col md:flex-row justify-between p-8 md:px-32 px-5">
         <div className=" w-full md:w-1/4">
-          <h1 className=" font-semibold text-xl pb-4">CafePulse</h1>
+          <h1 className=" font-semibold text-xl pb-4">SmartClass</h1>
           <p className=" text-sm">
-            Welcome to our coffee haven! Explore our aromatic brews, savor
-            artisanal flavors, and discover the perfect roast to elevate your
-            daily ritual.
+            Welcome to our Smart Class! Where student and teacher come together
           </p>
         </div>
         <div>

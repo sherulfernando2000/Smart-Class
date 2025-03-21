@@ -50,7 +50,7 @@ const Navbar = () => {
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-black transform scale-x-0 origin-left transition-transform group-hover:scale-x-100"></span>
             </Link>
 
-            <Link
+            {/* <Link
               to="menu"
               spy={true}
               smooth={true}
@@ -59,7 +59,7 @@ const Navbar = () => {
             >
               Menu
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-black transform scale-x-0 origin-left transition-transform group-hover:scale-x-100"></span>
-            </Link>
+            </Link> */}
 
             <Link
               to="about"
@@ -72,7 +72,7 @@ const Navbar = () => {
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-black transform scale-x-0 origin-left transition-transform group-hover:scale-x-100"></span>
             </Link>
 
-            <Link
+            {/* <Link
               to="products"
               spy={true}
               smooth={true}
@@ -81,7 +81,7 @@ const Navbar = () => {
             >
               Products
               <span className="absolute inset-x-0 bottom-0 h-0.5 bg-black transform scale-x-0 origin-left transition-transform group-hover:scale-x-100"></span>
-            </Link>
+            </Link> */}
 
             <Link
               to="review"
