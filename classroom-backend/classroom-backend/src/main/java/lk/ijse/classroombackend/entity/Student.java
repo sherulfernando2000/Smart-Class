@@ -8,6 +8,7 @@ import java.util.UUID;
 @Entity
 public class Student {
     @Id
+    @Column(name = "student_id")
     private String studentId;  // Custom student ID
     private String full_name;
     private String contact;

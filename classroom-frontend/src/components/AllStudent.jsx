@@ -1,15 +1,14 @@
-import { Email } from "@mui/icons-material";
+import { ContactSupportOutlined, Email } from "@mui/icons-material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 // import { ToastContainer, toast } from 'react-toastify';
-
 
 function AllStudent() {
   const [showPopup, setShowPopup] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [imageURL,setImageURL] = useState("");
+  const [imageURL, setImageURL] = useState("");
 
   const [fullName, setFullName] = useState("");
   const [contact, setContact] = useState("");
@@ -19,7 +18,7 @@ function AllStudent() {
   const [parentContact, setParentContact] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
-  const [students,setStudents] = useState([]);
+  const [students, setStudents] = useState([]);
 
   const handleAddStudent = () => {
     setShowPopup(true);
@@ -31,11 +30,9 @@ function AllStudent() {
     setPreview(null);
   };
 
-  
-
   // Handle file selection and update preview
   const handleFileChange = (e) => {
-   const file = e.target.files[0];
+    const file = e.target.files[0];
     if (file) {
       setImage(file);
       setPreview(URL.createObjectURL(file)); // Generate preview URL
@@ -45,46 +42,44 @@ function AllStudent() {
   const urlUploaded = async () => {
     if (!image) {
       alert("Please select an image first!");
-      return;
+      return null;
     }
-  
+
     const formData = new FormData();
     formData.append("file", image);
-    formData.append("upload_preset", "SmartClass"); 
-  
+    formData.append("upload_preset", "SmartClass");
+
     try {
       setLoading(true);
-      const res = await axios.post("https://api.cloudinary.com/v1_1/dzkqfsaxo/image/upload", formData, {
-        headers: 
-        { "Content-Type": "multipart/form-data"},
-      });
-      console.log("url",res.data.secure_url);
-      setImageURL(res.data.secure_url); // Store Cloudinary URL instead of file object
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dzkqfsaxo/image/upload",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
       setLoading(false);
+      return res.data.secure_url; // Return the URL instead of setting state
     } catch (error) {
       console.error("Upload failed:", error);
       alert("Image upload failed!");
       setLoading(false);
+      return null;
     }
   };
-  
 
-  const emptyFields = () => {
-    setFullName("");
-    setContact("");
-    setDob(""); // Reset dob field
-    setGender("");
-    setParentName("");
-    setParentContact("");
-    setAddress("");
-    setImage(null);
-  };
-
-  // Submit Data to Backend
   const handleSubmit = async (e) => {
-    console.log("saved clicked");
     e.preventDefault();
-    await urlUploaded(); // Added await to ensure image is uploaded before submitting
+    console.log("Save clicked");
+
+    const uploadedImageUrl = await urlUploaded(); // Get the uploaded URL
+    if (!uploadedImageUrl) {
+      alert("Image upload failed. Cannot submit student data.");
+      return;
+    }
+
+    console.log("uploadedImageUrl", uploadedImageUrl);
 
     const studentData = {
       full_name: fullName,
@@ -93,49 +88,80 @@ function AllStudent() {
       address: address,
       parent_name: parentName,
       parent_contact: parentContact,
-      image_url: imageURL,
-      email: email
+      image_url: uploadedImageUrl, // Use the returned URL directly
+      email: email,
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/student/save", studentData,
-        { headers: { 
-          "Content-Type": "application/json" ,
-           "Authorization":`Bearer ${localStorage.getItem("token")}`
-        } }
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/student/save",
+        studentData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
-      console.log("response"+response);
+
+      console.log("response", response);
       if (response.data.code === 201) {
-        alert("message:" + response.data.msg + "  \nemail:" + response.data.data.email + "  \npassword:" + response.data.data.password);
+        alert(
+          `Message: ${response.data.msg}\nEmail: ${response.data.data.email}\nPassword: ${response.data.data.password}`
+        );
         setShowPopup(false);
-        // Reset fields after submission
+        fetchStudent(); 
         emptyFields();
       } else {
         alert("Failed to add student.");
-        
       }
     } catch (error) {
       console.error("Error:", error);
-      
     }
   };
+
 
   //get student in initialize
   useEffect(() => {
     fetchStudent();
-  },[])
+  }, []);
 
-  const fetchStudent = async () =>{
-    try{
-      const reponse = await axios.get("http://localhost:8080/api/v1/student/getAll")
-      console.log("response",reponse.data);
+  const fetchStudent = async () => {
+    try {
+      const reponse = await axios.get(
+        "http://localhost:8080/api/v1/student/getAll"
+      );
+      console.log("response", reponse.data);
       setStudents(reponse.data);
+    } catch (error) {
+      alert("Failed to fetch student.");
+    }
+  };
 
-    }catch(error){
-        alert("Failed to fetch student.");
-  }
-  }
+  // delete studetn
+  const handleDeleteStudent = async (studentId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this student?"
+    );
+    if (!confirmDelete) return;
 
+    try {
+      const resp = await axios.delete(
+        `http://localhost:8080/api/v1/student/delete/${studentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      fetchStudent();
+      alert("Student deleted successfully");
+      console.log("response", resp);
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Failed to delete student.");
+    }
+  };
 
   return (
     <div className="p-4">
@@ -212,7 +238,8 @@ function AllStudent() {
 
                 <div className="mb-4 w-1/2">
                   <label className="block text-black">Gender</label>
-                  <select className="border p-2 rounded w-full border-gray-300"
+                  <select
+                    className="border p-2 rounded w-full border-gray-300"
                     onChange={(e) => setGender(e.target.value)}
                     value={gender}
                   >
@@ -265,7 +292,6 @@ function AllStudent() {
                 </div>
               </div>
 
-              
               {/* Image Upload */}
               <div className="mb-4">
                 <label className="block text-black mb-2">Upload Image</label>
@@ -333,12 +359,12 @@ function AllStudent() {
           <h3 className="w-1/4 text-center">Edit</h3>
         </div>
 
-
-
-       
         <div className="students">
           {students.map((student) => (
-            <div key={student.studentId} className="student flex items-center p-4 border rounded-lg mb-2 hover:bg-gray-200">
+            <div
+              key={student.studentId}
+              className="student flex items-center p-4 border rounded-lg mb-2 hover:bg-gray-200"
+            >
               <div className="w-1/5 flex justify-center">
                 <img
                   className="w-10 h-10 rounded-full"
@@ -350,18 +376,22 @@ function AllStudent() {
               <div className="w-1/5 text-center">{student.full_name}</div>
               <div className="w-1/5 text-center">{student.contact}</div>
               <div className="w-1/5 text-center">
-                <button className="bg-blue-500 text-white px-4 py-1 rounded mr-2">View</button>
-                <button className="bg-red-500 text-white px-4 py-1 rounded">Delete</button>
+                <button className="bg-blue-500 text-white px-4 py-1 rounded mr-2">
+                  View
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-1 rounded"
+                  onClick={() => handleDeleteStudent(student.studentId)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
         </div>
-
-
       </div>
     </div>
   );
 }
-
 
 export default AllStudent;

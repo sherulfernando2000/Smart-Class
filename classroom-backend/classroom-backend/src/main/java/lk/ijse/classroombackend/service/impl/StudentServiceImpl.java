@@ -13,9 +13,11 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -93,11 +95,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(String id) {
-        if (studentRepo.existsByStudentId(id)){
-            studentRepo.deleteById(id);
+    @Transactional
+    public void deleteStudent(String studentId) {
+        Student student = studentRepo.findByStudentId(studentId);
+
+        if (student == null) {  // Correct null check
+            throw new RuntimeException("Student does not exist");
         }
-        throw new RuntimeException("Student does not exist");
+
+        studentRepo.delete(student);
     }
 
 
