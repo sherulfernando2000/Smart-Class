@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CourseClassRepo extends JpaRepository<CourseClass, String> {
     CourseClass findByClassName(String className); // Find class by class name
+
+    CourseClass findByClassId(String id);
 }

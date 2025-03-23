@@ -4,6 +4,7 @@ import Sidebar from "./Drawer/Drawer";
 import { Outlet } from "react-router-dom";
 
 const IndexClass = () => {
+  
   return (
     <div className="h-screen flex flex-col">
       {/* Fixed Header - Full Width */}

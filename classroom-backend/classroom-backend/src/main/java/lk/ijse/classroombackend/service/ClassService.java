@@ -1,6 +1,7 @@
 package lk.ijse.classroombackend.service;
 
 import lk.ijse.classroombackend.dto.ClassDTO;
+import lk.ijse.classroombackend.dto.StudentDTO;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface ClassService {
     void deleteClass(String id);
 
     void updateClass(ClassDTO classDTO);
+
+    ClassDTO getClassById(String id);
 }

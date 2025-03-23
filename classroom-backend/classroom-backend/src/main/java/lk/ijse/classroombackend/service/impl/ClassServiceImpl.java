@@ -48,7 +48,7 @@ public class ClassServiceImpl implements ClassService {
 
 
     public ClassDTO getClassById(String id) {
-        return modelMapper.map(classRepo.findById(id).get(), ClassDTO.class);
+        return modelMapper.map(classRepo.findByClassId(id), ClassDTO.class);
     }
 
 

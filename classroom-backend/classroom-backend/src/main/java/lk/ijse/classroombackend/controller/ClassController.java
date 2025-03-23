@@ -26,6 +26,14 @@ public class ClassController {
         return "Class";
     }
 
+    @GetMapping("get/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ClassDTO getClassById(@PathVariable String id){
+        System.out.println("id"+id);
+        return classService.getClassById(id);
+    }
+
+
     @PostMapping("save")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseUtil save(@RequestBody ClassDTO classDTO){
@@ -55,8 +63,9 @@ public class ClassController {
     @PutMapping("update")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseUtil update(@RequestBody ClassDTO classDTO){
+        System.out.println("classDTO"+classDTO);
         classService.updateClass(classDTO);
-        return new ResponseUtil(201,"Class updated.",null);
+        return new ResponseUtil(201,"Class updated.",classDTO);
     }
 
 

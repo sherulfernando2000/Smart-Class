@@ -1,9 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEdit, FaLink } from "react-icons/fa";
 import background from "../../assets/img/Honors.jpg";
+import axios from "axios";
 
 const Announcement = ({ id }) => {
     const [showForm, setShowForm] = useState(false);
+    const [classData, setClassData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        const fetchClassDetails = async () => {
+            try {
+                console.log("Fetching class details for class ID:", id);
+                const response = await axios.get(`http://localhost:8080/api/v1/class/get/${id}`,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`, // Ensure token is included
+                        "Content-Type": "application/json",
+                    },
+                });
+                
+                console.log(response);
+                setClassData(response.data);
+                console.log(classData);
+            } catch (error) {
+                setError("Failed to fetch class details");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchClassDetails();
+    }, [id]);
 
     const handleFormToggle = () => {
         setShowForm(!showForm);
@@ -16,8 +44,8 @@ const Announcement = ({ id }) => {
             {/* Card for class name and subject with edit icon */}
             <div className="p-4 bg-white rounded shadow mb-4 flex justify-between items-center bg-cover bg-center" style={{ backgroundImage: `url(${background})`}}>
                 <div className="bg-white bg-opacity-75 p-4 rounded">
-                    <h1 className="text-2xl font-bold mb-2">Class {id} Announcements</h1>
-                    <h2 className="text-xl font-semibold">Subject: Advanced API Development</h2>
+                    <h1 className="text-2xl font-bold mb-2">  Announcements</h1>
+                    <h2 className="text-xl font-semibold">{classData.className+" "+classData.subject}</h2>
                 </div>
                 <FaEdit className="text-gray-600 cursor-pointer" />
             </div>

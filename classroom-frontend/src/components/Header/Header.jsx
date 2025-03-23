@@ -66,6 +66,8 @@ export default function Header() {
 const [subject, setSubject] = useState("");
 
 
+
+
   const handleAddClassOpen = () => setAddClassOpen(true);
   const handleAddClassClose = () => setAddClassOpen(false);
 
@@ -79,6 +81,20 @@ const [subject, setSubject] = useState("");
     }
     alert(`Joining class with code: ${classCode}`);
     setJoinClassOpen(false);
+  };
+
+  const [classes, setClasses] = useState([]);
+
+  // Function to fetch classes
+  const fetchClasses = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/v1/class/getAll", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setClasses(response.data.data); // Update state with new classes
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
   };
 
 
@@ -101,6 +117,7 @@ const handleCreateClass = async () => {
     });
 
     alert(`Class Created: ${response.data.data.className}`);
+    fetchClasses();
     setAddClassOpen(false);
     setClassName("");
     setSubject("");
