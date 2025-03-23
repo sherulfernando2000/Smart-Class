@@ -1,8 +1,8 @@
 package lk.ijse.classroombackend.dto;
 
 public class TeacherDTO {
-    String teacher_id;
-    String full_name;
+    String teacherId;
+    String fullName;
     String address;
     String contact;
     String email;
@@ -12,29 +12,29 @@ public class TeacherDTO {
     }
 
     public TeacherDTO(String teacher_id, String full_name, String address, String contact, String email, String specialization) {
-        this.teacher_id = teacher_id;
-        this.full_name = full_name;
+        this.teacherId = teacher_id;
+        this.fullName = full_name;
         this.address = address;
         this.contact = contact;
         this.email = email;
         this.specialization = specialization;
     }
 
-    public String getTeacher_id() {
+    public String getTeacherId() {
 
-        return teacher_id;
+        return teacherId;
     }
 
-    public void setTeacher_id(String teacher_id) {
-        this.teacher_id = teacher_id;
+    public void setTeacherId(String teacher_id) {
+        this.teacherId = teacher_id;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String full_name) {
+        this.fullName = full_name;
     }
 
     public String getAddress() {
@@ -73,8 +73,8 @@ public class TeacherDTO {
     @Override
     public String toString() {
         return "TeacherDTO{" +
-                "teacher_id='" + teacher_id + '\'' +
-                ", full_name='" + full_name + '\'' +
+                "teacher_id='" + teacherId + '\'' +
+                ", full_name='" + fullName + '\'' +
                 ", address='" + address + '\'' +
                 ", contact='" + contact + '\'' +
                 ", email='" + email + '\'' +

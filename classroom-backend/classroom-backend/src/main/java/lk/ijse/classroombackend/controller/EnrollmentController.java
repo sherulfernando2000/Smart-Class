@@ -25,7 +25,7 @@ public class EnrollmentController {
     @PostMapping("save")
     @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
     public String saveEnrollment(@RequestBody EnrollmentDTO enrollmentDTO) {
-        enrollmentService.enrollStudent(enrollmentDTO.getEnrollment_id(), enrollmentDTO.getaCourseClass().getClassName());
+        enrollmentService.enrollStudent(enrollmentDTO.getEnrollmentId(), enrollmentDTO.getaCourseClass().getClassName());
         return "Student enrolled successfully!";
     }
 

@@ -24,4 +24,7 @@ public interface StudentRepo extends JpaRepository<Student, String> {
     @Modifying
     @Transactional
     void deleteByStudentId(String id);
+
+//    @Query()
+//    void update(Student student);
 }

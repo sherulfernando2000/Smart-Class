@@ -1,38 +1,81 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import background from "../../assets/img/Honors.jpg";
+import { FaEdit, FaTrash } from "react-icons/fa"; // Import FontAwesome icons
 
 function Card() {
+  const [classes, setClasses] = useState([]);
+
+  useEffect(() => {
+    // Fetch classes from backend
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/v1/class/getAll",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setClasses(response.data.data); // Assuming response.data is an array of classes
+      } catch (error) {
+        console.error("Error fetching classes:", error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
   return (
     <div className="grid grid-cols-3 gap-5">
-  {[...Array(6)].map((_, index) => (
-    <div key={index} className="max-w-xs rounded overflow-hidden shadow  hover:bg-slate-200">
-      {/* Card Image */}
-      <div className="relative">
-        <img className="w-full" src={background} alt="Background" />
-        <div className="absolute top-0 left-0 p-4">
-          <h2 className="text-white text-xl font-bold">GDSE - IJSE</h2>
-          <p className="text-white">GDSE71</p>
-        </div>
-      </div>
+      {classes.length === 0 ? (
+        <p className="text-gray-500 text-center col-span-3">
+          No classes available.
+        </p>
+      ) : (
+        classes.map((classItem, index) => (
+          <div
+            key={index}
+            className="max-w-xs rounded overflow-hidden shadow hover:bg-slate-200"
+          >
+            {/* Card Image */}
+            <div className="relative">
+              <img className="w-full" src={background} alt="Class Background" />
+              <div className="absolute top-0 left-0 p-4">
+                <h2 className="text-white text-xl font-bold">
+                  {classItem.className}
+                </h2>
+                <p className="text-white">{classItem.subject}</p>
+              </div>
+            </div>
 
-      {/* Card Content */}
-      <div className="px-6 py-4 h-32">
-        <div className="h-16 overflow-y-auto"></div>
+            {/* Card Content */}
+            <div className="px-6 py-4 h-32">
+              <div className="h-16 overflow-y-auto">
+                Welcome to {classItem.subject} class
+              </div>
 
-        {/* Card Footer */}
-        <div className="flex justify-end items-center h-10 gap-5 border-t-2">
-          <svg className="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
-          </svg>
-          <svg className="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9-2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM8 7h8v2H8zm0 4h8v2H8zm0 4h8v2H8z" />
-          </svg>
-        </div>
-      </div>
+              {/* Card Footer */}
+
+              <div className="flex justify-end items-center h-10 gap-5 border-t-2 p-2">
+                {/* Update Icon */}
+                <FaEdit
+                  className="w-4 h-4 text-blue-500 cursor-pointer hover:text-blue-700"
+                  onClick={() => handleUpdate(classItem)}
+                />
+
+                {/* Delete Icon */}
+                <FaTrash
+                  className="w-4 h-4 text-red-400 cursor-pointer hover:text-red-700"
+                  onClick={() => handleDelete(classItem.id)}
+                />
+              </div>
+            </div>
+          </div>
+        ))
+      )}
     </div>
-  ))}
-</div>
-
   );
 }
 

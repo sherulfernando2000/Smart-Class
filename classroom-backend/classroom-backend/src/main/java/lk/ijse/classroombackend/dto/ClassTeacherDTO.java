@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 
 public class ClassTeacherDTO {
-    private UUID class_teacher_id;
+    private UUID classTeacherId;
     private CourseClass aCourseClass;
     private Teacher teacher;
     private Date date;
@@ -26,18 +26,18 @@ public class ClassTeacherDTO {
     }
 
     public ClassTeacherDTO(UUID class_teacher_id, CourseClass aCourseClass, Teacher teacher, Date date) {
-        this.class_teacher_id = class_teacher_id;
+        this.classTeacherId = class_teacher_id;
         this.aCourseClass = aCourseClass;
         this.teacher = teacher;
         this.date = date;
     }
 
-    public UUID getClass_teacher_id() {
-        return class_teacher_id;
+    public UUID getClassTeacherId() {
+        return classTeacherId;
     }
 
-    public void setClass_teacher_id(UUID class_teacher_id) {
-        this.class_teacher_id = class_teacher_id;
+    public void setClassTeacherId(UUID class_teacher_id) {
+        this.classTeacherId = class_teacher_id;
     }
 
     public CourseClass getaCourseClass() {
@@ -67,7 +67,7 @@ public class ClassTeacherDTO {
     @Override
     public String toString() {
         return "ClassTeacherDTO{" +
-                "class_teacher_id=" + class_teacher_id +
+                "class_teacher_id=" + classTeacherId +
                 ", aCourseClass=" + aCourseClass +
                 ", teacher=" + teacher +
                 ", date=" + date +

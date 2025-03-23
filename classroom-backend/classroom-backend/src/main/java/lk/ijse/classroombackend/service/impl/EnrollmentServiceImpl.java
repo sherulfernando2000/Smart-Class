@@ -56,7 +56,7 @@ public class EnrollmentServiceImpl implements EnrollementService {
 
 
         Enrollment enrollment = new Enrollment();
-        enrollment.setEnrollment_id(enrollmentId);
+        enrollment.setEnrollmentId(enrollmentId);
         enrollment.setaClass(aCourseClass);
         enrollment.setStudent(student);
         enrollment.setEnrollment_date(enrollmentDate);
@@ -65,6 +65,6 @@ public class EnrollmentServiceImpl implements EnrollementService {
         System.out.println("student"+student.toString());
 
 
-        enrollmentRepo.saveEnrollment(enrollmentId, aCourseClass.getClass_id(), student.getStudentId(), enrollmentDate);
+        enrollmentRepo.saveEnrollment(enrollmentId, aCourseClass.getClassId(), student.getStudentId(), enrollmentDate);
     }
 }

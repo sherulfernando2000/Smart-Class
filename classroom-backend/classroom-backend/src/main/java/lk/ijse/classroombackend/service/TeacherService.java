@@ -14,4 +14,6 @@ public interface TeacherService {
     void updateTeacher(TeacherDTO teacherDTO);
 
     void deleteTeacher(String id);
+
+    TeacherDTO getTeacherById(String id);
 }

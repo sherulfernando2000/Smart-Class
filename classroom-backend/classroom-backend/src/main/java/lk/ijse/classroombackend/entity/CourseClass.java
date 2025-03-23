@@ -1,6 +1,7 @@
 package lk.ijse.classroombackend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -8,10 +9,14 @@ import java.util.List;
 @Entity
 public class CourseClass {
     @Id
-   private String class_id;
+   private String classId;
     private String className;
    private String subject;
-   private Date created_at;
+
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created_at;
 
    @OneToMany(mappedBy = "aCourseClass")
     private List<ClassTeacher> classTeacher;
@@ -31,7 +36,7 @@ public class CourseClass {
     }
 
     public CourseClass(String class_id, String class_name, String subject, Date created_at, List<ClassTeacher> classTeacher, List<Enrollment> enrollments) {
-        this.class_id = class_id;
+        this.classId = class_id;
         this.className = class_name;
         this.subject = subject;
         this.created_at = created_at;
@@ -40,7 +45,7 @@ public class CourseClass {
     }
 
     public CourseClass(String class_id, String className, String subject, Date created_at, List<ClassTeacher> classTeacher, List<Enrollment> enrollments, List<Assignment> assignments, List<Announcement> annoncements) {
-        this.class_id = class_id;
+        this.classId = class_id;
         this.className = className;
         this.subject = subject;
         this.created_at = created_at;
@@ -50,12 +55,12 @@ public class CourseClass {
         this.annoncements = annoncements;
     }
 
-    public String getClass_id() {
-        return class_id;
+    public String getClassId() {
+        return classId;
     }
 
-    public void setClass_id(String class_id) {
-        this.class_id = class_id;
+    public void setClassId(String class_id) {
+        this.classId = class_id;
     }
 
 
@@ -118,7 +123,7 @@ public class CourseClass {
     @Override
     public String toString() {
         return "CourseClass{" +
-                "class_id='" + class_id + '\'' +
+                "class_id='" + classId + '\'' +
                 ", class_name='" + className + '\'' +
                 ", subject='" + subject + '\'' +
                 ", created_at=" + created_at +

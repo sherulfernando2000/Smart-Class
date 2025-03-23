@@ -1,5 +1,6 @@
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
+import { useState } from "react";
 import {
   AppBar,
   Box,
@@ -20,6 +21,8 @@ import AddIcon from "@mui/icons-material/Add";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import logo from "../../assets/img/classlogo.png";
+import axios from "axios";
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -53,10 +56,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+ 
+
 export default function Header() {
   const [addClassOpen, setAddClassOpen] = React.useState(false);
   const [joinClassOpen, setJoinClassOpen] = React.useState(false);
   const [classCode, setClassCode] = React.useState("");
+  const [className, setClassName] = useState("");
+const [subject, setSubject] = useState("");
+
 
   const handleAddClassOpen = () => setAddClassOpen(true);
   const handleAddClassClose = () => setAddClassOpen(false);
@@ -72,6 +80,36 @@ export default function Header() {
     alert(`Joining class with code: ${classCode}`);
     setJoinClassOpen(false);
   };
+
+
+  // -----------------------------------create class---------------------------------------------------------------
+
+const handleCreateClass = async () => {
+  if (!className || !subject) {
+    alert("Please enter both Class Name and Subject.");
+    return;
+  }
+
+  try {
+    const response = await axios.post("http://localhost:8080/api/v1/class/save", {
+      className: className,
+      subject: subject,
+    },{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    });
+
+    alert(`Class Created: ${response.data.data.className}`);
+    setAddClassOpen(false);
+    setClassName("");
+    setSubject("");
+  } catch (error) {
+    console.error("Error creating class:", error);
+    alert("Failed to create class. Please try again.");
+  }
+};
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -124,9 +162,9 @@ export default function Header() {
           <Typography variant="h6" gutterBottom>
             Create a New Class
           </Typography>
-          <TextField fullWidth label="Class Name" variant="outlined" sx={{ mb: 2 }} />
-          <TextField fullWidth label="Subject" variant="outlined" sx={{ mb: 2 }} />
-          <Button variant="contained" color="primary" fullWidth>
+          <TextField fullWidth label="Class Name" variant="outlined" sx={{ mb: 2 } } onChange={(e) => setClassName(e.target.value)} />
+          <TextField fullWidth label="Subject" variant="outlined" sx={{ mb: 2 }}  onChange={(e) => setSubject(e.target.value)}/>
+          <Button variant="contained" color="primary" fullWidth onClick={handleCreateClass}>
             Create Class
           </Button>
         </Box>

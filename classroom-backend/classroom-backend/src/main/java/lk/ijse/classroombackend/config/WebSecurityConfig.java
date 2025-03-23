@@ -61,6 +61,11 @@ public class WebSecurityConfig {
                                 "/api/v1/student/get/{id}",
                                 "/api/v1/teacher/get",
                                 "/api/v1/teacher/getAll",
+                                "/api/v1/teacher/test",
+                               "/api/mail/send",
+                               "/api/mail/get",
+                                "api/v1/teacher/get/{id}",
+
 
 
 

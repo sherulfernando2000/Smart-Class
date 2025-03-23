@@ -2,7 +2,7 @@ package lk.ijse.classroombackend.dto;
 
 public class StudentDTO {
     private String studentId;
-   private String full_name;
+   private String fullName;
    private String contact;
    private String gender;
    private String address;
@@ -16,7 +16,7 @@ public class StudentDTO {
 
     public StudentDTO(String studentId,String full_name, String contact, String gender, String address, String parent_name, String parent_contact, String image_url,String email) {
         this.studentId = studentId;
-        this.full_name = full_name;
+        this.fullName = full_name;
         this.contact = contact;
         this.gender = gender;
         this.address = address;
@@ -34,12 +34,12 @@ public class StudentDTO {
         this.studentId = studentId;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String full_name) {
+        this.fullName = full_name;
     }
 
     public String getContact() {
@@ -101,7 +101,7 @@ public class StudentDTO {
     @Override
     public String toString() {
         return "StudentDTO{" +
-                "full_name='" + full_name + '\'' +
+                "full_name='" + fullName + '\'' +
                 ", contact='" + contact + '\'' +
                 ", gender='" + gender + '\'' +
                 ", address='" + address + '\'' +

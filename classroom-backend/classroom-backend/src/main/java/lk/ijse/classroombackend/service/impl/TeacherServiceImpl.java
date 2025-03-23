@@ -55,15 +55,16 @@ public class TeacherServiceImpl implements TeacherService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(randomPass));
 
-        user.setName(teacherDTO.getFull_name());
+        user.setName(teacherDTO.getFullName());
         user.setRole("TEACHER");
 
         user = userRepository.save(user);
 
 
         String teacherId = teacherIdGenerator.generateTeacherId();
+        System.out.println("teacherId"+teacherId);
 
-        Teacher teacher = new Teacher(teacherId, teacherDTO.getFull_name(),teacherDTO.getAddress(), teacherDTO.getContact(),
+        Teacher teacher = new Teacher(teacherId, teacherDTO.getFullName(),teacherDTO.getAddress(), teacherDTO.getContact(),
                 teacherDTO.getEmail(), teacherDTO.getSpecialization(), user);
 
         teacherRepo.save(teacher);
@@ -72,18 +73,42 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void updateTeacher(TeacherDTO teacherDTO) {
-        if (teacherRepo.existsByTeacherId(teacherDTO.getTeacher_id())) {
-            teacherRepo.save(modelMapper.map(teacherDTO, Teacher.class));
+        Teacher getTeacher = teacherRepo.findByTeacherId(teacherDTO.getTeacherId());
+
+        try {
+            if (getTeacher != null) {
+                System.out.println("Teacher exists");
+
+                getTeacher.setFullName(teacherDTO.getFullName());
+                getTeacher.setContact(teacherDTO.getContact());
+                getTeacher.setEmail(teacherDTO.getEmail());
+                getTeacher.setAddress(teacherDTO.getAddress());
+                getTeacher.setSpecialization(teacherDTO.getSpecialization());
+                /*Student student = modelMapper.map(studentDTO, Student.class);
+                student.setUser(getStudent.getUser());
+                System.out.println("Student: " + student.getStudentId());*/
+                teacherRepo.save(getTeacher);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Teacher does not exist");
         }
-        throw new RuntimeException("Teacher does not exist");
     }
 
     @Override
     public void deleteTeacher(String id) {
-        if (teacherRepo.existsByTeacherId(id)) {
-            teacherRepo.deleteById(id);
+        Teacher teacher = teacherRepo.findByTeacherId(id);
+
+        if (teacher == null) {  // Correct null check
+            throw new RuntimeException("Teacher does not exist");
         }
-        throw new RuntimeException("Teacher does not exist");
+
+        teacherRepo.delete(teacher);
+    }
+
+    @Override
+    public TeacherDTO getTeacherById(String id) {
+        Teacher teacher = teacherRepo.findByTeacherId(id);
+        return modelMapper.map(teacher, TeacherDTO.class);
     }
 
 

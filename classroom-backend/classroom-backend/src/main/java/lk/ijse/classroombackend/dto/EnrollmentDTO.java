@@ -13,7 +13,7 @@ import lk.ijse.classroombackend.entity.Student;
  * ------------------------------------------------
  */
 public class EnrollmentDTO {
-    private String enrollment_id;
+    private String enrollmentId;
     private CourseClass aCourseClass;
     private Student student;
     String enrollment_date;
@@ -22,18 +22,18 @@ public class EnrollmentDTO {
     }
 
     public EnrollmentDTO(String enrollment_id, CourseClass aCourseClass, Student student, String enrollment_date) {
-        this.enrollment_id = enrollment_id;
+        this.enrollmentId = enrollment_id;
         this.aCourseClass = aCourseClass;
         this.student = student;
         this.enrollment_date = enrollment_date;
     }
 
-    public String getEnrollment_id() {
-        return enrollment_id;
+    public String getEnrollmentId() {
+        return enrollmentId;
     }
 
-    public void setEnrollment_id(String enrollment_id) {
-        this.enrollment_id = enrollment_id;
+    public void setEnrollmentId(String enrollment_id) {
+        this.enrollmentId = enrollment_id;
     }
 
     public CourseClass getaCourseClass() {
@@ -63,7 +63,7 @@ public class EnrollmentDTO {
     @Override
     public String toString() {
         return "EnrollmentDTO{" +
-                "enrollment_id='" + enrollment_id + '\'' +
+                "enrollment_id='" + enrollmentId + '\'' +
                 ", aCourseClass=" + aCourseClass +
                 ", student=" + student +
                 ", enrollment_date='" + enrollment_date + '\'' +

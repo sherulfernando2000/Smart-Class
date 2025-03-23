@@ -8,9 +8,8 @@ import java.util.UUID;
 @Entity
 public class Student {
     @Id
-    @Column(name = "student_id")
     private String studentId;  // Custom student ID
-    private String full_name;
+    private String fullName;
     private String contact;
     private String gender;
     private String address;
@@ -49,7 +48,7 @@ public class Student {
 
     public Student(String studentId, String full_name, String contact, String gender, String address, String parent_name, String parent_contact, String image_url,String email, User user) {
         this.studentId = studentId;
-        this.full_name = full_name;
+        this.fullName = full_name;
         this.contact = contact;
         this.gender = gender;
         this.address = address;
@@ -62,7 +61,7 @@ public class Student {
 
     public Student(String studentId, String full_name, String contact, String gender, String address, String parent_name, String parent_contact, String image_url) {
         this.studentId = studentId;
-        this.full_name = full_name;
+        this.fullName = full_name;
         this.contact = contact;
         this.gender = gender;
         this.address = address;
@@ -73,7 +72,7 @@ public class Student {
 
     public Student(String studentId, String full_name, String contact, String gender, String address, String parent_name, String parent_contact, String image_url, String email, User user, List<Enrollment> enrollments, List<Submission> submissions, List<Attendance> attendances, List<Payment> payments) {
         this.studentId = studentId;
-        this.full_name = full_name;
+        this.fullName = full_name;
         this.contact = contact;
         this.gender = gender;
         this.address = address;
@@ -96,12 +95,12 @@ public class Student {
         this.studentId = studentId;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String full_name) {
+        this.fullName = full_name;
     }
 
     public String getContact() {
@@ -204,7 +203,7 @@ public class Student {
     public String toString() {
         return "Student{" +
                 "studentId='" + studentId + '\'' +
-                ", full_name='" + full_name + '\'' +
+                ", full_name='" + fullName + '\'' +
                 ", contact='" + contact + '\'' +
                 ", gender='" + gender + '\'' +
                 ", address='" + address + '\'' +

@@ -1,18 +1,14 @@
 package lk.ijse.classroombackend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 public class Teacher {
     @Id
-
-   private String teacherId;
-   private String full_name;
+    private String teacherId;
+   private String fullName;
    private String address;
    private String contact;
    private String email;
@@ -45,7 +41,7 @@ public class Teacher {
 
     public Teacher(String teacher_id, String full_name, String address, String contact, String email, String specialization) {
         this.teacherId = teacher_id;
-        this.full_name = full_name;
+        this.fullName = full_name;
         this.address = address;
         this.contact = contact;
         this.email = email;
@@ -54,7 +50,7 @@ public class Teacher {
 
     public Teacher(String teacher_id, String full_name, String address, String contact, String email, String specialization, User user) {
         this.teacherId = teacher_id;
-        this.full_name = full_name;
+        this.fullName = full_name;
         this.address = address;
         this.contact = contact;
         this.email = email;
@@ -70,12 +66,12 @@ public class Teacher {
         this.teacherId = teacherId;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String full_name) {
+        this.fullName = full_name;
     }
 
     public String getAddress() {
@@ -129,7 +125,7 @@ public class Teacher {
     public String toString() {
         return "Teacher{" +
                 "teacher_id='" + teacherId + '\'' +
-                ", full_name='" + full_name + '\'' +
+                ", full_name='" + fullName + '\'' +
                 ", address='" + address + '\'' +
                 ", contact='" + contact + '\'' +
                 ", email='" + email + '\'' +

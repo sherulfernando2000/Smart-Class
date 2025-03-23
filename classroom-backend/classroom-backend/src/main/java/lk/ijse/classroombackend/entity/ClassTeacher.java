@@ -9,7 +9,7 @@ import java.util.UUID;
 public class ClassTeacher {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID class_teacher_id;
+    private UUID classTeacherId;
 
     @ManyToOne
     private CourseClass aCourseClass;
@@ -23,18 +23,18 @@ public class ClassTeacher {
     }
 
     public ClassTeacher(UUID class_teacher_id, CourseClass aCourseClass, Teacher teacher, Date date) {
-        this.class_teacher_id = class_teacher_id;
+        this.classTeacherId = class_teacher_id;
         this.aCourseClass = aCourseClass;
         this.teacher = teacher;
         this.date = date;
     }
 
     public UUID getClass_teacher_id() {
-        return class_teacher_id;
+        return classTeacherId;
     }
 
-    public void setClass_teacher_id(UUID class_teacher_id) {
-        this.class_teacher_id = class_teacher_id;
+    public void setClassTeacherId(UUID class_teacher_id) {
+        this.classTeacherId = class_teacher_id;
     }
 
     public CourseClass getaCourseClass() {
@@ -64,7 +64,7 @@ public class ClassTeacher {
     @Override
     public String toString() {
         return "ClassTeacher{" +
-                "class_teacher_id=" + class_teacher_id +
+                "class_teacher_id=" + classTeacherId +
                 ", aClass=" + aCourseClass +
                 ", teacher=" + teacher +
                 ", date=" + date +

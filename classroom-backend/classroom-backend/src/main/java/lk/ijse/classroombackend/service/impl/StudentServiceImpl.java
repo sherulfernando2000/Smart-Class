@@ -12,6 +12,7 @@ import lk.ijse.classroombackend.util.PasswordGenerator;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +32,8 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     public ModelMapper modelMapper;
 
-    @Autowired
-    private EmailServiceImpl emailService;
+//    @Autowired
+//    private EmailServiceImpl emailService;
 
     @Autowired
     public StudentIdGenerator studentIdGenerator;
@@ -47,8 +48,12 @@ public class StudentServiceImpl implements StudentService {
         // Create and save User
         User user = new User();
         user.setEmail(studentDTO.getEmail());
-        user.setPassword(randomPassword);  // Save raw password
-        user.setName(studentDTO.getFull_name());
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(randomPassword));
+
+
+        user.setName(studentDTO.getFullName());
         user.setRole("STUDENT");
 
         user = userRepository.save(user);  //
@@ -59,7 +64,7 @@ public class StudentServiceImpl implements StudentService {
         String studentId = studentIdGenerator.generateStudentId();
 
         // Create and save Student
-        Student student = new Student(studentId, studentDTO.getFull_name(), studentDTO.getContact(),
+        Student student = new Student(studentId, studentDTO.getFullName(), studentDTO.getContact(),
                 studentDTO.getGender(), studentDTO.getAddress(), studentDTO.getParent_name(),
                 studentDTO.getParent_contact(), studentDTO.getImage_url(),studentDTO.getEmail(), user);
 
@@ -70,7 +75,7 @@ public class StudentServiceImpl implements StudentService {
                 "Dear " + user.getName() + ",\n\nYour account has been created.\n\nEmail: " +
                         user.getEmail() + "\nPassword: " + randomPassword + "\n\nPlease change your password after login.");*/
 
-        return new UserDTO(user.getEmail(), user.getPassword(), user.getName(), user.getRole());
+        return new UserDTO(user.getEmail(), randomPassword, user.getName(), user.getRole());
 
     }
 
@@ -87,11 +92,28 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public void updateStudent(StudentDTO studentDTO) {
-        if (studentRepo.existsByStudentId(studentDTO.getStudentId())) {
-            studentRepo.save(modelMapper.map(studentDTO, Student.class));
+        Student getStudent = studentRepo.findByStudentId(studentDTO.getStudentId());
+
+        try {
+            if (getStudent != null) {
+                System.out.println("Student exists");
+
+                getStudent.setFullName(studentDTO.getFullName());
+                getStudent.setContact(studentDTO.getContact());
+                getStudent.setParent_name(studentDTO.getParent_name());
+                getStudent.setParent_contact(studentDTO.getParent_contact());
+                getStudent.setEmail(studentDTO.getEmail());
+                getStudent.setAddress(studentDTO.getAddress());
+                /*Student student = modelMapper.map(studentDTO, Student.class);
+                student.setUser(getStudent.getUser());
+                System.out.println("Student: " + student.getStudentId());*/
+                studentRepo.save(getStudent);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Student does not exist");
         }
-        throw new RuntimeException("Student does not exist");
     }
 
     @Override

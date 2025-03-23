@@ -20,6 +20,11 @@ function AllStudent() {
   const [email, setEmail] = useState("");
   const [students, setStudents] = useState([]);
 
+  const [showViewPopup, setShowViewPopup] = useState(false); // New state for view popup
+  const [selectedStudent, setSelectedStudent] = useState(null); // Store selected student
+
+  const [search, setSearch] = useState("");
+
   const handleAddStudent = () => {
     setShowPopup(true);
   };
@@ -82,7 +87,7 @@ function AllStudent() {
     console.log("uploadedImageUrl", uploadedImageUrl);
 
     const studentData = {
-      full_name: fullName,
+      fullName: fullName,
       contact: contact,
       gender: gender,
       address: address,
@@ -110,7 +115,7 @@ function AllStudent() {
           `Message: ${response.data.msg}\nEmail: ${response.data.data.email}\nPassword: ${response.data.data.password}`
         );
         setShowPopup(false);
-        fetchStudent(); 
+        fetchStudent();
         emptyFields();
       } else {
         alert("Failed to add student.");
@@ -119,7 +124,6 @@ function AllStudent() {
       console.error("Error:", error);
     }
   };
-
 
   //get student in initialize
   useEffect(() => {
@@ -163,6 +167,62 @@ function AllStudent() {
     }
   };
 
+  //view student
+  const handleViewStudent = async (studentId) => {
+    console.log("Clicked and View student with ID:", studentId);
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/student/get/${studentId}`
+      );
+      console.log("response", response.data);
+      setSelectedStudent(response.data);
+      setShowViewPopup(true);
+    } catch (error) {
+      alert("Failed to fetch student details.");
+    }
+  };
+
+  const handleCloseViewPopup = () => {
+    setShowViewPopup(false);
+    setSelectedStudent(null);
+  };
+
+  //update student
+  const handleUpdate = async () => {
+    console.log("click Update student with ID:", selectedStudent.studentId);
+    if (!selectedStudent) return;
+
+    const updateStudentData = {
+      studentId: selectedStudent.studentId,
+      fullName: selectedStudent.fullName,
+      contact: selectedStudent.contact,
+      address: selectedStudent.address,
+      parent_name: selectedStudent.parent_name,
+      parent_contact: selectedStudent.parent_contact,
+      email: selectedStudent.email,
+    };
+
+    try {
+      const resp = await axios.put(
+        "http://localhost:8080/api/v1/student/update",
+        updateStudentData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("response", resp.data);
+      alert(resp.data.msg);
+      fetchStudent();
+      setShowViewPopup(false);
+    } catch (err) {
+      console.error("Error updating student:", err);
+      alert("Failed to update student.");
+    }
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">All Students</h1>
@@ -173,6 +233,7 @@ function AllStudent() {
           type="text"
           placeholder="🔎 Search student..."
           className="border p-2 rounded w-3/4"
+          onChange={(e) => setSearch(e.target.value)}
         />
         <button
           onClick={handleAddStudent}
@@ -360,36 +421,225 @@ function AllStudent() {
         </div>
 
         <div className="students">
-          {students.map((student) => (
-            <div
-              key={student.studentId}
-              className="student flex items-center p-4 border rounded-lg mb-2 hover:bg-gray-200"
-            >
-              <div className="w-1/5 flex justify-center">
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src={student.image_url || "https://via.placeholder.com/40"}
-                  alt={student.full_name}
-                />
+          {students
+            .filter((student) => {
+              const searchTerm = search.toLowerCase();
+              return (
+                searchTerm === "" || // If search is empty, show all students
+                student.fullName.toLowerCase().includes(searchTerm) || // Match name
+                student.contact.includes(searchTerm) || // Match contact
+                student.studentId.toString().includes(searchTerm) // Match student ID
+              );
+             
+            })
+            .map((student) => (
+              <div
+                key={student.studentId}
+                className="student flex items-center p-4 border rounded-lg mb-2 hover:bg-gray-200"
+              >
+                <div className="w-1/5 flex justify-center">
+                  <img
+                    className="w-10 h-10 rounded-full"
+                    src={student.image_url || "https://via.placeholder.com/40"}
+                    alt={student.fullName}
+                  />
+                </div>
+                <div className="w-1/5 text-center">{student.studentId}</div>
+                <div className="w-1/5 text-center">{student.fullName}</div>
+                <div className="w-1/5 text-center">{student.contact}</div>
+                <div className="w-1/5 text-center">
+                  <button
+                    className="bg-blue-500 text-white px-4 py-1 rounded mr-2"
+                    onClick={() => handleViewStudent(student.studentId)}
+                  >
+                    View
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-4 py-1 rounded"
+                    onClick={() => handleDeleteStudent(student.studentId)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-              <div className="w-1/5 text-center">{student.studentId}</div>
-              <div className="w-1/5 text-center">{student.full_name}</div>
-              <div className="w-1/5 text-center">{student.contact}</div>
-              <div className="w-1/5 text-center">
-                <button className="bg-blue-500 text-white px-4 py-1 rounded mr-2">
-                  View
-                </button>
-                <button
-                  className="bg-red-500 text-white px-4 py-1 rounded"
-                  onClick={() => handleDeleteStudent(student.studentId)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
+
+      {/* View Student Popup */}
+      {showViewPopup && selectedStudent && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-[1000]">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-2/3">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-center">Student Details</h2>
+              <button
+                onClick={handleCloseViewPopup}
+                className="hover:bg-red-400 rounded-full p-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="black"
+                >
+                  <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                </svg>
+              </button>
+            </div>
+
+            <form className="text-sm">
+              <div className="flex gap-3">
+                <div className="mb-4 w-1/2">
+                  <label className="block text-black">Student ID</label>
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full border-gray-300"
+                    value={selectedStudent.studentId}
+                    readOnly
+                  />
+                </div>
+                <div className="mb-4 w-1/2">
+                  <label className="block text-black">Full Name</label>
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full border-gray-300"
+                    value={selectedStudent.fullName}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        fullName: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="mb-4 w-1/2">
+                  <label className="block text-black">Contact</label>
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full border-gray-300"
+                    value={selectedStudent.contact}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        contact: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="mb-4 w-1/2">
+                  <label className="block text-black">Gender</label>
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full border-gray-300"
+                    value={selectedStudent.gender}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        gender: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="mb-4 w-1/2">
+                  <label className="block text-black">Parent Name</label>
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full border-gray-300"
+                    value={selectedStudent.parent_name}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        parent_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="mb-4 w-1/2">
+                  <label className="block text-black">Parent Contact</label>
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full border-gray-300"
+                    value={selectedStudent.parent_contact}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        parent_contact: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="mb-4 w-1/2">
+                  <label className="block text-black">Email</label>
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full border-gray-300"
+                    value={selectedStudent.email}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        email: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="mb-4 w-1/2">
+                  <label className="block text-black">Address</label>
+                  <input
+                    type="text"
+                    className="border p-2 rounded w-full border-gray-300"
+                    value={selectedStudent.address}
+                    onChange={(e) =>
+                      setSelectedStudent({
+                        ...selectedStudent,
+                        address: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* Image Preview */}
+              <div className="mb-4 flex justify-center">
+                <img
+                  className="w-32 h-32 rounded-lg"
+                  src={
+                    selectedStudent.image_url ||
+                    "https://via.placeholder.com/100"
+                  }
+                  alt={selectedStudent.fullName}
+                />
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                  onClick={handleUpdate} // Bind the handleUpdate function
+                >
+                  Update
+                </button>
+
+                <button
+                  type="button"
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Print Id
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

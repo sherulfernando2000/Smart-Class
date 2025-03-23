@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
-    private String enrollment_id;
+    private String enrollmentId;
 
     @ManyToOne
     private CourseClass aCourseClass;
@@ -14,16 +14,16 @@ public class Enrollment {
     @ManyToOne
     private Student student;
 
-    String enrollment_date;
+    String enrollmentDate;
 
     public Enrollment() {
     }
 
     public Enrollment(String enrollment_id, CourseClass aCourseClass, Student student, String enrollment_date) {
-        this.enrollment_id = enrollment_id;
+        this.enrollmentId = enrollment_id;
         this.aCourseClass = aCourseClass;
         this.student = student;
-        this.enrollment_date = enrollment_date;
+        this.enrollmentDate = enrollment_date;
     }
 
     public CourseClass getaCourseClass() {
@@ -34,12 +34,12 @@ public class Enrollment {
         this.aCourseClass = aCourseClass;
     }
 
-    public String getEnrollment_id() {
-        return enrollment_id;
+    public String getEnrollmentId() {
+        return enrollmentId;
     }
 
-    public void setEnrollment_id(String enrollment_id) {
-        this.enrollment_id = enrollment_id;
+    public void setEnrollmentId(String enrollment_id) {
+        this.enrollmentId = enrollment_id;
     }
 
     public CourseClass getaClass() {
@@ -58,21 +58,21 @@ public class Enrollment {
         this.student = student;
     }
 
-    public String getEnrollment_date() {
-        return enrollment_date;
+    public String getEnrollmentDate() {
+        return enrollmentDate;
     }
 
     public void setEnrollment_date(String enrollment_date) {
-        this.enrollment_date = enrollment_date;
+        this.enrollmentDate = enrollment_date;
     }
 
     @Override
     public String toString() {
         return "Enrollment{" +
-                "enrollment_id='" + enrollment_id + '\'' +
+                "enrollment_id='" + enrollmentId + '\'' +
                 ", aClass=" + aCourseClass +
                 ", student=" + student +
-                ", enrollment_date='" + enrollment_date + '\'' +
+                ", enrollment_date='" + enrollmentDate + '\'' +
                 '}';
     }
 }

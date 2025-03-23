@@ -24,7 +24,7 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public ClassDTO saveClass(ClassDTO classDTO) {
-        classDTO.setClass_id("C-" + UUID.randomUUID().toString());
+        classDTO.setClassId("C-" + UUID.randomUUID().toString());
 
         CourseClass aclass = modelMapper.map(classDTO, CourseClass.class);
         ClassDTO aclassDTO = modelMapper.map(classRepo.save(aclass), ClassDTO.class);

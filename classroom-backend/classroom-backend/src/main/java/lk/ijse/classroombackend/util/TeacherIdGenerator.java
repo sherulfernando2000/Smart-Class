@@ -16,9 +16,11 @@ public class TeacherIdGenerator {
     public  String generateTeacherId() {
         // Get current year
         String year = String.valueOf(LocalDate.now().getYear());
+        System.out.println("TeacherIdGenerator year"+year);
 
         // Find the last inserted student ID
         String lastId = teacherRepo.findLastTeacherId(year);
+        System.out.println("TeacherIdGenerator lastId"+lastId);
 
         int nextNumber;
         if (lastId != null && lastId.startsWith("T"+year)) {

@@ -19,14 +19,31 @@ public class TeacherController {
     @Autowired
     public TeacherService teacherService;
 
+    /*@Autowired
+    private EmailServiceImpl emailService;*/
+
+    /*@GetMapping("test")
+    public String test(){
+        emailService.sendEmail("shamodha7@gmail.com", "Test", "Test");
+
+        return "teacher";
+    }*/
+
     @GetMapping("get")
     public String get(){
         return "teacher";
     }
 
+    @GetMapping("get/{id}")
+    public TeacherDTO getTeacherById(@PathVariable String id){
+
+        return teacherService.getTeacherById(id);
+    }
+
     @GetMapping("getAll")
     public ResponseUtil getAll(){
           List<TeacherDTO> teacherDTOS =  teacherService.getAllTeacher();
+        System.out.println(teacherDTOS.get(0).getTeacherId());
             return new ResponseUtil(200,"Teachers loaded successfully",teacherDTOS);
     }
 
@@ -40,6 +57,8 @@ public class TeacherController {
     @PutMapping("update")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseUtil updateTeacher(@RequestBody TeacherDTO teacherDTO){
+        System.out.println("teachercontroller, teacherId"+teacherDTO.getTeacherId());
+        System.out.println("teachercontroller, teacherId"+teacherDTO);
         teacherService.updateTeacher(teacherDTO);
         return new ResponseUtil(201,"Teacher updated.",null);
     }

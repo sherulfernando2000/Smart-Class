@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ClassDTO {
 
-    private String class_id;
+    private String classId;
     private String className;
     private String subject;
     private Date created_at;
@@ -14,18 +14,18 @@ public class ClassDTO {
     }
 
     public ClassDTO(String class_id, String class_name, String subject, Date created_at) {
-        this.class_id = class_id;
+        this.classId = class_id;
         this.className = class_name;
         this.subject = subject;
         this.created_at = created_at;
     }
 
-    public String getClass_id() {
-        return class_id;
+    public String getClassId() {
+        return classId;
     }
 
-    public void setClass_id(String class_id) {
-        this.class_id = class_id;
+    public void setClassId(String class_id) {
+        this.classId = class_id;
     }
 
     public String getClassName() {
@@ -55,7 +55,7 @@ public class ClassDTO {
     @Override
     public String toString() {
         return "ClassDTO{" +
-                "class_id='" + class_id + '\'' +
+                "class_id='" + classId + '\'' +
                 ", class_name='" + className + '\'' +
                 ", subject='" + subject + '\'' +
                 ", created_at=" + created_at +

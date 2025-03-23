@@ -31,7 +31,7 @@ public class ClassController {
     public ResponseUtil save(@RequestBody ClassDTO classDTO){
         String classId = "C-" + UUID.randomUUID().toString();
 
-        classDTO.setClass_id(classId);
+        classDTO.setClassId(classId);
         System.out.println(classDTO.getClassName());
         ClassDTO classDTO1 = classService.saveClass(classDTO);
         return new ResponseUtil(201,"Class saved.",classDTO1);
