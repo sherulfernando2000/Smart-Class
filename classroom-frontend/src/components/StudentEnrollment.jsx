@@ -149,6 +149,7 @@ function StudentEnrollment() {
               <th className="border border-gray-300 px-4 py-2">Student ID</th>
               <th className="border border-gray-300 px-4 py-2">Class Name</th>
               <th className="border border-gray-300 px-4 py-2">Date</th>
+              <th className="border border-gray-300 px-4 py-2"></th>
             </tr>
           </thead>
           <tbody>
@@ -159,6 +160,10 @@ function StudentEnrollment() {
                   <td className="border border-gray-300 px-4 py-2">{enrollment.studentId}</td>
                   <td className="border border-gray-300 px-4 py-2">{enrollment.className}</td>
                   <td className="border border-gray-300 px-4 py-2">{enrollment.date}</td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    
+                    <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">delete</button>
+                  </td>
                 </tr>
               ))
             ) : (

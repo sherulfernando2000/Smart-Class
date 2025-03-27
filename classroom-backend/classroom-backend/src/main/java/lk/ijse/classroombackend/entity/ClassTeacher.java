@@ -1,6 +1,7 @@
 package lk.ijse.classroombackend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 import java.util.UUID;
@@ -17,6 +18,8 @@ public class ClassTeacher {
     @ManyToOne
     private Teacher teacher;
 
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     public ClassTeacher() {
@@ -29,12 +32,12 @@ public class ClassTeacher {
         this.date = date;
     }
 
-    public UUID getClass_teacher_id() {
+    public UUID getClassTeacherId() {
         return classTeacherId;
     }
 
-    public void setClassTeacherId(UUID class_teacher_id) {
-        this.classTeacherId = class_teacher_id;
+    public void setClassTeacherId(UUID classTeacherId) {
+        this.classTeacherId = classTeacherId;
     }
 
     public CourseClass getaCourseClass() {

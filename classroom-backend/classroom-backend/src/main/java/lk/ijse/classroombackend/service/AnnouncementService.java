@@ -1,6 +1,7 @@
 package lk.ijse.classroombackend.service;
 
 import lk.ijse.classroombackend.dto.AnnouncementDTO;
+import lk.ijse.classroombackend.dto.AnnouncementWithMaterialAndTeacherDTO;
 import lk.ijse.classroombackend.entity.Announcement;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface AnnouncementService {
     void updateAnnouncement(AnnouncementDTO announcementDTO);
 
     void deleteAnnouncement(String id);
+
+    public List<AnnouncementWithMaterialAndTeacherDTO> getAnnouncementsWithMaterialsAndTeacher(String classId);
 }

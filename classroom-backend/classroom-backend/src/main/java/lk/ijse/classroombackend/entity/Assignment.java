@@ -2,6 +2,7 @@ package lk.ijse.classroombackend.entity;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,9 @@ public class Assignment {
    private String title;
    @Column(columnDefinition = "LONGTEXT", nullable = false)
    private String description;
+
+   @CreationTimestamp
+   @Temporal(TemporalType.TIMESTAMP)
    private Date dueDate;
 
    @ManyToOne

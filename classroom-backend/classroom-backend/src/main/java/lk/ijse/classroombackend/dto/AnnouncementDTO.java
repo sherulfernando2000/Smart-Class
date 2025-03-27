@@ -20,14 +20,23 @@ import java.time.LocalDateTime;
 public class AnnouncementDTO {
     private String announcementId;
     private String message;
+    private String email;
+    private String url;
     private LocalDateTime postedAt;
-    private CourseClass classId;
+    private String classId;
     private Teacher postedBy;
 
     public AnnouncementDTO() {
     }
 
-    public AnnouncementDTO(String announcementId, String message, LocalDateTime postedAt, CourseClass classId, Teacher postedBy) {
+    public AnnouncementDTO( String message, String classId, String url, String email) {
+        this.message = message;
+        this.classId = classId;
+        this.url = url;
+        this.email = email;
+    }
+
+    public AnnouncementDTO(String announcementId, String message, LocalDateTime postedAt, String classId, Teacher postedBy) {
         this.announcementId = announcementId;
         this.message = message;
         this.postedAt = postedAt;
@@ -51,6 +60,22 @@ public class AnnouncementDTO {
         this.message = message;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public LocalDateTime getPostedAt() {
         return postedAt;
     }
@@ -59,11 +84,11 @@ public class AnnouncementDTO {
         this.postedAt = postedAt;
     }
 
-    public CourseClass getClassId() {
+    public String getClassId() {
         return classId;
     }
 
-    public void setClassId(CourseClass classId) {
+    public void setClassId(String classId) {
         this.classId = classId;
     }
 

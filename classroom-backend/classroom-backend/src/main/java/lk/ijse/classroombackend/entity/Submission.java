@@ -1,6 +1,7 @@
 package lk.ijse.classroombackend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -10,7 +11,10 @@ public class Submission {
     @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
     String submissionId;
     String grade;
-    Date submittedAt;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date submittedAt;
 
     @ManyToOne
     Assignment assignmentId;

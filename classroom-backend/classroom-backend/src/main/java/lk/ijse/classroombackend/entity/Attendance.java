@@ -1,13 +1,19 @@
 package lk.ijse.classroombackend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @Entity
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
     private String attendanceId;
-    private String date;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
     private String status;
     @ManyToOne
     private Student studentId;
@@ -15,7 +21,7 @@ public class Attendance {
     public Attendance() {
     }
 
-    public Attendance(String attendanceId, String date, String status, Student studentId) {
+    public Attendance(String attendanceId, Date date, String status, Student studentId) {
         this.attendanceId = attendanceId;
         this.date = date;
         this.status = status;
@@ -30,11 +36,11 @@ public class Attendance {
         this.attendanceId = attendanceId;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -52,15 +58,5 @@ public class Attendance {
 
     public void setStudentId(Student studentId) {
         this.studentId = studentId;
-    }
-
-    @Override
-    public String toString() {
-        return "Attendance{" +
-                "attendanceId='" + attendanceId + '\'' +
-                ", date='" + date + '\'' +
-                ", status='" + status + '\'' +
-                ", studentId=" + studentId +
-                '}';
     }
 }

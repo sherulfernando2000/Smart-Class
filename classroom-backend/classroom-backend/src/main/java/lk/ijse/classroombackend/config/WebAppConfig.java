@@ -14,11 +14,6 @@ public class WebAppConfig {
         return new ModelMapper();
     }
 
-    @Bean
-    public JavaMailSender javaMailSender(){
-        return new JavaMailSenderImpl();
-    };
-
    /* @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

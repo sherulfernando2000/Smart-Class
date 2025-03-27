@@ -1,14 +1,21 @@
 package lk.ijse.classroombackend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.lang.String;
+import java.util.UUID;
 
 @Entity
 public class Material {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
+    @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate String
     String materialId;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     Date uploadedAt;
     String fileUrl;
 
@@ -19,6 +26,8 @@ public class Material {
     Announcement announcementId;
 
     public Material() {
+        this.materialId = UUID.randomUUID().toString(); // Assign UUID manually
+
     }
 
     public Material(String materialId, Date uploadedAt, String fileUrl, Assignment assignmentId, Announcement announcementId) {

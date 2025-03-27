@@ -2,21 +2,25 @@ package lk.ijse.classroombackend.entity;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.lang.String;
+import java.util.UUID;
 
 @Entity
 public class Announcement {
       @Id
-      @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
+      @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate String
       private String announcementId;
 
       @Column(columnDefinition = "LONGTEXT", nullable = false)
       private String message;
 
+      @CreationTimestamp
       @Temporal(TemporalType.TIMESTAMP)
-      private  LocalDateTime postedAt;
+      private  Date postedAt;
 
       @ManyToOne
       private  CourseClass classId;
@@ -25,16 +29,16 @@ public class Announcement {
       private  Teacher postedBy;
 
     public Announcement() {
+        this.announcementId = UUID.randomUUID().toString(); // Assign UUID manually
     }
 
-    public Announcement(String announcementId, String message, LocalDateTime postedAt, CourseClass classId, Teacher postedBy) {
+    public Announcement(String announcementId, String message, Date postedAt, CourseClass classId, Teacher postedBy) {
         this.announcementId = announcementId;
         this.message = message;
         this.postedAt = postedAt;
         this.classId = classId;
         this.postedBy = postedBy;
     }
-
 
     public String getAnnouncementId() {
         return announcementId;
@@ -52,11 +56,11 @@ public class Announcement {
         this.message = message;
     }
 
-    public LocalDateTime getPostedAt() {
+    public Date getPostedAt() {
         return postedAt;
     }
 
-    public void setPostedAt(LocalDateTime postedAt) {
+    public void setPostedAt(Date postedAt) {
         this.postedAt = postedAt;
     }
 

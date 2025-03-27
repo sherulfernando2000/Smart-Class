@@ -1,6 +1,7 @@
 package lk.ijse.classroombackend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -17,10 +18,14 @@ import java.util.Date;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
-    String paymentId;
-    String status;
-    Date date;
-    Double amount;
+    private String paymentId;
+    private String status;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+
+    private Double amount;
 
     @ManyToOne
     Student student;

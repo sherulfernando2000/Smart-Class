@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -52,19 +53,19 @@ public class EnrollmentServiceImpl implements EnrollementService {
         String enrollmentId = "ENR-" + UUID.randomUUID().toString();
 
 
-        String enrollmentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
 
 
         Enrollment enrollment = new Enrollment();
         enrollment.setEnrollmentId(enrollmentId);
-        enrollment.setaClass(aCourseClass);
+        enrollment.setaCourseClass(aCourseClass);
         enrollment.setStudent(student);
-        enrollment.setEnrollment_date(enrollmentDate);
+        enrollment.setEnrollmentDate(new Date());
 
         System.out.println("course"+aCourseClass.toString());
         System.out.println("student"+student.toString());
 
 
-        enrollmentRepo.saveEnrollment(enrollmentId, aCourseClass.getClassId(), student.getStudentId(), enrollmentDate);
+        enrollmentRepo.saveEnrollment(enrollmentId, aCourseClass.getClassId(), student.getStudentId(), String.valueOf(enrollment.getEnrollmentDate()));
     }
 }

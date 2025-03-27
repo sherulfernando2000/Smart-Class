@@ -65,11 +65,9 @@ public class WebSecurityConfig {
                                "/api/mail/send",
                                "/api/mail/get",
                                 "/api/v1/teacher/get/{id}",
-
-
-
-
-
+                                "/api/v1/announcement/byClass/{classId}",
+                                "/actuator/env",
+                                "/api/v1/announcement/file/{fileName}",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()

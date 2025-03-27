@@ -1,6 +1,9 @@
 package lk.ijse.classroombackend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @Entity
 public class Enrollment {
@@ -14,16 +17,26 @@ public class Enrollment {
     @ManyToOne
     private Student student;
 
-    String enrollmentDate;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date enrollmentDate;
 
     public Enrollment() {
     }
 
-    public Enrollment(String enrollment_id, CourseClass aCourseClass, Student student, String enrollment_date) {
-        this.enrollmentId = enrollment_id;
+    public Enrollment(String enrollmentId, CourseClass aCourseClass, Student student, Date enrollmentDate) {
+        this.enrollmentId = enrollmentId;
         this.aCourseClass = aCourseClass;
         this.student = student;
-        this.enrollmentDate = enrollment_date;
+        this.enrollmentDate = enrollmentDate;
+    }
+
+    public String getEnrollmentId() {
+        return enrollmentId;
+    }
+
+    public void setEnrollmentId(String enrollmentId) {
+        this.enrollmentId = enrollmentId;
     }
 
     public CourseClass getaCourseClass() {
@@ -31,22 +44,6 @@ public class Enrollment {
     }
 
     public void setaCourseClass(CourseClass aCourseClass) {
-        this.aCourseClass = aCourseClass;
-    }
-
-    public String getEnrollmentId() {
-        return enrollmentId;
-    }
-
-    public void setEnrollmentId(String enrollment_id) {
-        this.enrollmentId = enrollment_id;
-    }
-
-    public CourseClass getaClass() {
-        return aCourseClass;
-    }
-
-    public void setaClass(CourseClass aCourseClass) {
         this.aCourseClass = aCourseClass;
     }
 
@@ -58,21 +55,21 @@ public class Enrollment {
         this.student = student;
     }
 
-    public String getEnrollmentDate() {
+    public Date getEnrollmentDate() {
         return enrollmentDate;
     }
 
-    public void setEnrollment_date(String enrollment_date) {
-        this.enrollmentDate = enrollment_date;
+    public void setEnrollmentDate(Date enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
     }
 
     @Override
     public String toString() {
         return "Enrollment{" +
-                "enrollment_id='" + enrollmentId + '\'' +
-                ", aClass=" + aCourseClass +
+                "enrollmentId='" + enrollmentId + '\'' +
+                ", aCourseClass=" + aCourseClass +
                 ", student=" + student +
-                ", enrollment_date='" + enrollmentDate + '\'' +
+                ", enrollmentDate=" + enrollmentDate +
                 '}';
     }
 }
