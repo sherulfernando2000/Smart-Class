@@ -63,13 +63,5 @@ public class Enrollment {
         this.enrollmentDate = enrollmentDate;
     }
 
-    @Override
-    public String toString() {
-        return "Enrollment{" +
-                "enrollmentId='" + enrollmentId + '\'' +
-                ", aCourseClass=" + aCourseClass +
-                ", student=" + student +
-                ", enrollmentDate=" + enrollmentDate +
-                '}';
-    }
+
 }

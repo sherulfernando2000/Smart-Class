@@ -14,9 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 public interface EnrollmentRepo extends JpaRepository<Enrollment,String> {
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO enrollment (enrollment_id, a_course_class_class_id, student_student_id, enrollment_date) VALUES (:id, :classId, :studentId, :date)", nativeQuery = true)
+    @Query(value = "INSERT INTO enrollment (enrollmentId, aCourseClass_classId, student_studentId) VALUES (:id, :classId, :studentId )", nativeQuery = true)
     void saveEnrollment(@Param("id") String id,
                         @Param("classId") String classId,
-                        @Param("studentId") String studentId,
-                        @Param("date") String date);
+                        @Param("studentId") String studentId);
+
+    boolean existsByEnrollmentId(String enrollmentId);
+
+    void deleteByEnrollmentId(String enrollmentId);
+
+    Enrollment findByEnrollmentId(String enrollmentId);
 }

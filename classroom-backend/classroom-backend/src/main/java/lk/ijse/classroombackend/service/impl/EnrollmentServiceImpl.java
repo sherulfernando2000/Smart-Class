@@ -1,6 +1,7 @@
 package lk.ijse.classroombackend.service.impl;
 
 import jakarta.persistence.EntityManager;
+import lk.ijse.classroombackend.dto.EnrollmentDTO;
 import lk.ijse.classroombackend.entity.CourseClass;
 import lk.ijse.classroombackend.entity.Enrollment;
 import lk.ijse.classroombackend.entity.Student;
@@ -14,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class EnrollmentServiceImpl implements EnrollementService {
@@ -34,8 +34,9 @@ public class EnrollmentServiceImpl implements EnrollementService {
 
     @Transactional
     public void enrollStudent(String email, String className) {
-
+        System.out.println("className"+className);
         CourseClass aCourseClass = classRepo.findByClassName(className);
+        System.out.println("course"+aCourseClass.toString());
         if (aCourseClass == null) {
             throw new RuntimeException("Class not found with name: " + className);
         }
@@ -60,12 +61,46 @@ public class EnrollmentServiceImpl implements EnrollementService {
         enrollment.setEnrollmentId(enrollmentId);
         enrollment.setaCourseClass(aCourseClass);
         enrollment.setStudent(student);
-        enrollment.setEnrollmentDate(new Date());
+
 
         System.out.println("course"+aCourseClass.toString());
         System.out.println("student"+student.toString());
 
 
-        enrollmentRepo.saveEnrollment(enrollmentId, aCourseClass.getClassId(), student.getStudentId(), String.valueOf(enrollment.getEnrollmentDate()));
+        enrollmentRepo.saveEnrollment(enrollmentId, aCourseClass.getClassId(), student.getStudentId());
+    }
+
+    @Override
+    public List<EnrollmentDTO> getAllEnrollment() {
+        List<Enrollment> enrollments = enrollmentRepo.findAll();
+        List<EnrollmentDTO> enrollmentDTOS = new ArrayList<>();
+        for(Enrollment enrollment: enrollments){
+            String classId = enrollment.getaCourseClass().getClassId();
+            System.out.println("classId"+classId);
+            String studentId = enrollment.getStudent().getStudentId();
+            System.out.println("studentId"+studentId);
+            Student student = studentRepo.findByStudentId(studentId);
+            CourseClass classById = classRepo.findByClassId(classId);
+
+            EnrollmentDTO enrollmentDTO = new EnrollmentDTO();
+            enrollmentDTO.setEnrollmentId(enrollment.getEnrollmentId());
+            enrollmentDTO.setStudentId(student.getStudentId());
+            enrollmentDTO.setStudentName(student.getFullName());
+            enrollmentDTO.setClassName(classById.getClassName());
+            enrollmentDTO.setEnrollmentDate(enrollment.getEnrollmentDate().toString());
+            enrollmentDTOS.add(enrollmentDTO);
+
+        }
+        return enrollmentDTOS;
+    }
+
+    @Override
+    public void deleteEnrollment(String enrollmentId) {
+        if (!enrollmentRepo.existsByEnrollmentId(enrollmentId)) {
+            throw new RuntimeException("No enrollment found with id: " + enrollmentId);
+        }
+        Enrollment enrollment = enrollmentRepo.findByEnrollmentId(enrollmentId);
+        System.out.println("enrollment"+enrollment.getEnrollmentId());
+        enrollmentRepo.delete(enrollment);
     }
 }

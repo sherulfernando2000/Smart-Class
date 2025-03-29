@@ -15,25 +15,33 @@ import lk.ijse.classroombackend.entity.Student;
 public class EnrollmentDTO {
     private String enrollmentId;
     private CourseClass aCourseClass;
+    private String name;
+    private String studentId;
+    private String studentName;
     private Student student;
-    String enrollment_date;
+    private String className;
+    String enrollmentDate;
 
     public EnrollmentDTO() {
     }
 
-    public EnrollmentDTO(String enrollment_id, CourseClass aCourseClass, Student student, String enrollment_date) {
-        this.enrollmentId = enrollment_id;
+    public EnrollmentDTO(String enrollmentId, CourseClass aCourseClass, String name, String studentId, String studentName, Student student, String className, String enrollment_date) {
+        this.enrollmentId = enrollmentId;
         this.aCourseClass = aCourseClass;
+        this.name = name;
+        this.studentId = studentId;
+        this.studentName = studentName;
         this.student = student;
-        this.enrollment_date = enrollment_date;
+        this.className = className;
+        this.enrollmentDate = enrollment_date;
     }
 
     public String getEnrollmentId() {
         return enrollmentId;
     }
 
-    public void setEnrollmentId(String enrollment_id) {
-        this.enrollmentId = enrollment_id;
+    public void setEnrollmentId(String enrollmentId) {
+        this.enrollmentId = enrollmentId;
     }
 
     public CourseClass getaCourseClass() {
@@ -44,6 +52,30 @@ public class EnrollmentDTO {
         this.aCourseClass = aCourseClass;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
     public Student getStudent() {
         return student;
     }
@@ -52,21 +84,20 @@ public class EnrollmentDTO {
         this.student = student;
     }
 
-    public String getEnrollment_date() {
-        return enrollment_date;
+    public String getClassName() {
+        return className;
     }
 
-    public void setEnrollment_date(String enrollment_date) {
-        this.enrollment_date = enrollment_date;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    @Override
-    public String toString() {
-        return "EnrollmentDTO{" +
-                "enrollment_id='" + enrollmentId + '\'' +
-                ", aCourseClass=" + aCourseClass +
-                ", student=" + student +
-                ", enrollment_date='" + enrollment_date + '\'' +
-                '}';
+
+    public String getEnrollmentDate() {
+        return enrollmentDate;
+    }
+
+    public void setEnrollmentDate(String enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
     }
 }

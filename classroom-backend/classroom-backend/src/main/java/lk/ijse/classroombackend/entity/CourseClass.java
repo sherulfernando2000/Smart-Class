@@ -120,17 +120,6 @@ public class CourseClass {
         this.annoncements = annoncements;
     }
 
-    @Override
-    public String toString() {
-        return "CourseClass{" +
-                "class_id='" + classId + '\'' +
-                ", class_name='" + className + '\'' +
-                ", subject='" + subject + '\'' +
-                ", created_at=" + created_at +
-                ", classTeacher=" + classTeacher +
-                ", enrollments=" + enrollments +
-                '}';
-    }
 
-    //private Teacher teacher;
+//private Teacher teacher;
 }
