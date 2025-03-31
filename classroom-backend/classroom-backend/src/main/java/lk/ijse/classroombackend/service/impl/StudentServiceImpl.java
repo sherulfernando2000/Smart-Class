@@ -128,5 +128,10 @@ public class StudentServiceImpl implements StudentService {
         studentRepo.delete(student);
     }
 
+    @Override
+    public StudentDTO getStudentByEmail(String email) {
+        return modelMapper.map(studentRepo.findByEmail(email),StudentDTO.class);
+    }
+
 
 }

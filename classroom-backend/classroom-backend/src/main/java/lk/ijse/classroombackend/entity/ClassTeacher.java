@@ -4,13 +4,12 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
-import java.util.UUID;
+import java.lang.String;
 
 @Entity
 public class ClassTeacher {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID classTeacherId;
+    private String classTeacherId;
 
     @ManyToOne
     private CourseClass aCourseClass;
@@ -25,18 +24,18 @@ public class ClassTeacher {
     public ClassTeacher() {
     }
 
-    public ClassTeacher(UUID class_teacher_id, CourseClass aCourseClass, Teacher teacher, Date date) {
+    public ClassTeacher(String class_teacher_id, CourseClass aCourseClass, Teacher teacher, Date date) {
         this.classTeacherId = class_teacher_id;
         this.aCourseClass = aCourseClass;
         this.teacher = teacher;
         this.date = date;
     }
 
-    public UUID getClassTeacherId() {
+    public String getClassTeacherId() {
         return classTeacherId;
     }
 
-    public void setClassTeacherId(UUID classTeacherId) {
+    public void setClassTeacherId(String classTeacherId) {
         this.classTeacherId = classTeacherId;
     }
 

@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface EnrollmentRepo extends JpaRepository<Enrollment,String> {
     @Modifying
@@ -24,4 +26,6 @@ public interface EnrollmentRepo extends JpaRepository<Enrollment,String> {
     void deleteByEnrollmentId(String enrollmentId);
 
     Enrollment findByEnrollmentId(String enrollmentId);
+
+    List<Enrollment> findByStudent_studentId(String studentId);
 }

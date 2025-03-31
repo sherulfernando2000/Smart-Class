@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RestController
 @RequestMapping("api/v1/class")
 @CrossOrigin
@@ -27,7 +29,7 @@ public class ClassController {
     }
 
     @GetMapping("get/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER','STUDENT')")
     public ClassDTO getClassById(@PathVariable String id){
         System.out.println("id"+id);
         return classService.getClassById(id);
@@ -66,6 +68,15 @@ public class ClassController {
         System.out.println("classDTO"+classDTO);
         classService.updateClass(classDTO);
         return new ResponseUtil(201,"Class updated.",classDTO);
+    }
+
+    @GetMapping("getByEmail/{email}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','STUDENT','TEACHER')")
+    public ResponseUtil getClassByEmail(@PathVariable String email){
+        System.out.println("id"+email);
+        List<ClassDTO> classes= classService.getClassByEmail(email);
+        return new ResponseUtil(201,"All Classes",classes);
+
     }
 
 

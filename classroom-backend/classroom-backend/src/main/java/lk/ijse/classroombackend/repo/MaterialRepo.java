@@ -36,4 +36,16 @@ public interface MaterialRepo extends JpaRepository<Material, String> {
 
 
     void deleteByAnnouncementId_announcementId(String id);
+
+
+    @Modifying
+    @Query(value = "INSERT INTO material (materialId, fileUrl, assignmentId_assignmentId) " +
+            "VALUES (:materialId, :url, :assignmentId)", nativeQuery = true)
+    void saveMaterialAss(
+            @Param("materialId") String materialId,
+            @Param("url") String url,
+            @Param("assignmentId") String assignmentId
+    );
+
+    Material findByAssignmentId_assignmentId(String assignmentId);
 }

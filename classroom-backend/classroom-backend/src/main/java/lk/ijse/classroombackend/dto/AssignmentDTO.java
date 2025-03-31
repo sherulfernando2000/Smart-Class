@@ -24,17 +24,19 @@ public class AssignmentDTO {
     private String title;
     private String description;
     private Date dueDate;
-    private CourseClass classId;
-    private Teacher uploadedBy;
+    private String url;
+    private String classId;
+    private String uploadedBy;
 
     public AssignmentDTO() {
     }
 
-    public AssignmentDTO(String assignmentId, String title, String description, Date dueDate, CourseClass classId, Teacher uploadedBy) {
+    public AssignmentDTO(String assignmentId, String title, String description, Date dueDate, String url, String classId, String uploadedBy) {
         this.assignmentId = assignmentId;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
+        this.url = url;
         this.classId = classId;
         this.uploadedBy = uploadedBy;
     }
@@ -71,19 +73,27 @@ public class AssignmentDTO {
         this.dueDate = dueDate;
     }
 
-    public CourseClass getClassId() {
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getClassId() {
         return classId;
     }
 
-    public void setClassId(CourseClass classId) {
+    public void setClassId(String classId) {
         this.classId = classId;
     }
 
-    public Teacher getUploadedBy() {
+    public String getUploadedBy() {
         return uploadedBy;
     }
 
-    public void setUploadedBy(Teacher uploadedBy) {
+    public void setUploadedBy(String uploadedBy) {
         this.uploadedBy = uploadedBy;
     }
 
@@ -94,8 +104,9 @@ public class AssignmentDTO {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", dueDate=" + dueDate +
-                ", classId=" + classId +
-                ", uploadedBy=" + uploadedBy +
+                ", url='" + url + '\'' +
+                ", classId='" + classId + '\'' +
+                ", uploadedBy='" + uploadedBy + '\'' +
                 '}';
     }
 }

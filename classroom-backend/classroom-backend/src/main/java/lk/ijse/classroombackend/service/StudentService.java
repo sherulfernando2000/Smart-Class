@@ -19,4 +19,6 @@ public interface StudentService {
 
 
     void deleteStudent(String id);
+
+    StudentDTO getStudentByEmail(String email);
 }

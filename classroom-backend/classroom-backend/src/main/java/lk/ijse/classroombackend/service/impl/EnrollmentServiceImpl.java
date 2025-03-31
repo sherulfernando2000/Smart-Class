@@ -63,10 +63,6 @@ public class EnrollmentServiceImpl implements EnrollementService {
         enrollment.setStudent(student);
 
 
-        System.out.println("course"+aCourseClass.toString());
-        System.out.println("student"+student.toString());
-
-
         enrollmentRepo.saveEnrollment(enrollmentId, aCourseClass.getClassId(), student.getStudentId());
     }
 

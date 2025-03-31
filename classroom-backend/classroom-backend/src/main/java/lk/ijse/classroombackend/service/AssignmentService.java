@@ -21,4 +21,6 @@ public interface AssignmentService {
     void updateAssignment(AssignmentDTO assignmentDTO);
 
     void deleteAssignment(String id);
+
+    List<AssignmentDTO> getAssignmentForClass(String id);
 }

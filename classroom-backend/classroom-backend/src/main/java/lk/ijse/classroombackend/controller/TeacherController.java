@@ -19,15 +19,6 @@ public class TeacherController {
     @Autowired
     public TeacherService teacherService;
 
-    /*@Autowired
-    private EmailServiceImpl emailService;*/
-
-    /*@GetMapping("test")
-    public String test(){
-        emailService.sendEmail("shamodha7@gmail.com", "Test", "Test");
-
-        return "teacher";
-    }*/
 
     @GetMapping("get")
     public String get(){

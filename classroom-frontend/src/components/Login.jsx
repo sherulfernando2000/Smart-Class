@@ -30,9 +30,9 @@ function Login() {
       console.log("after response");
       if (response.data.status === 200) {
         console.log("in if");
-        const { role, token } = response.data.data;
+        const { role, token,email } = response.data.data;
         console.log("role", role);
-
+        localStorage.setItem("email", email);
         localStorage.setItem("token", token);
         if (role === "ADMIN") {
           navigate("/indexclass");
@@ -40,6 +40,9 @@ function Login() {
         } else if (role === "TEACHER") {
           navigate("/teacherindexclass");
           alert("Logged in as Teacher");
+        }else if(role === "STUDENT"){
+          navigate("/studentindexclass")
+          alert("Logged in as Student")
         } else {
           setError(response.data.message);
           alert(response.data.message);

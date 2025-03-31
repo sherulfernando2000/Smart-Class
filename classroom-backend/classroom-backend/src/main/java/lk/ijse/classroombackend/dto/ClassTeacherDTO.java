@@ -4,8 +4,7 @@ import jakarta.persistence.ManyToOne;
 import lk.ijse.classroombackend.entity.CourseClass;
 import lk.ijse.classroombackend.entity.Teacher;
 
-import java.util.Date;
-import java.util.UUID;
+
 
 /**
  * ------------------------------------------------
@@ -17,27 +16,58 @@ import java.util.UUID;
  */
 
 public class ClassTeacherDTO {
-    private UUID classTeacherId;
+    private String classTeacherId;
+    private String teacherId;
+    private String teacherName;
+    private String className;
     private CourseClass aCourseClass;
     private Teacher teacher;
-    private Date date;
+    private String date;
 
     public ClassTeacherDTO() {
     }
 
-    public ClassTeacherDTO(UUID class_teacher_id, CourseClass aCourseClass, Teacher teacher, Date date) {
-        this.classTeacherId = class_teacher_id;
+    public ClassTeacherDTO(String classTeacherId, String teacherId, String teacherName, String className, CourseClass aCourseClass, Teacher teacher, String date) {
+        this.classTeacherId = classTeacherId;
+        this.teacherId = teacherId;
+        this.teacherName = teacherName;
+        this.className = className;
         this.aCourseClass = aCourseClass;
         this.teacher = teacher;
         this.date = date;
     }
 
-    public UUID getClassTeacherId() {
+
+    public String getClassTeacherId() {
         return classTeacherId;
     }
 
-    public void setClassTeacherId(UUID class_teacher_id) {
-        this.classTeacherId = class_teacher_id;
+    public void setClassTeacherId(String classTeacherId) {
+        this.classTeacherId = classTeacherId;
+    }
+
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public CourseClass getaCourseClass() {
@@ -56,21 +86,24 @@ public class ClassTeacherDTO {
         this.teacher = teacher;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
     @Override
     public String toString() {
         return "ClassTeacherDTO{" +
-                "class_teacher_id=" + classTeacherId +
+                "classTeacherId=" + classTeacherId +
+                ", teacherId='" + teacherId + '\'' +
+                ", teacherName='" + teacherName + '\'' +
+                ", className='" + className + '\'' +
                 ", aCourseClass=" + aCourseClass +
                 ", teacher=" + teacher +
-                ", date=" + date +
+                ", date='" + date + '\'' +
                 '}';
     }
 }

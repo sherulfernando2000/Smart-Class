@@ -35,6 +35,14 @@ public class StudentController {
         return studentService.getStudentById(id);
     }
 
+    @GetMapping("getBy/{email}")
+    public StudentDTO getStudentByEmail(@PathVariable String email){
+        System.out.println("email"+email);
+        return studentService.getStudentByEmail(email);
+    }
+
+
+
     @PostMapping("save")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseUtil addUserAndSave(@RequestBody StudentDTO studentDTO){

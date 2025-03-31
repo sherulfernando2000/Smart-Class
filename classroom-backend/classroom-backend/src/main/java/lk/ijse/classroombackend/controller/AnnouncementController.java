@@ -48,6 +48,7 @@ import java.util.Optional;
 public class AnnouncementController {
     @Autowired
     private AnnouncementService announcementService;
+
     private static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
 
     public AnnouncementController(AnnouncementServiceImpl announcementServiceImpl) {

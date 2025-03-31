@@ -4,9 +4,13 @@ import lk.ijse.classroombackend.entity.CourseClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CourseClassRepo extends JpaRepository<CourseClass, String> {
     CourseClass findByClassName(String className); // Find class by class name
 
     CourseClass findByClassId(String id);
+
+//    List<CourseClass> findByEmail(String email);
 }

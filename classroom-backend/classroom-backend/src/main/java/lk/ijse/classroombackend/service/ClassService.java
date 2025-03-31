@@ -16,4 +16,6 @@ public interface ClassService {
     void updateClass(ClassDTO classDTO);
 
     ClassDTO getClassById(String id);
+
+    List<ClassDTO> getClassByEmail(String email);
 }

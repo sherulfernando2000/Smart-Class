@@ -21,7 +21,13 @@ import TeacherAllStudent from "./teacher/othermain/TeacherAllStudent";
 import TeacherStudentEnrollment from "./teacher/othermain/TeacherStudentEnrollment";
 import TeacherUserSetting from "./teacher/othermain/TeacherUserSetting";
 
+import Classwork from "./components/pages/Classwork";
+import StudentWork from "./components/pages/StudentWork";
+import StudentIndexClass from "./student/StudentIndexClass";
+import StudentHomePage from "./student/studentpages/StudentHomePage";
+import StudentClassPage from "./student/studentpages/StudentClassPage";
 
+import StudentStudentWork from "./student/studentpages/StudentStudentWork";
 
 const App = () => {
   return (
@@ -49,6 +55,7 @@ const App = () => {
           <Route path="studentenrollment" element={<StudentEnrollment/>}></Route>
           <Route path="teacherenrollment" element={<TeacherEnrollment/>}></Route>
           <Route path="usersetting" element={<UserSetting/>}></Route>
+          <Route path="student-work/:assignementId" element={<StudentWork />} />
         </Route>
 
       {/* Teacher DashBoard */}
@@ -61,9 +68,17 @@ const App = () => {
         
         
         </Route>
-        
-        
 
+        {/* Teacher DashBoard */}
+        <Route path="/studentindexclass/*" element={<StudentIndexClass/>}>
+          <Route index element={<StudentHomePage/>}></Route>
+          <Route path="studentclass/:id" element={<StudentClassPage />} />
+          <Route path="student-work/:assignementId" element={<StudentStudentWork />} />
+        
+        
+        </Route>
+        
+        
 
         </Routes>
 
