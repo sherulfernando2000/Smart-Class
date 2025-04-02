@@ -18,6 +18,7 @@
     "@toolpad/core": "^0.12.1",
     "axios": "^1.8.3",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.486.0",
     "quill": "^2.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,6 +27,7 @@
     "react-router-dom": "^7.3.0",
     "react-scroll": "^1.9.0",
     "react-toastify": "^11.0.5",
+    "sweetalert2": "^11.17.2",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

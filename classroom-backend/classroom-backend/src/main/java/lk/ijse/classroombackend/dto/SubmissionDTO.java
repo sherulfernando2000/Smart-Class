@@ -26,19 +26,22 @@ public class SubmissionDTO {
    private String submissionId;
    private String grade;
    private Date submittedAt;
-   private Assignment assignmentId;
-   private Student studentId;
+   private String assignmentId;
+   private String studentId;
+   private String url;
 
     public SubmissionDTO() {
     }
 
-    public SubmissionDTO(String submissionId, String grade, Date submittedAt, Assignment assignmentId, Student studentId) {
+    public SubmissionDTO(String submissionId, String grade, Date submittedAt, String assignmentId, String studentId, String url) {
         this.submissionId = submissionId;
         this.grade = grade;
         this.submittedAt = submittedAt;
         this.assignmentId = assignmentId;
         this.studentId = studentId;
+        this.url = url;
     }
+
 
     public String getSubmissionId() {
         return submissionId;
@@ -64,20 +67,28 @@ public class SubmissionDTO {
         this.submittedAt = submittedAt;
     }
 
-    public Assignment getAssignmentId() {
+    public String getAssignmentId() {
         return assignmentId;
     }
 
-    public void setAssignmentId(Assignment assignmentId) {
+    public void setAssignmentId(String assignmentId) {
         this.assignmentId = assignmentId;
     }
 
-    public Student getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Student studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override
@@ -86,8 +97,9 @@ public class SubmissionDTO {
                 "submissionId='" + submissionId + '\'' +
                 ", grade='" + grade + '\'' +
                 ", submittedAt=" + submittedAt +
-                ", assignmentId=" + assignmentId +
-                ", studentId=" + studentId +
+                ", assignmentId='" + assignmentId + '\'' +
+                ", studentId='" + studentId + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 }

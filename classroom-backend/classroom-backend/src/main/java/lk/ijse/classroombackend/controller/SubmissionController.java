@@ -5,12 +5,17 @@ import lk.ijse.classroombackend.dto.SubmissionDTO;
 import lk.ijse.classroombackend.service.AnnouncementService;
 import lk.ijse.classroombackend.service.SubmissionService;
 import lk.ijse.classroombackend.service.impl.AnnouncementServiceImpl;
+import lk.ijse.classroombackend.util.FileUploadUtil;
 import lk.ijse.classroombackend.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * ------------------------------------------------
@@ -29,10 +34,16 @@ public class SubmissionController {
     private SubmissionService submissionService;
 
 
-    @GetMapping("get")
-    public String get(){
-        return "submission";
+    @GetMapping("details")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER','STUDENT')")
+    public ResponseUtil getSubmissionDetails(
+            @RequestParam String assignmentId,
+            @RequestParam String studentId) {
+
+        SubmissionDTO submissionDTO = submissionService.getSubmissionDetails(assignmentId, studentId);
+        return new ResponseUtil(200, "Submission details fetched successfully", submissionDTO);
     }
+
 
     @GetMapping("getAll")
     public ResponseUtil getAll(){
@@ -41,11 +52,36 @@ public class SubmissionController {
     }
 
     @PostMapping("save")
-    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
-    public ResponseUtil save(@RequestBody SubmissionDTO submissionDTO){
-        SubmissionDTO submissionDTO1 = submissionService.saveSubmission(submissionDTO);
-        return new ResponseUtil(201,"Submission saved successfully",submissionDTO1);
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER','STUDENT')")
+    public ResponseUtil save(
+            @RequestParam("file") MultipartFile[] files,
+            @RequestParam("assignmentId") String assignmentId,
+            @RequestParam("studentId") String studentId) throws IOException {
+
+        String uploadDir = "src/main/resources/static/uploads/submissions/";
+        String fileUrl = null;
+
+        if (files != null && files.length > 0) { // Check if files exist
+            StringBuilder filePaths = new StringBuilder();
+            for (MultipartFile file : files) {
+                String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+                String savedPath = FileUploadUtil.saveFile(uploadDir, fileName, file);
+                filePaths.append(savedPath).append(",");
+            }
+            // Remove the last comma
+            fileUrl = filePaths.length() > 0 ? filePaths.substring(0, filePaths.length() - 1) : null;
+        }
+
+        SubmissionDTO submissionDTO = new SubmissionDTO();
+        submissionDTO.setAssignmentId(assignmentId);
+        submissionDTO.setStudentId(studentId);
+        submissionDTO.setUrl(fileUrl); // Set file URLs in DTO
+
+        SubmissionDTO savedSubmission = submissionService.saveSubmission(submissionDTO);
+
+        return new ResponseUtil(201, "Submission saved successfully", savedSubmission);
     }
+
 
     @PutMapping("update")
     @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
@@ -55,7 +91,7 @@ public class SubmissionController {
     }
 
     @DeleteMapping("delete/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER','STUDENT')")
     public ResponseUtil deleteAnnouncement(@PathVariable String id){
         submissionService.deleteSubmission(id);
         return new ResponseUtil(201,"Submission deleted.",null);

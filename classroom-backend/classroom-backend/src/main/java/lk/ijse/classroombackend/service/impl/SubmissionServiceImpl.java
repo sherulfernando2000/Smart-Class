@@ -1,18 +1,22 @@
 package lk.ijse.classroombackend.service.impl;
 
 
-import lk.ijse.classroombackend.dto.AnnouncementDTO;
 import lk.ijse.classroombackend.dto.SubmissionDTO;
-import lk.ijse.classroombackend.entity.Announcement;
+import lk.ijse.classroombackend.entity.Assignment;
+import lk.ijse.classroombackend.entity.Student;
 import lk.ijse.classroombackend.entity.Submission;
+import lk.ijse.classroombackend.repo.AssignmentRepo;
+import lk.ijse.classroombackend.repo.StudentRepo;
 import lk.ijse.classroombackend.repo.SubmissionRepo;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * ------------------------------------------------
@@ -30,6 +34,12 @@ public class SubmissionServiceImpl implements lk.ijse.classroombackend.service.S
     @Autowired
     private SubmissionRepo submissionRepo;
 
+    @Autowired
+    private AssignmentRepo assignmentRepo;
+
+    @Autowired
+    private StudentRepo studentRepo;
+
 
     @Override
     public List<SubmissionDTO> getAllSubmissions() {
@@ -37,8 +47,23 @@ public class SubmissionServiceImpl implements lk.ijse.classroombackend.service.S
     }
 
     @Override
+    @Transactional
     public SubmissionDTO saveSubmission(SubmissionDTO submissionDTO) {
-        submissionRepo.save(modelMapper.map(submissionDTO, Submission.class));
+
+        String submitId = "SUB-" + UUID.randomUUID().toString();
+        Assignment assignment = assignmentRepo.findByAssignmentId(submissionDTO.getAssignmentId());
+        Student student = studentRepo.findByStudentId(submissionDTO.getStudentId());
+
+
+
+        Submission submission = new Submission();
+        submission.setSubmissionId(submitId);
+        submission.setAssignmentId(assignment);
+        submission.setStudentId(student);
+        submission.setUrl(submissionDTO.getUrl());
+
+
+        submissionRepo.save(submission);
         return submissionDTO;
     }
 
@@ -59,4 +84,13 @@ public class SubmissionServiceImpl implements lk.ijse.classroombackend.service.S
         throw new RuntimeException("Submission does not exist");
 
     }
+
+    @Override
+    public SubmissionDTO getSubmissionDetails(String assignmentId, String studentId) {
+        Submission submission = (Submission) submissionRepo.findByAssignmentId_assignmentIdAndStudentId_StudentId(assignmentId, studentId)
+                .orElseThrow(() -> new RuntimeException("Submission does not exist"));
+
+        return modelMapper.map(submission, SubmissionDTO.class);
+    }
+
 }

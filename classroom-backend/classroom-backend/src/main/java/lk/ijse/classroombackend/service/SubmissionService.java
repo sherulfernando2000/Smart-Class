@@ -21,4 +21,6 @@ public interface SubmissionService {
     void updateSubmission(SubmissionDTO submissionDTO);
 
     void deleteSubmission(String id);
+
+    SubmissionDTO getSubmissionDetails(String assignmentId, String studentId);
 }

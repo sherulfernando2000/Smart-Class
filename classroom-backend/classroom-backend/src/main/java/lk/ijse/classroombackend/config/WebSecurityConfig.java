@@ -48,7 +48,8 @@ public class WebSecurityConfig {
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-@Bean
+
+    @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)

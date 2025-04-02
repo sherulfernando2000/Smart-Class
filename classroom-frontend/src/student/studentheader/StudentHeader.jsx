@@ -90,6 +90,7 @@ export default function TeacherHeader() {
           `http://localhost:8080/api/v1/student/getBy/${email}`
         );
         setStudent(response.data);
+        localStorage.setItem("studentId", response.data.studentId);
       } catch (error) {
         console.error("Failed to fetch student:", error);
       }

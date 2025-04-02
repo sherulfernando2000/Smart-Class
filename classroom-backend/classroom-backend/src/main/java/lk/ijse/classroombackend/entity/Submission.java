@@ -11,6 +11,7 @@ public class Submission {
     @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
     String submissionId;
     String grade;
+    String url;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -25,9 +26,10 @@ public class Submission {
     public Submission() {
     }
 
-    public Submission(String submissionId, String grade, Date submittedAt, Assignment assignmentId, Student studentId) {
+    public Submission(String submissionId, String grade, String url, Date submittedAt, Assignment assignmentId, Student studentId) {
         this.submissionId = submissionId;
         this.grade = grade;
+        this.url = url;
         this.submittedAt = submittedAt;
         this.assignmentId = assignmentId;
         this.studentId = studentId;
@@ -47,6 +49,14 @@ public class Submission {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Date getSubmittedAt() {
@@ -78,6 +88,7 @@ public class Submission {
         return "Submission{" +
                 "submissionId='" + submissionId + '\'' +
                 ", grade='" + grade + '\'' +
+                ", url='" + url + '\'' +
                 ", submittedAt=" + submittedAt +
                 ", assignmentId=" + assignmentId +
                 ", studentId=" + studentId +

@@ -18,11 +18,11 @@ const StudentPeople = () => {
       {/* Students Section */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">Students</h2>
-          <FaUserPlus
+          <h2 className="text-2xl font-semibold">Teachers</h2>
+          {/* <FaUserPlus
             className="text-gray-600 cursor-pointer"
             onClick={handleStudentFormToggle}
-          />
+          /> */}
         </div>
         {showStudentForm && (
           <div className="flex-col p-4 bg-white rounded shadow mb-4 border-2">
@@ -54,10 +54,10 @@ const StudentPeople = () => {
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">Students</h2>
-          <FaUserPlus
+          {/* <FaUserPlus
             className="text-gray-600 cursor-pointer"
             // onClick={handleStudentFormToggle}
-          />
+          /> */}
         </div>
         {showStudentForm && (
           <div className="p-4 bg-white rounded shadow mb-4 border-2">
