@@ -14,27 +14,28 @@ const StudentStudentWork = () => {
   const studentId = localStorage.getItem("studentId"); // Replace with actual studentId logic
     
 
-  useEffect(() => {
-    const fetchSubmissionDetails = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/v1/submission/details`,
-          {
-            params: {
-              assignmentId: assignment?.assignmentId,
-              studentId: studentId,
-            },
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        setSubmissionDetails(response.data.data);
-      } catch (error) {
-        console.error("Error fetching submission details:", error);
-      }
-    };
+  const fetchSubmissionDetails = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/submission/details`,
+        {
+          params: {
+            assignmentId: assignment?.assignmentId,
+            studentId: studentId,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setSubmissionDetails(response.data.data);
+    } catch (error) {
+      console.error("Error fetching submission details:", error);
+    }
+  };
 
+  useEffect(() => {
+   
     if (assignment?.assignmentId && studentId) {
       fetchSubmissionDetails();
     }
@@ -87,7 +88,7 @@ const StudentStudentWork = () => {
       );
       alert("Submission successful!");
       setShowPopup(false); // Close the popup on success
-      setSubmissionDetails(response.data); // Update submission details
+      fetchSubmissionDetails();
     } catch (error) {
       console.error("Error submitting work:", error);
       alert("Failed to submit. Please try again.");

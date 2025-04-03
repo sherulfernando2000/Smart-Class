@@ -69,18 +69,25 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public void updateAssignment(AssignmentDTO assignmentDTO) {
-        if (assignmentRepo.existsByAssignmentId(assignmentDTO.getAssignmentId())){
-            assignmentRepo.save(modelMapper.map(assignmentDTO,Assignment.class));
+        System.out.println("id "+assignmentDTO.getAssignmentId());
+        System.out.println("exist"+assignmentRepo.existsById(assignmentDTO.getAssignmentId()));
+//        System.out.println("find"+assignmentRepo.findByAssignmentId(assignmentDTO.getAssignmentId()));
+        if (assignmentRepo.findByAssignmentId(assignmentDTO.getAssignmentId()) != null){
+            assignmentRepo.update(assignmentDTO.getAssignmentId(),assignmentDTO.getTitle(),assignmentDTO.getDescription(),assignmentDTO.getDueDate());
+        }else{
+            throw new RuntimeException("Assignment does not exist");
         }
-        throw new RuntimeException("Assignment does not exist");
+
     }
 
     @Override
     public void deleteAssignment(String id) {
         if (assignmentRepo.existsByAssignmentId(id)){
             assignmentRepo.deleteByAssignmentId(id);
+        }else{
+            throw new RuntimeException("Assignment does not exist");
         }
-        throw new RuntimeException("Assignment does not exist");
+
     }
 
     @Override

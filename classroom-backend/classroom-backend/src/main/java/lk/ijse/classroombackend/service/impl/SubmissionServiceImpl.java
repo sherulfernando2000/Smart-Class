@@ -42,8 +42,8 @@ public class SubmissionServiceImpl implements lk.ijse.classroombackend.service.S
 
 
     @Override
-    public List<SubmissionDTO> getAllSubmissions() {
-        return modelMapper.map(submissionRepo.findAll(),new TypeToken<List<SubmissionDTO>>(){}.getType());
+    public List<SubmissionDTO> getAllSubmissions(String assignmentId) {
+        return modelMapper.map(submissionRepo.findAllByAssignmentId_assignmentId(assignmentId),new TypeToken<List<SubmissionDTO>>(){}.getType());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SubmissionServiceImpl implements lk.ijse.classroombackend.service.S
         submission.setUrl(submissionDTO.getUrl());
 
 
-        submissionRepo.save(submission);
+        submissionRepo.saveSubmission(submission.getSubmissionId(),"null",assignment.getAssignmentId(),student.getStudentId(),submission.getUrl());
         return submissionDTO;
     }
 
@@ -77,11 +77,14 @@ public class SubmissionServiceImpl implements lk.ijse.classroombackend.service.S
     }
 
     @Override
+    @Transactional
     public void deleteSubmission(String id) {
-        if (submissionRepo.existsBySubmissionId(id)) {
+        if (submissionRepo.findBySubmissionId(id)!= null) {
             submissionRepo.deleteBySubmissionId(id);
+        }else{
+            throw new RuntimeException("Submission does not exist");
         }
-        throw new RuntimeException("Submission does not exist");
+
 
     }
 

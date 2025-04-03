@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 public interface SubmissionService {
-    List<SubmissionDTO> getAllSubmissions();
+    List<SubmissionDTO> getAllSubmissions(String assignmentId);
 
     SubmissionDTO saveSubmission(SubmissionDTO submissionDTO);
 

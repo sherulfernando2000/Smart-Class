@@ -72,6 +72,7 @@ public class WebSecurityConfig {
                                 "/actuator/env",
                                 "/api/v1/announcement/file/{fileName}",
                                 "/api/v1/assignment/file/{fileName}",
+                                "/api/v1/submission/file/{fileName}",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()
