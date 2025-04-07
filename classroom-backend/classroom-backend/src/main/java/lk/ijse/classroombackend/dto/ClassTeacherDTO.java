@@ -20,14 +20,14 @@ public class ClassTeacherDTO {
     private String teacherId;
     private String teacherName;
     private String className;
-    private CourseClass aCourseClass;
+    private String aCourseClass;
     private Teacher teacher;
     private String date;
 
     public ClassTeacherDTO() {
     }
 
-    public ClassTeacherDTO(String classTeacherId, String teacherId, String teacherName, String className, CourseClass aCourseClass, Teacher teacher, String date) {
+    public ClassTeacherDTO(String classTeacherId, String teacherId, String teacherName, String className, String aCourseClass, Teacher teacher, String date) {
         this.classTeacherId = classTeacherId;
         this.teacherId = teacherId;
         this.teacherName = teacherName;
@@ -37,6 +37,9 @@ public class ClassTeacherDTO {
         this.date = date;
     }
 
+    public ClassTeacherDTO(String classTeacherId) {
+        this.classTeacherId = classTeacherId;
+    }
 
     public String getClassTeacherId() {
         return classTeacherId;
@@ -70,11 +73,11 @@ public class ClassTeacherDTO {
         this.className = className;
     }
 
-    public CourseClass getaCourseClass() {
+    public String getaCourseClass() {
         return aCourseClass;
     }
 
-    public void setaCourseClass(CourseClass aCourseClass) {
+    public void setaCourseClass(String aCourseClass) {
         this.aCourseClass = aCourseClass;
     }
 
@@ -97,11 +100,11 @@ public class ClassTeacherDTO {
     @Override
     public String toString() {
         return "ClassTeacherDTO{" +
-                "classTeacherId=" + classTeacherId +
+                "classTeacherId='" + classTeacherId + '\'' +
                 ", teacherId='" + teacherId + '\'' +
                 ", teacherName='" + teacherName + '\'' +
                 ", className='" + className + '\'' +
-                ", aCourseClass=" + aCourseClass +
+                ", aCourseClass='" + aCourseClass + '\'' +
                 ", teacher=" + teacher +
                 ", date='" + date + '\'' +
                 '}';

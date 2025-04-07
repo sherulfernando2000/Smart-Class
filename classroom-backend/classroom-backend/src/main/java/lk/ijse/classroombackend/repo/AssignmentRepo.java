@@ -45,6 +45,7 @@ public interface AssignmentRepo extends JpaRepository<Assignment,String> {
 
     List<Assignment> findByClassId_classId(String id);
 
+    @Transactional
     @Modifying
     @Query(value = "UPDATE assignment SET title = :title, description = :description, dueDate = :dueDate WHERE assignmentId = :assignmentId", nativeQuery = true)
     void update(@Param("assignmentId") String assignmentId,

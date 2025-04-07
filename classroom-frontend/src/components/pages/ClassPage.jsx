@@ -5,6 +5,8 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import Announcement from "./Announcement"; // Import the Announcement component
 import People from "./People"; // Import the People component
 import Classwork from "./Classwork"; // Import the Classwork component
+import Attendance from "./Attendance"; // Import the Attendance component
+
 
 const ClassPage = () => {
     const { id } = useParams();
@@ -40,7 +42,8 @@ const ClassPage = () => {
             case "attendance":
                 return (
                     <div class="p-4 bg-white rounded shadow">
-                        <h2 class="text-xl font-semibold mb-4">Attendance</h2>
+                        {/* <h2 class="text-xl font-semibold mb-4">Attendance</h2> */}
+                        <Attendance id={id} /> 
                         {/* Add attendance form and list of attendance records here */}
                     </div>
                 );
@@ -51,7 +54,7 @@ const ClassPage = () => {
 
     return (
         <div className="container mx-auto p-6">
-            <div className="tabs mb-6">
+            <div className="tabs mb-6 ">
                 <button
                     className={`px-4 py-2 mr-2 rounded ${activeTab === "streams" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                     onClick={() => setActiveTab("streams")}

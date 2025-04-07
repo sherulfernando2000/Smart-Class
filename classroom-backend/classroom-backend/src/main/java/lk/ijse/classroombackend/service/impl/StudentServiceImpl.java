@@ -62,6 +62,7 @@ public class StudentServiceImpl implements StudentService {
         // Generate Student ID
 
         String studentId = studentIdGenerator.generateStudentId();
+        System.out.println(studentId);
 
         // Create and save Student
         Student student = new Student(studentId, studentDTO.getFullName(), studentDTO.getContact(),

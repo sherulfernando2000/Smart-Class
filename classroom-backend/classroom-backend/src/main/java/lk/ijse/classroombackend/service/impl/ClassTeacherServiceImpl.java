@@ -80,6 +80,7 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
             teacherEnrollDTO.setTeacherName(teacher.getFullName());
             teacherEnrollDTO.setClassName(classById.getClassName());
             teacherEnrollDTO.setDate(teacherEnroll.getDate().toString());
+            teacherEnrollDTO.setaCourseClass(classId);
             teacherEnrollDTOs.add(teacherEnrollDTO);
         }
         return teacherEnrollDTOs;

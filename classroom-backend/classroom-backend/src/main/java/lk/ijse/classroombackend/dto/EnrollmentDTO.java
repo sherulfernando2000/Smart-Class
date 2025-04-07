@@ -21,11 +21,12 @@ public class EnrollmentDTO {
     private Student student;
     private String className;
     String enrollmentDate;
+    private String classId;
 
     public EnrollmentDTO() {
     }
 
-    public EnrollmentDTO(String enrollmentId, CourseClass aCourseClass, String name, String studentId, String studentName, Student student, String className, String enrollment_date) {
+    public EnrollmentDTO(String enrollmentId, CourseClass aCourseClass, String name, String studentId, String studentName, Student student, String className, String enrollmentDate, String classId) {
         this.enrollmentId = enrollmentId;
         this.aCourseClass = aCourseClass;
         this.name = name;
@@ -33,7 +34,8 @@ public class EnrollmentDTO {
         this.studentName = studentName;
         this.student = student;
         this.className = className;
-        this.enrollmentDate = enrollment_date;
+        this.enrollmentDate = enrollmentDate;
+        this.classId = classId;
     }
 
     public String getEnrollmentId() {
@@ -92,12 +94,19 @@ public class EnrollmentDTO {
         this.className = className;
     }
 
-
     public String getEnrollmentDate() {
         return enrollmentDate;
     }
 
     public void setEnrollmentDate(String enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
     }
 }

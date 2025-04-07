@@ -80,6 +80,7 @@ public class EnrollmentServiceImpl implements EnrollementService {
 
             EnrollmentDTO enrollmentDTO = new EnrollmentDTO();
             enrollmentDTO.setEnrollmentId(enrollment.getEnrollmentId());
+            enrollmentDTO.setClassId(classId);
             enrollmentDTO.setStudentId(student.getStudentId());
             enrollmentDTO.setStudentName(student.getFullName());
             enrollmentDTO.setClassName(classById.getClassName());
