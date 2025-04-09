@@ -30,6 +30,9 @@ public class CourseClass {
     @OneToMany(mappedBy = "announcementId")
     private List<Announcement> annoncements;
 
+    @OneToMany(mappedBy = "classId")
+    private List<Attendance> attendances;
+
 
 
     public CourseClass() {
@@ -53,6 +56,18 @@ public class CourseClass {
         this.enrollments = enrollments;
         this.assignments = assignments;
         this.annoncements = annoncements;
+    }
+
+    public CourseClass(String classId, String className, String subject, Date created_at, List<ClassTeacher> classTeacher, List<Enrollment> enrollments, List<Assignment> assignments, List<Announcement> annoncements, List<Attendance> attendances) {
+        this.classId = classId;
+        this.className = className;
+        this.subject = subject;
+        this.created_at = created_at;
+        this.classTeacher = classTeacher;
+        this.enrollments = enrollments;
+        this.assignments = assignments;
+        this.annoncements = annoncements;
+        this.attendances = attendances;
     }
 
     public String getClassId() {
@@ -120,6 +135,13 @@ public class CourseClass {
         this.annoncements = annoncements;
     }
 
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
 
-//private Teacher teacher;
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
+
+    //private Teacher teacher;
 }

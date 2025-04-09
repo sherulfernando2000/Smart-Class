@@ -18,6 +18,13 @@ public class Attendance {
     @ManyToOne
     private Student studentId;
 
+    @Version
+    private Long version = 0L;  // Initialize version
+
+    @ManyToOne
+    private CourseClass classId;
+
+
     public Attendance() {
     }
 
@@ -26,7 +33,9 @@ public class Attendance {
         this.date = date;
         this.status = status;
         this.studentId = studentId;
+
     }
+
 
     public String getAttendanceId() {
         return attendanceId;
@@ -58,5 +67,22 @@ public class Attendance {
 
     public void setStudentId(Student studentId) {
         this.studentId = studentId;
+    }
+
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public CourseClass getClassId() {
+        return classId;
+    }
+
+    public void setClassId(CourseClass classId) {
+        this.classId = classId;
     }
 }

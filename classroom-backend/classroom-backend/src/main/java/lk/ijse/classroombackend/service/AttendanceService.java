@@ -13,11 +13,13 @@ import java.util.List;
  * ------------------------------------------------
  */
 public interface AttendanceService {
-    List<AttendanceDTO> getAllAttendance();
+    List<AttendanceDTO> getAllAttendance(String id);
 
     AttendanceDTO saveAttendance(AttendanceDTO attendanceDTO);
 
-    AttendanceDTO updateAttendance(AttendanceDTO attendanceDTO);
+//    AttendanceDTO updateAttendance(AttendanceDTO attendanceDTO);
 
-    void deleteAttendance(AttendanceDTO attendanceDTO);
+//    void deleteAttendance(AttendanceDTO attendanceDTO);
+
+    void saveAllAttendance(List<AttendanceDTO> attendanceDTO);
 }

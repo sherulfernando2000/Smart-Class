@@ -32,9 +32,10 @@ public class AttendanceController {
         return "Attendance";
     }
 
-    @GetMapping("getAll")
-    public ResponseUtil getAll(){
-        List<AttendanceDTO> allAttendance = attendanceService.getAllAttendance();
+    @GetMapping("getAll/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
+    public ResponseUtil getAll(@PathVariable String id){
+        List<AttendanceDTO> allAttendance = attendanceService.getAllAttendance(id);
         return new ResponseUtil(200,"Success",allAttendance);
     }
 
@@ -45,18 +46,27 @@ public class AttendanceController {
         return new ResponseUtil(201,"Attendance saved successfully",attendance);
     }
 
-    @PutMapping("update")
+    @PostMapping("saveAll")
     @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
-    public ResponseUtil update(@RequestBody AttendanceDTO attendanceDTO){
-        AttendanceDTO attendance = attendanceService.updateAttendance(attendanceDTO);
-        return new ResponseUtil(201,"Attendance updated successfully",attendance);
+    public ResponseUtil saveAll(@RequestBody List<AttendanceDTO> attendanceDTOs){
+        System.out.println("Received: " + attendanceDTOs);
+        attendanceService.saveAllAttendance(attendanceDTOs);
+      return new ResponseUtil(201,"Attendance saved successfully",null);
     }
 
-    @DeleteMapping("delete")
-    public ResponseUtil deleteAttendance(@RequestBody AttendanceDTO attendanceDTO){
-        attendanceService.deleteAttendance(attendanceDTO);
-        return new ResponseUtil(201,"Attendance deleted",null);
-    }
+
+//    @PutMapping("update")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
+//    public ResponseUtil update(@RequestBody AttendanceDTO attendanceDTO){
+//        AttendanceDTO attendance = attendanceService.updateAttendance(attendanceDTO);
+//        return new ResponseUtil(201,"Attendance updated successfully",attendance);
+//    }
+//
+//    @DeleteMapping("delete")
+//    public ResponseUtil deleteAttendance(@RequestBody AttendanceDTO attendanceDTO){
+//        attendanceService.deleteAttendance(attendanceDTO);
+//        return new ResponseUtil(201,"Attendance deleted",null);
+//    }
 
 
 

@@ -18,16 +18,26 @@ public class AttendanceDTO {
     private String attendanceId;
     private String date;
     private String status;
-    private Student studentId;
+    private String studentId;
+    private String classId;
+    private String studentName;
 
     public AttendanceDTO() {
     }
 
-    public AttendanceDTO(String attendanceId, String date, String status, Student studentId) {
+    public AttendanceDTO(String attendanceId, String date, String status, String studentId) {
         this.attendanceId = attendanceId;
         this.date = date;
         this.status = status;
         this.studentId = studentId;
+    }
+
+    public AttendanceDTO(String attendanceId, String date, String status, String studentId, String classId) {
+        this.attendanceId = attendanceId;
+        this.date = date;
+        this.status = status;
+        this.studentId = studentId;
+        this.classId = classId;
     }
 
     public String getAttendanceId() {
@@ -54,12 +64,28 @@ public class AttendanceDTO {
         this.status = status;
     }
 
-    public Student getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Student studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
     @Override
@@ -68,7 +94,7 @@ public class AttendanceDTO {
                 "attendanceId='" + attendanceId + '\'' +
                 ", date='" + date + '\'' +
                 ", status='" + status + '\'' +
-                ", studentId=" + studentId +
+                ", studentId='" + studentId + '\'' +
                 '}';
     }
 }

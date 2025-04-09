@@ -73,6 +73,8 @@ public class WebSecurityConfig {
                                 "/api/v1/announcement/file/{fileName}",
                                 "/api/v1/assignment/file/{fileName}",
                                 "/api/v1/submission/file/{fileName}",
+                                "/api/payment/payhere",
+                                "/api/payment/notify",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()

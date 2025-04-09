@@ -19,6 +19,8 @@ const AttendancePage = ({ id }) => {
 
   const [StudentEnroll, setStudentEnroll] = useState([]);
 
+  const [fetchedStudents, setFetchedStudents] = useState([]);
+
   // Handle attendance status change
   const handleStatusChange = (studentId, status) => {
     setStudents((prevStudents) =>
@@ -121,7 +123,7 @@ const AttendancePage = ({ id }) => {
   );
 
   // Submit attendance
-  const submitAttendance = () => {
+  const submitAttendance = async () => {
     // Validate all students have status
     const hasEmptyStatus = students.some((student) => !student.status);
 
@@ -135,19 +137,68 @@ const AttendancePage = ({ id }) => {
       return;
     }
 
-    // Here you would typically send data to your backend
-    Swal.fire({
-      title: "Success!",
-      text: `Attendance for ${selectedDate.toLocaleDateString()} submitted successfully`,
-      icon: "success",
-      confirmButtonText: "OK",
-    });
+    try {
+        
+        const attendanceData = students.map((student) => ({
+          studentId: student.id,    
+          date: selectedDate.toISOString().split("T")[0],
+          status: student.status,
+          classId: id
+        }))
+    
+        // Here you would typically send data to your backend
+        const resp = await axios.post("http://localhost:8080/api/v1/attendance/saveAll",attendanceData, {
+            headers:{
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+        console.log(resp.data.data);
+        
+         Swal.fire({
+          title: "Success!",
+          text: `Attendance for ${selectedDate.toLocaleDateString()} submitted successfully`,
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+    
+        // Reset statuses after submission
+        setStudents((prevStudents) =>
+          prevStudents.map((student) => ({ ...student, status: "" }))
+        );
+    } catch (error) {
+        alert("Failed to submit attendance.");
+        console.error("Error submitting attendance:", error);
+    }
 
-    // Reset statuses after submission
-    setStudents((prevStudents) =>
-      prevStudents.map((student) => ({ ...student, status: "" }))
-    );
   };
+
+  const fetchStudentAttendance = async () => {
+    try {
+        const resp = await axios.get(
+            `http://localhost:8080/api/v1/attendance/getAll/${id}`,
+            {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            }
+        );
+        console.log(resp.data.data);
+        setFetchedStudents(resp.data.data);
+    }catch(error){
+        alert("Failed to fetch student attendance.");
+        console.error("Error fetching student attendance:", error);
+
+    }
+
+}
+
+
+  //----------------------------------
+  const handleSearchStudent = () => {
+        fetchStudentAttendance();
+        setShowModal(true);
+
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 md:p-2">
@@ -175,7 +226,7 @@ const AttendancePage = ({ id }) => {
 
           <div className="flex gap-2">
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => handleSearchStudent()}//setShowModal(true)}
               className="px-4 py-2 rounded-md font-medium bg-gray-600 text-white hover:bg-gray-700"
             >
               Search Student attendance
@@ -251,19 +302,19 @@ const AttendancePage = ({ id }) => {
                   Attendance Details
                 </h3>
                 <div className="mt-2 space-y-4">
-                  {filteredStudents.map((student) => (
+                  {fetchedStudents.map((student) => (
                     <div
-                      key={student.id}
+                      key={student.studentId}
                       className="flex justify-between items-center p-4 border rounded-md shadow-sm bg-gray-50"
                     >
                       <span className="text-sm font-medium text-gray-700">
-                        ID: {student.id}
+                        ID: {student.studentId}
                       </span>
                       <span className="text-sm font-medium text-gray-700">
-                        Name: {student.name}
+                        Name: {student.studentName}
                       </span>
                       <span className="text-sm font-medium text-gray-700">
-                        Date: {selectedDate.toLocaleDateString()}
+                        Date: {student.date}
                       </span>
                       <span className="text-sm font-medium text-gray-700">
                         Status: {student.status || "Not Marked"}
