@@ -26,9 +26,8 @@ public class EmailController {
     private EmailService emailService;
 
     @GetMapping("/send")
-    public String sendMail() {
-
-        return emailService.sendSimpleMail("sherul.dhanushka@gmail.com", "SmartClass", "Hi");
+    public String sendMail(String email, String subject, String message) {
+        return emailService.sendSimpleMail(email, subject, message);
     }
 
     @GetMapping("/get")

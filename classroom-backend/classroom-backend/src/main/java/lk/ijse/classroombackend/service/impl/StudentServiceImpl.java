@@ -32,16 +32,14 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     public ModelMapper modelMapper;
 
-//    @Autowired
-//    private EmailServiceImpl emailService;
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     public StudentIdGenerator studentIdGenerator;
 
     @Override
     public UserDTO registerStudent(StudentDTO studentDTO){   //user --> void
-//        Student student = modelMapper.map(studentDTO, Student.class);
-
         // Generate a random password
         String randomPassword = PasswordGenerator.generatePassword(6);
 
@@ -71,10 +69,35 @@ public class StudentServiceImpl implements StudentService {
 
         studentRepo.save(student); // Save student after user
 
+        String htmlMsg = "<html>" +
+                "<body style=\"font-family: Arial, sans-serif; color: #202124;\">" +
+                "<h2>Hi " + user.getName() + ",</h2>" +
+                "<p>You are now registered to <b>Smart Class</b> 🎓</p>" +
+                "<p>Your user account has been created. Use the details below to log in:</p>" +
+
+                "<table style=\"margin: 20px 0;\">" +
+                "<tr><td><strong>Email:</strong></td><td>" + user.getEmail() + "</td></tr>" +
+                "<tr><td><strong>Password:</strong></td><td>" + randomPassword + "</td></tr>" +
+                "</table>" +
+
+                "<a href=\"http://localhost:5173/login\" style=\"" +
+                "background-color: #1a73e8;" +
+                "color: white;" +
+                "padding: 10px 20px;" +
+                "text-decoration: none;" +
+                "border-radius: 4px;" +
+                "display: inline-block;\">" +
+                "Login Now</a>" +
+
+                "<p style=\"margin-top: 20px;\">Please change your password after logging in.</p>" +
+                "<p style=\"font-size: 0.9em; color: #5f6368;\">Do not share this email with anyone.</p>" +
+                "</body>" +
+                "</html>";
+
+
+
         // Send email with password
-       /* emailService.sendEmail(user.getEmail(), "Your Account Credentials",
-                "Dear " + user.getName() + ",\n\nYour account has been created.\n\nEmail: " +
-                        user.getEmail() + "\nPassword: " + randomPassword + "\n\nPlease change your password after login.");*/
+        emailService.sendSimpleMail(user.getEmail(), "Registered and Your Account Credentials", htmlMsg);
 
         return new UserDTO(user.getEmail(), randomPassword, user.getName(), user.getRole());
 

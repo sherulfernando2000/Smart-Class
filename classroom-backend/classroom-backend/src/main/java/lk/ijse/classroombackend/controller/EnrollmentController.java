@@ -35,7 +35,7 @@ public class EnrollmentController {
     }
 
     @GetMapping("getAll")
-    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER','STUDENT')")
     public ResponseUtil getAll(){
         List<EnrollmentDTO> enrollments = enrollmentService.getAllEnrollment();
         return new ResponseUtil(200,"All Enrollments",enrollments);

@@ -3,24 +3,83 @@ import axios from 'axios';
 
 
 function StudentPayment() {
-  const [students] = useState([
-    { id: '1', name: 'John Doe', email: 'johndoe@example.com' },
-    { id: '2', name: 'Jane Smith', email: 'janesmith@example.com' },
-  ]);
 
-  const [availableClasses] = useState([
-    { className: 'Mathematics', fees: '500' },
-    { className: 'Science', fees: '600' },
-    { className: 'History', fees: '450' },
-    { className: 'English', fees: '400' },
-  ]);
+    const [students, setStudents] = useState([]);
+    const [classes, setClasses] = useState([]);
+    const [availableClasses, setAvailableClasses] = useState([]);
 
-  const [studentId, setStudentId] = useState('');
-  const [classDetails, setClassDetails] = useState({ className: '', fees: '' });
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
-  const [addedClasses, setAddedClasses] = useState([]);
-  const suggestionsRef = useRef(null);
+    const [studentId, setStudentId] = useState('');
+    const [classDetails, setClassDetails] = useState({ className: '', fees: '' });
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+    const [addedClasses, setAddedClasses] = useState([]);
+    const suggestionsRef = useRef(null);
+
+    const fetchStudent = async () => {
+        try {
+          const reponse = await axios.get(
+            "http://localhost:8080/api/v1/student/getAll"
+          );
+          console.log("response", reponse.data);
+          setStudents(reponse.data);
+        } catch (error) {
+          alert("Failed to fetch student.");
+        }
+    };
+
+    // Fetch classes from backend
+      
+        const fetchClasses = async () => {
+          try {
+            const response = await axios.get(
+              "http://localhost:8080/api/v1/class/getAll",
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
+            setClasses(response.data.data);
+            console.log(response.data.data);
+
+            const cls = response.data.data.map((classItem) => ({
+              className: classItem.className,
+              fees: "1500"
+            }));
+            console.log("cls", cls);
+    
+            setAvailableClasses(cls);
+
+          } catch (error) {
+            console.error("Error fetching classes:", error);
+          }
+        };
+ 
+        
+    
+    useEffect(() => {
+        fetchStudent();
+        fetchClasses();
+    
+    },[])
+
+    
+    
+//   const [students] = useState([
+//     { id: '1', name: 'John Doe', email: 'johndoe@example.com' },
+//     { id: '2', name: 'Jane Smith', email: 'janesmith@example.com' },
+//   ]);    
+
+    
+
+  // const [availableClasses] = useState([
+  //   { className: 'Mathematics', fees: '500' },
+  //   { className: 'Science', fees: '600' },
+  //   { className: 'History', fees: '450' },
+  //   { className: 'English', fees: '400' },
+  // ]);
+
+ 
 
   const handleStudentIdChange = (e) => {
     setStudentId(e.target.value);
@@ -39,7 +98,7 @@ function StudentPayment() {
   };
 
   const getStudentById = (id) => {
-    return students.find((student) => student.id === id) || { id: '', name: '', email: '' };
+    return students.find((student) => student.studentId === id) || { id: '', name: '', email: '' };
   };
 
   const handleClassNameChange = (e) => {
@@ -110,10 +169,11 @@ function StudentPayment() {
     try {
       const response = await axios.post('http://localhost:8080/api/payment/payhere', {
         amount: 3000,   //subtotal,
-        firstName:"shenal",                //student.name.split(" ")[0] || "Test",
-        lastName:"sherul",                //student.name.split(" ")[1] || "User",
-        email: "sherul.dhanushka@gmail.com",                               //student.email,
-        phone: "0771234567"
+        firstName:getStudentById(studentId).fullName,                //student.name.split(" ")[0] || "Test",
+        lastName:" ",                //student.name.split(" ")[1] || "User",
+        email: getStudentById(studentId).email,                               //student.email,
+        phone: getStudentById(studentId).phone,   
+        studentId: studentId                            //student.phone,"
       });
   
       const payment = response.data;
@@ -162,7 +222,7 @@ function StudentPayment() {
             <label className="block text-sm font-medium text-gray-700">Name</label>
             <input
               type="text"
-              value={getStudentById(studentId).name}
+              value={getStudentById(studentId).fullName}
               readOnly
               className="mt-1 block w-full border rounded-md p-2 bg-gray-100 focus:outline-none"
             />

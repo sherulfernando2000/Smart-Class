@@ -18,6 +18,7 @@ public class PaymentRequest {
     private String address;
     private String city;
     private String itemName;
+    private String studentId;
 
 
 
@@ -94,6 +95,14 @@ public class PaymentRequest {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 }
 

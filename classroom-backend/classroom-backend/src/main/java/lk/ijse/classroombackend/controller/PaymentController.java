@@ -1,7 +1,9 @@
 package lk.ijse.classroombackend.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lk.ijse.classroombackend.dto.PaymentDTO;
 import lk.ijse.classroombackend.dto.PaymentRequest;
+import lk.ijse.classroombackend.service.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,9 +29,12 @@ import java.util.UUID;
 @RequestMapping("/api/payment")
 public class PaymentController {
 
+    private PaymentService paymentService;
+
     private final String merchantId = "1230062"; // Replace with your test merchant ID
     private final String merchantSecret = "MjIwODk2NzgyMzE1Mjk5MzA2MDczNDEzOTI5OTk1MzI1MTA0MTA0Mg=="; // From PayHere sandbox
     private final String currency = "LKR";
+    private  String studentId = "";
 
     @PostMapping("/payhere")
     public Map<String, String> initiatePayment(@RequestBody PaymentRequest request) {
@@ -37,6 +42,8 @@ public class PaymentController {
         String amountFormatted = String.format("%.2f", request.getAmount());
 
         String hash = generateHash(merchantId, orderId, amountFormatted, currency, merchantSecret);
+
+        studentId = request.getStudentId();
 
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("merchant_id", merchantId);
@@ -66,8 +73,30 @@ public class PaymentController {
     }
 
     @PostMapping("/notify")
-    public ResponseEntity<String> handleNotification(HttpServletRequest req) {
+    public ResponseEntity<String> handleNotification(HttpServletRequest request) {
         // Here you can verify the hash and save payment status
+
+        System.out.println("Notification received");
+        String payherePaymentId = request.getParameter("payment_id");
+        String payhereAmount = request.getParameter("payhere_amount");
+        String status = request.getParameter("status"); // 2 = success
+        String md5sig = request.getParameter("md5sig");
+        String firstName = request.getParameter("first_name");
+        String email = request.getParameter("email");
+
+        PaymentDTO paymentDTO = new PaymentDTO();
+        paymentDTO.setPaymentId(payherePaymentId);
+        paymentDTO.setAmount(Double.parseDouble(payhereAmount));
+        paymentDTO.setStatus(status);
+        paymentDTO.setStudent(studentId); // Assuming you have a method to get student by ID
+
+
+        if ("2".equals(status)) {
+            System.out.println("Payment successful");
+            paymentService.savePayment(paymentDTO);
+        }// 2 = SUCCESS
+
+
         return ResponseEntity.ok("Notification received");
     }
 }

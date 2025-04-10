@@ -48,7 +48,7 @@ public class ClassController {
     }
 
     @GetMapping("getAll")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER','STUDENT')")
     public ResponseUtil getAllClass(){
         List<ClassDTO> allClass = classService.getAllClass();
         return  new ResponseUtil(201,"All Classes",allClass);

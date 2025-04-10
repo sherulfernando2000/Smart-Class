@@ -1,24 +1,81 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
-function Payment() {
-  const [students] = useState([
-    { id: '1', name: 'John Doe', email: 'johndoe@example.com' },
-    { id: '2', name: 'Jane Smith', email: 'janesmith@example.com' },
-  ]);
 
-  const [availableClasses] = useState([
-    { className: 'Mathematics', fees: '500' },
-    { className: 'Science', fees: '600' },
-    { className: 'History', fees: '450' },
-    { className: 'English', fees: '400' },
-  ]);
+function StudentPayment() {
 
-  const [studentId, setStudentId] = useState('');
-  const [classDetails, setClassDetails] = useState({ className: '', fees: '' });
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
-  const [addedClasses, setAddedClasses] = useState([]);
-  const suggestionsRef = useRef(null);
+    const [students, setStudents] = useState([]);
+    const [classes, setClasses] = useState([]);
+    const [availableClasses, setAvailableClasses] = useState([]);
+
+    const [studentId, setStudentId] = useState('');
+    const [classDetails, setClassDetails] = useState({ className: '', fees: '' });
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+    const [addedClasses, setAddedClasses] = useState([]);
+    const suggestionsRef = useRef(null);
+
+    const fetchStudent = async () => {
+        try {
+          const reponse = await axios.get(
+            "http://localhost:8080/api/v1/student/getAll"
+          );
+          console.log("response", reponse.data);
+          setStudents(reponse.data);
+        } catch (error) {
+          alert("Failed to fetch student.");
+        }
+    };
+
+    // Fetch classes from backend
+      
+        const fetchClasses = async () => {
+          try {
+            const response = await axios.get(
+              "http://localhost:8080/api/v1/class/getAll",
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
+            setClasses(response.data.data);
+            console.log(response.data.data);
+
+            const cls = response.data.data.map((classItem) => ({
+              className: classItem.className,
+              fees: "1500"
+            }));
+            console.log("cls", cls);
+    
+            setAvailableClasses(cls);
+
+          } catch (error) {
+            console.error("Error fetching classes:", error);
+          }
+        };
+ 
+        
+    
+    useEffect(() => {
+        fetchStudent();
+        fetchClasses();
+    
+    },[])
+
+    
+    
+//   const [students] = useState([
+//     { id: '1', name: 'John Doe', email: 'johndoe@example.com' },
+//     { id: '2', name: 'Jane Smith', email: 'janesmith@example.com' },
+//   ]);    
+
+  // const [availableClasses] = useState([
+  //   { className: 'Mathematics', fees: '500' },
+  //   { className: 'Science', fees: '600' },
+  //   { className: 'History', fees: '450' },
+  //   { className: 'English', fees: '400' },
+  // ]);
 
   const handleStudentIdChange = (e) => {
     setStudentId(e.target.value);
@@ -37,7 +94,7 @@ function Payment() {
   };
 
   const getStudentById = (id) => {
-    return students.find((student) => student.id === id) || { id: '', name: '', email: '' };
+    return students.find((student) => student.studentId === id) || { id: '', name: '', email: '' };
   };
 
   const handleClassNameChange = (e) => {
@@ -95,6 +152,45 @@ function Payment() {
     }
   }, [activeSuggestionIndex]);
 
+  
+  
+  const handleConfirmAndPay = async () => {
+    try {
+        const response = await axios.post('http://localhost:8080/api/payment/payhere', {
+          amount: 3000,   //subtotal,
+          firstName:getStudentById(studentId).fullName,                //student.name.split(" ")[0] || "Test",
+          lastName:" ",                //student.name.split(" ")[1] || "User",
+          email: getStudentById(studentId).email,                               //student.email,
+          phone: getStudentById(studentId).phone,   
+          studentId: studentId                            //student.phone,"
+      });
+  
+      const payment = response.data;
+  
+      // Setup PayHere events
+      payhere.onCompleted = function(orderId) {
+        alert("Payment completed. Order ID: " + orderId);
+        // Optionally reset state or navigate to a success page
+      };
+  
+      payhere.onDismissed = function() {
+        alert("Payment dismissed");
+      };
+  
+      payhere.onError = function(error) {
+        alert("Error: " + error);
+      };
+  
+      // Start PayHere payment
+      payhere.startPayment(payment);
+  
+    } catch (err) {
+      console.error("Payment Error:", err);
+      alert("Something went wrong with the payment.");
+    }
+  };
+  
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6">
@@ -115,7 +211,7 @@ function Payment() {
             <label className="block text-sm font-medium text-gray-700">Name</label>
             <input
               type="text"
-              value={getStudentById(studentId).name}
+              value={getStudentById(studentId).fullName}
               readOnly
               className="mt-1 block w-full border rounded-md p-2 bg-gray-100 focus:outline-none"
             />
@@ -239,6 +335,7 @@ function Payment() {
         {/* Confirm and Pay Button - ALWAYS VISIBLE */}
         <div className="flex justify-end">
           <button
+           onClick={handleConfirmAndPay}
             className={`px-6 py-2 text-white rounded-md ${
               addedClasses.length > 0 ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed'
             }`}
@@ -254,4 +351,4 @@ function Payment() {
   );
 }
 
-export default Payment;
+export default StudentPayment;

@@ -25,12 +25,14 @@ public class PaymentDTO {
   private String status;
   private Date date;
   private Double amount;
-  private Student student;
+  private String student;
 
     public PaymentDTO() {
     }
 
-    public PaymentDTO(String paymentId, String status, Date date, Double amount, Student student) {
+
+
+    public PaymentDTO(String paymentId, String status, Date date, Double amount, String student) {
         this.paymentId = paymentId;
         this.status = status;
         this.date = date;
@@ -70,11 +72,11 @@ public class PaymentDTO {
         this.amount = amount;
     }
 
-    public Student getStudent() {
+    public String getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(String student) {
         this.student = student;
     }
 

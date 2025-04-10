@@ -33,7 +33,7 @@ public class ClassTeacherController {
     }
 
     @GetMapping("getAll")
-    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER','STUDENT')")
     public ResponseUtil getAll(){
         List<ClassTeacherDTO> teacherEnrolls = classTeacherService.getAllTeacherEnrollments();
         return new ResponseUtil(200,"All Teacher Enrollments",teacherEnrolls);
