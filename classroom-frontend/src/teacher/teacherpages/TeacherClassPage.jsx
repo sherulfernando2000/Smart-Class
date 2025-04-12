@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import Announcement from "./TeacherAnnouncement"; // Import the Announcement component
 import People from "./TeacherPeople"; // Import the People component
 import Classwork from "./TeacherClasswork"; // Import the Classwork component
+import AttendancePage from "./Attendance";
 
 const TeacherClassPage = () => {
     const { id } = useParams();
@@ -42,6 +43,7 @@ const TeacherClassPage = () => {
                     <div class="p-4 bg-white rounded shadow">
                         <h2 class="text-xl font-semibold mb-4">Attendance</h2>
                         {/* Add attendance form and list of attendance records here */}
+                        <AttendancePage id={id} /> {/* Load Attendance component */}
                     </div>
                 );
             default:
@@ -70,12 +72,12 @@ const TeacherClassPage = () => {
                 >
                     Classwork
                 </button>
-                <button
+                {/* <button
                     className={`px-4 py-2 mr-2 rounded ${activeTab === "payment" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                     onClick={() => setActiveTab("payment")}
                 >
                     Payment
-                </button>
+                </button> */}
                 <button
                     className={`px-4 py-2 mr-2 rounded ${activeTab === "attendance" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                     onClick={() => setActiveTab("attendance")}

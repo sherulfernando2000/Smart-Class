@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React from "react";
+import './App.css'; 
 
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -21,6 +22,9 @@ import TeacherClassPage from "./teacher/teacherpages/TeacherClassPage";
 import TeacherAllStudent from "./teacher/othermain/TeacherAllStudent";
 import TeacherStudentEnrollment from "./teacher/othermain/TeacherStudentEnrollment";
 import TeacherUserSetting from "./teacher/othermain/TeacherUserSetting";
+import TeacherStudentWork from "./teacher/teacherpages/TeacherStudentWork";
+import TeacherPayment from "./teacher/Payment";
+
 
 
 import Classwork from "./components/pages/Classwork";
@@ -33,6 +37,7 @@ import StudentStudentWork from "./student/studentpages/StudentStudentWork";
 import StudentUserSetting from "./student/userSetting";
 import Payment from "./student/StudentPayment";
  import { ToastContainer, toast } from 'react-toastify';
+
 //  import toast from "react-hot-toast";
 
 
@@ -50,6 +55,7 @@ const App = () => {
         draggable
         pauseOnHover
         theme="light"       // options: "light", "dark", "colored"
+        toastClassName="custom-toast"
       />
 
         {/* Routes define the main content for each route */}
@@ -84,6 +90,8 @@ const App = () => {
           <Route path="teacherallstudent" element={<TeacherAllStudent/>}></Route>
           <Route path="teacherstudentenrollment" element={<TeacherStudentEnrollment/>}></Route>
           <Route path="teacherusersetting" element={<TeacherUserSetting/>}></Route>
+          <Route path="student-work/:assignementId" element={<TeacherStudentWork />} />
+          <Route path="payment" element={<TeacherPayment/>}></Route>
         
         
         </Route>

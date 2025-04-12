@@ -26,18 +26,20 @@ public class PaymentDTO {
   private Date date;
   private Double amount;
   private String student;
+  private String className;
 
     public PaymentDTO() {
     }
 
 
 
-    public PaymentDTO(String paymentId, String status, Date date, Double amount, String student) {
+    public PaymentDTO(String paymentId, String status, Date date, Double amount, String student,String className) {
         this.paymentId = paymentId;
         this.status = status;
         this.date = date;
         this.amount = amount;
         this.student = student;
+        this.className = className;
     }
 
     public String getPaymentId() {
@@ -78,6 +80,14 @@ public class PaymentDTO {
 
     public void setStudent(String student) {
         this.student = student;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     @Override

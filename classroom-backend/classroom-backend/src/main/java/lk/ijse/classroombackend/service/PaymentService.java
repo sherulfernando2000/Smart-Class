@@ -1,6 +1,10 @@
 package lk.ijse.classroombackend.service;
 
+import lk.ijse.classroombackend.dto.PayDTO;
 import lk.ijse.classroombackend.dto.PaymentDTO;
+
+import java.text.ParseException;
+import java.util.List;
 
 /**
  * ------------------------------------------------
@@ -14,4 +18,8 @@ import lk.ijse.classroombackend.dto.PaymentDTO;
 public interface PaymentService {
 
     void savePayment(PaymentDTO paymentDTO);
+
+    void saveAllPayment(List<PayDTO> payments);
+
+    List<PaymentDTO> getAllPayments();
 }

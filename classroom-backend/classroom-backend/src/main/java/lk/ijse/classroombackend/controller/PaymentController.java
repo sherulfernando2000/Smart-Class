@@ -1,17 +1,19 @@
 package lk.ijse.classroombackend.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lk.ijse.classroombackend.dto.PayDTO;
 import lk.ijse.classroombackend.dto.PaymentDTO;
+import lk.ijse.classroombackend.dto.PaymentList;
 import lk.ijse.classroombackend.dto.PaymentRequest;
 import lk.ijse.classroombackend.service.PaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,6 +31,7 @@ import java.util.UUID;
 @RequestMapping("/api/payment")
 public class PaymentController {
 
+    @Autowired
     private PaymentService paymentService;
 
     private final String merchantId = "1230062"; // Replace with your test merchant ID
@@ -98,6 +101,23 @@ public class PaymentController {
 
 
         return ResponseEntity.ok("Notification received");
+    }
+
+    @PostMapping("/save")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
+    public ResponseEntity<String> savePayment(@RequestBody PaymentList request){
+        // Access list of payment details
+        System.out.println("payments"+ request.getPaymentDetails());
+        List<PayDTO> payments = request.getPaymentDetails();
+        paymentService.saveAllPayment(payments);
+        return ResponseEntity.ok("Payments processed successfully.");
+    }
+
+    @GetMapping("/getAll")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TEACHER')")
+    public ResponseEntity<List<PaymentDTO>> getAllPayments() {
+        List<PaymentDTO> payments = paymentService.getAllPayments();
+        return ResponseEntity.ok(payments);
     }
 }
 

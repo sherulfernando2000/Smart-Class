@@ -248,7 +248,7 @@ function StudentPayment() {
               type="email"
               value={getStudentById(studentId).email}
               readOnly
-              className="mt-1 block w-full border rounded-full bg-blue-300 p-2 bg-gray-100 focus:outline-none"
+              className="mt-1 block w-full border rounded-full bg-blue-300 p-2 focus:outline-none"
             />
           </div>
         </div>
@@ -308,7 +308,7 @@ function StudentPayment() {
 
         {/* Class Details Section - Only shows when classes are added */}
         <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6">
+      <div className="max-w-4xl mx-auto bg-white rounded-xl p-6 shadow-2xl border-2 border-gray-300">
         <h1 className="text-2xl font-bold mb-6">Payment</h1>
 
         {/* Student Details (unchanged) */}

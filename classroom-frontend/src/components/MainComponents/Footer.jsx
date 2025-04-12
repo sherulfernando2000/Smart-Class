@@ -46,19 +46,19 @@ const Footer = () => {
               className=" hover:text-backgroundColor transition-all cursor-pointer"
               href="/"
             >
-              Cappuccino
+              Admin
             </a>
             <a
               className=" hover:text-backgroundColor transition-all cursor-pointer"
               href="/"
             >
-              Latte
+              Teacher
             </a>
             <a
               className=" hover:text-backgroundColor transition-all cursor-pointer"
               href="/"
             >
-              Americano
+              Student
             </a>
           </nav>
         </div>
@@ -69,13 +69,13 @@ const Footer = () => {
               className=" hover:text-backgroundColor transition-all cursor-pointer"
               href="/"
             >
-              CafePulse@email.com
+              SmartClass@gmail.com
             </a>
             <a
               className=" hover:text-backgroundColor transition-all cursor-pointer"
               href="/"
             >
-              +84 958 248 966
+              +9458 248 966
             </a>
             <a
               className=" hover:text-backgroundColor transition-all cursor-pointer"

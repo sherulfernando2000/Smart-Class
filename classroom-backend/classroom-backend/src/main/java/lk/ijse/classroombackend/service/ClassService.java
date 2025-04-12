@@ -18,4 +18,6 @@ public interface ClassService {
     ClassDTO getClassById(String id);
 
     List<ClassDTO> getClassByEmail(String email);
+
+    public List<ClassDTO> getClassByEmailT(String email);
 }

@@ -22,6 +22,7 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import logo from "../../assets/img/classlogo.png";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 
 const Search = styled("div")(({ theme }) => ({
@@ -102,7 +103,7 @@ const [subject, setSubject] = useState("");
 
 const handleCreateClass = async () => {
   if (!className || !subject) {
-    alert("Please enter both Class Name and Subject.");
+    toast.error("Please enter both Class Name and Subject.");
     return;
   }
 
@@ -116,7 +117,7 @@ const handleCreateClass = async () => {
       }
     });
 
-    alert(`Class Created: ${response.data.data.className}`);
+    toast.success(`Class Created: ${response.data.data.className}`);
     fetchClasses();
     setAddClassOpen(false);
     setClassName("");

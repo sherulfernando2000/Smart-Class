@@ -79,6 +79,15 @@ public class ClassController {
 
     }
 
+    @GetMapping("getByEmailT/{email}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','STUDENT','TEACHER')")
+    public ResponseUtil getClassByEmailT(@PathVariable String email){
+        System.out.println("id"+email);
+        List<ClassDTO> classes= classService.getClassByEmailT(email);
+        return new ResponseUtil(201,"All Classes",classes);
+
+    }
+
 
 
 }

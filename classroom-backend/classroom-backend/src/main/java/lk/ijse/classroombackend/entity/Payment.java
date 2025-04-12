@@ -26,6 +26,7 @@ public class Payment {
     private Date date;
 
     private Double amount;
+    private String className;
 
     @ManyToOne
     Student student;
@@ -33,11 +34,12 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String paymentId, String status, Date date, Double amount, Student student) {
+    public Payment(String paymentId, String status, Date date, Double amount, String className, Student student) {
         this.paymentId = paymentId;
         this.status = status;
         this.date = date;
         this.amount = amount;
+        this.className = className;
         this.student = student;
     }
 
@@ -79,6 +81,14 @@ public class Payment {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     @Override

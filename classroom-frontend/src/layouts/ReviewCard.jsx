@@ -25,9 +25,7 @@ const ReviewCard = (props) => {
         </span>
       </div>
       <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet
-        consequatur fuga suscipit perspiciatis totam. Eos esse nisi omnis dicta,
-        aperiam distinctio fuga ipsam rerum rem.
+      As a student using SmartClass, I really like how easy it is to join classes and check my attendance. The interface is clean and simple, so I can quickly see my payment history and class updates.
       </p>
     </div>
   );

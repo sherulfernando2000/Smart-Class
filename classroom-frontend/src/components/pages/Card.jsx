@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import background from "../../assets/img/Honors.jpg";
+import background from "../../assets/img/Geography.jpg";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Modal, Box, TextField, Button, Typography } from "@mui/material";
+import { toast } from "react-toastify";
 
 function Card() {
   const [classes, setClasses] = useState([]);
@@ -44,7 +45,7 @@ function Card() {
           }
         );
         setClasses(classes.filter((cls) => cls.classId !== classId));
-        alert("Class deleted successfully!");
+        toast.success("Class deleted successfully!");
       } catch (error) {
         console.error("Error deleting class:", error);
         alert("Failed to delete class.");
