@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios"; // Import Axios
+import { toast } from "react-toastify";
+import LoadingOverlay from '../LoadingOverlay'; 
 
 const Classwork = ({ id }) => {
   const [showForm, setShowForm] = useState(false);
@@ -15,6 +17,7 @@ const Classwork = ({ id }) => {
   const [assignTo, setAssignTo] = useState("This Class");
   const [assignments, setAssignments] = useState([]); // State to store assignments
   const navigate = useNavigate();
+  const [isSaving, setIsSaving] = useState(false); 
 
 
   useEffect(() => {
@@ -49,6 +52,7 @@ const Classwork = ({ id }) => {
   };
 
   const handleSubmit = async (e) => {
+    setIsSaving(true); 
     e.preventDefault();
 
     const teacherEmail = localStorage.getItem("email");
@@ -67,12 +71,14 @@ const Classwork = ({ id }) => {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("Assignment created successfully:");
+      toast.success("Assignment created successfully:");
       console.log("Assignment created successfully:", response.data);
       setShowForm(false); // Close the form on success
     } catch (error) {
-      alert("Error creating assignment: ", error);
+      toast.error("Error creating assignment: ", error);
       console.error("Error creating assignment:", error);
+    }finally{
+      setIsSaving(false);
     }
   };
 
@@ -85,6 +91,7 @@ const Classwork = ({ id }) => {
   return (
     <div className="p-2">
       {/* Create Button */}
+      <LoadingOverlay isLoading={isSaving} message="Saving..." />
       <button
         className="flex items-center px-4 py-2 bg-blue-500 text-white text-sm rounded"
         onClick={handleCreateClick}

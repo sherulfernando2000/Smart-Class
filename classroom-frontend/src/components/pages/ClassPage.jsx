@@ -73,12 +73,12 @@ const ClassPage = () => {
                 >
                     Classwork
                 </button>
-                <button
+                {/* <button
                     className={`px-4 py-2 mr-2 rounded ${activeTab === "payment" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                     onClick={() => setActiveTab("payment")}
                 >
                     Payment
-                </button>
+                </button> */}
                 <button
                     className={`px-4 py-2 mr-2 rounded ${activeTab === "attendance" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                     onClick={() => setActiveTab("attendance")}

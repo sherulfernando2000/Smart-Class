@@ -1,10 +1,21 @@
 package lk.ijse.classroombackend.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 public class TeacherDTO {
+
     String teacherId;
+    @NotBlank(message = "Full name is required")
     String fullName;
+    @NotBlank(message = "Address is required")
     String address;
+    @NotBlank(message = "Contact number is required")
+    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid contact number format")
     String contact;
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     String email;
     String specialization;
 

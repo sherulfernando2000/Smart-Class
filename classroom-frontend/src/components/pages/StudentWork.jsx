@@ -4,6 +4,7 @@ import { FaEdit, FaFilePdf } from "react-icons/fa";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const StudentWork = () => {
   const location = useLocation();
@@ -51,7 +52,8 @@ const StudentWork = () => {
           },
         }
       );
-      alert("Assignment updated successfully!");
+      toast.success("Assignment updated successfully!");
+      console.log("Assignment updated successfully!");
       setIsPopupOpen(false);
       // Optionally refresh the page or update state
     } catch (error) {

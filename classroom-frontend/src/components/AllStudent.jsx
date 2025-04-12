@@ -1,7 +1,11 @@
 import { ContactSupportOutlined, Email } from "@mui/icons-material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { GraduationCap, Search, User } from "lucide-react";
+
 // import { ToastContainer, toast } from 'react-toastify';
+import LoadingOverlay from "./LoadingOverlay"; // Adjust the path as needed
+import { toast } from "react-toastify";
 
 function AllStudent() {
   const [showPopup, setShowPopup] = useState(false);
@@ -24,6 +28,8 @@ function AllStudent() {
   const [selectedStudent, setSelectedStudent] = useState(null); // Store selected student
 
   const [search, setSearch] = useState("");
+
+  const [isSaving, setIsSaving] = useState(false); // Add this with your other state declarations
 
   const handleAddStudent = () => {
     setShowPopup(true);
@@ -76,11 +82,13 @@ function AllStudent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSaving(true); // Start loading
     console.log("Save clicked");
 
     const uploadedImageUrl = await urlUploaded(); // Get the uploaded URL
     if (!uploadedImageUrl) {
       alert("Image upload failed. Cannot submit student data.");
+      setIsSaving(false); // Stop loading on error
       return;
     }
 
@@ -111,17 +119,22 @@ function AllStudent() {
 
       console.log("response", response);
       if (response.data.code === 201) {
-        alert(
-          `Message: ${response.data.msg}\nEmail: ${response.data.data.email}\nPassword: ${response.data.data.password}`
-        );
+        // alert(
+        //   `Message: ${response.data.msg}\nEmail: ${response.data.data.email}\nPassword: ${response.data.data.password}`
+        // );
+        toast.success("student saved successfully");
         setShowPopup(false);
         fetchStudent();
         emptyFields();
       } else {
-        alert("Failed to add student.");
+        toast.error("Failed to add student.");
+        // alert("Failed to add student.");
       }
     } catch (error) {
       console.error("Error:", error);
+      tost.error("Failed to add student.");
+    } finally {
+      setIsSaving(false); // Stop loading whether successful or not
     }
   };
 
@@ -144,27 +157,49 @@ function AllStudent() {
 
   // delete studetn
   const handleDeleteStudent = async (studentId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this student?"
-    );
-    if (!confirmDelete) return;
+    toast(
+      (t) => (
+        <span className="text-sm">
+          Are you sure you want to delete this student?
+          <div className="mt-2 flex gap-2 justify-end">
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id); // Close the confirmation toast
 
-    try {
-      const resp = await axios.delete(
-        `http://localhost:8080/api/v1/student/delete/${studentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      fetchStudent();
-      alert("Student deleted successfully");
-      console.log("response", resp);
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Failed to delete student.");
-    }
+                try {
+                  const resp = await axios.delete(
+                    `http://localhost:8080/api/v1/student/delete/${studentId}`,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                      },
+                    }
+                  );
+                  fetchStudent(); // Refresh student list
+                  toast.success("Student deleted successfully");
+                  console.log("response", resp);
+                } catch (err) {
+                  console.error("Error:", err);
+                  toast.error("Failed to delete student.");
+                }
+              }}
+              className="px-3 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1 bg-gray-300 text-black rounded text-xs hover:bg-gray-400"
+            >
+              No
+            </button>
+          </div>
+        </span>
+      ),
+      {
+        duration: 10000,
+      }
+    );
   };
 
   //view student
@@ -214,30 +249,46 @@ function AllStudent() {
         }
       );
       console.log("response", resp.data);
-      alert(resp.data.msg);
+      toast.success(resp.data.msg);
       fetchStudent();
       setShowViewPopup(false);
     } catch (err) {
       console.error("Error updating student:", err);
-      alert("Failed to update student.");
+      toast.error("Failed to update student.");
     }
   };
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">All Students</h1>
+      <LoadingOverlay isLoading={isSaving} message="Saving..." />
+      <h1 className="text-2xl font-bold mb-4 text-center flex items-center justify-center gap-2 text-black">
+        <GraduationCap className="w-6 h-6" />
+        All Students
+      </h1>
 
       {/* Search bar and button to Add student */}
-      <div className="flex justify-between mb-4">
-        <input
-          type="text"
-          placeholder="🔎 Search student..."
-          className="border p-2 rounded w-3/4"
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className="flex justify-between items-end mb-4 flex-wrap gap-4">
+        {/* Search Input Section */}
+        <div className="flex flex-col w-full sm:w-2/3">
+          <label htmlFor="search" className="text-black font-medium mb-1">
+            Search
+          </label>
+          <div className="relative">
+            <input
+              id="search"
+              type="text"
+              placeholder="Search student..."
+              className="border p-2 pr-10 rounded w-full hover:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          </div>
+        </div>
+
+        {/* Add Student Button */}
         <button
           onClick={handleAddStudent}
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          className="bg-green-500 text-white px-4 py-2 rounded h-fit"
         >
           Add Student
         </button>
@@ -245,168 +296,198 @@ function AllStudent() {
 
       {/* Add Student Popup */}
       {showPopup && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center top-5 z-[1000]">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-2/3">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-center">ADD STUDENT</h2>
-              <button
-                onClick={handleClosePopup}
-                className="hover:bg-red-400 rounded-full p-1"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 -960 960 960"
-                  width="24px"
-                  fill="black"
-                >
-                  <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                </svg>
-              </button>
-            </div>
-            <form className="text-sm">
-              {/* First Row */}
-              <div className="flex gap-3">
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Full Name</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    onChange={(e) => setFullName(e.target.value)}
-                  />
-                </div>
+  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-[1000] p-4">
+    <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-4xl">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+  <div className="flex flex-col w-full">
+    <h2 className="text-2xl font-bold flex items-center gap-2 justify-center">
+      <User className="w-6 h-6 text-black" />
+      ADD STUDENT
+    </h2>
+  </div>
 
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Contact</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    onChange={(e) => setContact(e.target.value)}
-                  />
-                </div>
-              </div>
+  <button
+    onClick={handleClosePopup}
+    className="hover:bg-red-400 rounded-full p-1"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="black"
+    >
+      <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+    </svg>
+  </button>
+</div>
 
-              {/* Second Row */}
-              <div className="flex gap-3">
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Date of Birth</label>
-                  <input
-                    type="date"
-                    className="border p-2 rounded w-full border-gray-300"
-                    onChange={(e) => setDob(e.target.value)} // Added onChange handler for dob
-                  />
-                </div>
 
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Gender</label>
-                  <select
-                    className="border p-2 rounded w-full border-gray-300"
-                    onChange={(e) => setGender(e.target.value)}
-                    value={gender}
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                </div>
-              </div>
+      {/* Form */}
+      <form className="text-sm">
+  {/* Input Row Template */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {/* Full Name */}
+    <div>
+      <label className="block text-black mb-1">Full Name</label>
+      <div className="relative">
+        <input
+          type="text"
+          className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+          onChange={(e) => setFullName(e.target.value)}
+        />
+        <svg
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path d="M5.121 17.804A8.966 8.966 0 0112 15c2.21 0 4.222.805 5.879 2.134M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </div>
+    </div>
 
-              {/* Third Row */}
-              <div className="flex gap-3">
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Parent Name</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    onChange={(e) => setParentName(e.target.value)}
-                  />
-                </div>
+    {/* Contact */}
+    <div>
+      <label className="block text-black mb-1">Contact</label>
+      <div className="relative">
+        <input
+          type="text"
+          className=" bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+          onChange={(e) => setContact(e.target.value)}
+        />
+        <svg
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path d="M22 16.92v3a2 2 0 01-2.18 2A19.72 19.72 0 013 5.18 2 2 0 015 3h3a2 2 0 012 1.72c.2 1.38.73 2.68 1.56 3.85a2 2 0 01-.45 2.82L9 12a16 16 0 007 7l1.61-1.61a2 2 0 012.82-.45c1.17.83 2.47 1.36 3.85 1.56A2 2 0 0122 16.92z" />
+        </svg>
+      </div>
+    </div>
 
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Parent Contact</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    onChange={(e) => setParentContact(e.target.value)}
-                  />
-                </div>
-              </div>
+    {/* Date of Birth */}
+    <div>
+      <label className="block text-black mb-1">Date of Birth</label>
+      <input
+        type="date"
+        className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 rounded-full w-full focus:outline-none focus:border-blue-500"
+        onChange={(e) => setDob(e.target.value)}
+      />
+    </div>
 
-              {/* fourth Row */}
-              <div className="flex gap-3">
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Email</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+    {/* Gender */}
+    <div>
+      <label className="block text-black mb-1">Gender</label>
+      <select
+        className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 rounded-full w-full focus:outline-none focus:border-blue-500"
+        onChange={(e) => setGender(e.target.value)}
+        value={gender}
+      >
+        <option value="">Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
 
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Address</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    onChange={(e) => setAddress(e.target.value)}
-                  />
-                </div>
-              </div>
+    {/* Parent Name */}
+    <div>
+      <label className="block text-black mb-1">Parent Name</label>
+      <input
+        type="text"
+        className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 rounded-full w-full focus:outline-none focus:border-blue-500"
+        onChange={(e) => setParentName(e.target.value)}
+      />
+    </div>
 
-              {/* Image Upload */}
-              <div className="mb-4">
-                <label className="block text-black mb-2">Upload Image</label>
-                <div className="w-40 h-40 border-2 border-gray-300 rounded flex items-center justify-center relative cursor-pointer overflow-hidden">
-                  {/* Hidden File Input */}
-                  <input
-                    type="file"
-                    id="fileInput"
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
+    {/* Parent Contact */}
+    <div>
+      <label className="block text-black mb-1">Parent Contact</label>
+      <input
+        type="text"
+        className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 rounded-full w-full focus:outline-none focus:border-blue-500"
+        onChange={(e) => setParentContact(e.target.value)}
+      />
+    </div>
 
-                  {/* Preview Image */}
-                  {preview ? (
-                    <img
-                      src={preview}
-                      alt="Uploaded Preview"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <label
-                      htmlFor="fileInput"
-                      className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 hover:bg-gray-200 transition cursor-pointer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 -960 960 960"
-                        width="24px"
-                        fill="black"
-                      >
-                        <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-                      </svg>
-                      Upload Photo
-                    </label>
-                  )}
-                </div>
-              </div>
+    {/* Email */}
+    <div>
+      <label className="block text-black mb-1">Email</label>
+      <input
+        type="email"
+        className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 rounded-full w-full focus:outline-none focus:border-blue-500"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+    </div>
 
-              {/* Save Button */}
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  className="bg-green-500 text-white px-4 py-2 rounded"
-                  onClick={handleSubmit} // Added onClick handler for Save button
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+    {/* Address */}
+    <div>
+      <label className="block text-black mb-1">Address</label>
+      <input
+        type="text"
+        className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 rounded-full w-full focus:outline-none focus:border-blue-500"
+        onChange={(e) => setAddress(e.target.value)}
+      />
+    </div>
+  </div>
+
+  {/* Image Upload */}
+  <div className="mb-4 mt-4">
+    <label className="block text-black mb-2">Upload Image</label>
+    <div className="w-40 h-40 border-2 border-blue-300 hover:border-blue-500 rounded-full flex items-center justify-center relative overflow-hidden">
+      <input
+        type="file"
+        id="fileInput"
+        className="hidden"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
+      {preview ? (
+        <img
+          src={preview}
+          alt="Uploaded Preview"
+          className="w-full h-full object-cover rounded-full"
+        />
+      ) : (
+        <label
+          htmlFor="fileInput"
+          className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 hover:bg-gray-200 transition cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="black"
+          >
+            <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+          </svg>
+          Upload Photo
+        </label>
       )}
+    </div>
+  </div>
+
+  {/* Save Button */}
+  <div className="flex justify-end mt-6">
+    <button
+      type="button"
+      className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full transition"
+      onClick={handleSubmit}
+    >
+      Save
+    </button>
+  </div>
+</form>
+
+    </div>
+  </div>
+)}
+
 
       <div className="border-b-2 black"></div>
 
@@ -430,7 +511,6 @@ function AllStudent() {
                 student.contact.includes(searchTerm) || // Match contact
                 student.studentId.toString().includes(searchTerm) // Match student ID
               );
-             
             })
             .map((student) => (
               <div
@@ -468,178 +548,156 @@ function AllStudent() {
 
       {/* View Student Popup */}
       {showViewPopup && selectedStudent && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-[1000]">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-2/3">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-center">Student Details</h2>
-              <button
-                onClick={handleCloseViewPopup}
-                className="hover:bg-red-400 rounded-full p-1"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 -960 960 960"
-                  width="24px"
-                  fill="black"
-                >
-                  <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                </svg>
-              </button>
-            </div>
+  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-[1000]">
+    <div className="bg-white p-8 rounded-lg shadow-lg w-2/3">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold text-center">Student Details</h2>
+        <button
+          onClick={handleCloseViewPopup}
+          className="hover:bg-red-400 rounded-full p-1"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
+            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+          </svg>
+        </button>
+      </div>
 
-            <form className="text-sm">
-              <div className="flex gap-3">
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Student ID</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    value={selectedStudent.studentId}
-                    readOnly
-                  />
-                </div>
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Full Name</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    value={selectedStudent.fullName}
-                    onChange={(e) =>
-                      setSelectedStudent({
-                        ...selectedStudent,
-                        fullName: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
+      <form className="text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Student ID */}
+          <div>
+            <label className="block text-black mb-1">Student ID</label>
+            <input
+              type="text"
+              className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+              value={selectedStudent.studentId}
+              readOnly
+            />
+          </div>
 
-              <div className="flex gap-3">
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Contact</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    value={selectedStudent.contact}
-                    onChange={(e) =>
-                      setSelectedStudent({
-                        ...selectedStudent,
-                        contact: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Gender</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    value={selectedStudent.gender}
-                    onChange={(e) =>
-                      setSelectedStudent({
-                        ...selectedStudent,
-                        gender: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
+          {/* Full Name */}
+          <div>
+            <label className="block text-black mb-1">Full Name</label>
+            <input
+              type="text"
+              className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+              value={selectedStudent.fullName}
+              onChange={(e) =>
+                setSelectedStudent({ ...selectedStudent, fullName: e.target.value })
+              }
+            />
+          </div>
 
-              <div className="flex gap-3">
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Parent Name</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    value={selectedStudent.parent_name}
-                    onChange={(e) =>
-                      setSelectedStudent({
-                        ...selectedStudent,
-                        parent_name: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Parent Contact</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    value={selectedStudent.parent_contact}
-                    onChange={(e) =>
-                      setSelectedStudent({
-                        ...selectedStudent,
-                        parent_contact: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
+          {/* Contact */}
+          <div>
+            <label className="block text-black mb-1">Contact</label>
+            <input
+              type="text"
+              className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+              value={selectedStudent.contact}
+              onChange={(e) =>
+                setSelectedStudent({ ...selectedStudent, contact: e.target.value })
+              }
+            />
+          </div>
 
-              <div className="flex gap-3">
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Email</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    value={selectedStudent.email}
-                    onChange={(e) =>
-                      setSelectedStudent({
-                        ...selectedStudent,
-                        email: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="mb-4 w-1/2">
-                  <label className="block text-black">Address</label>
-                  <input
-                    type="text"
-                    className="border p-2 rounded w-full border-gray-300"
-                    value={selectedStudent.address}
-                    onChange={(e) =>
-                      setSelectedStudent({
-                        ...selectedStudent,
-                        address: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
+          {/* Gender */}
+          <div>
+            <label className="block text-black mb-1">Gender</label>
+            <input
+              type="text"
+              className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+              value={selectedStudent.gender}
+              onChange={(e) =>
+                setSelectedStudent({ ...selectedStudent, gender: e.target.value })
+              }
+            />
+          </div>
 
-              {/* Image Preview */}
-              <div className="mb-4 flex justify-center">
-                <img
-                  className="w-32 h-32 rounded-lg"
-                  src={
-                    selectedStudent.image_url ||
-                    "https://via.placeholder.com/100"
-                  }
-                  alt={selectedStudent.fullName}
-                />
-              </div>
+          {/* Parent Name */}
+          <div>
+            <label className="block text-black mb-1">Parent Name</label>
+            <input
+              type="text"
+              className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+              value={selectedStudent.parent_name}
+              onChange={(e) =>
+                setSelectedStudent({ ...selectedStudent, parent_name: e.target.value })
+              }
+            />
+          </div>
 
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  className="bg-green-500 text-white px-4 py-2 rounded"
-                  onClick={handleUpdate} // Bind the handleUpdate function
-                >
-                  Update
-                </button>
+          {/* Parent Contact */}
+          <div>
+            <label className="block text-black mb-1">Parent Contact</label>
+            <input
+              type="text"
+              className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+              value={selectedStudent.parent_contact}
+              onChange={(e) =>
+                setSelectedStudent({ ...selectedStudent, parent_contact: e.target.value })
+              }
+            />
+          </div>
 
-                <button
-                  type="button"
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
-                >
-                  Print Id
-                </button>
-              </div>
-            </form>
+          {/* Email */}
+          <div>
+            <label className="block text-black mb-1">Email</label>
+            <input
+              type="text"
+              className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+              value={selectedStudent.email}
+              onChange={(e) =>
+                setSelectedStudent({ ...selectedStudent, email: e.target.value })
+              }
+            />
+          </div>
+
+          {/* Address */}
+          <div>
+            <label className="block text-black mb-1">Address</label>
+            <input
+              type="text"
+              className="bg-blue-200 border border-blue-300 hover:border-blue-500 p-2 pl-10 rounded-full w-full focus:outline-none focus:border-blue-500"
+              value={selectedStudent.address}
+              onChange={(e) =>
+                setSelectedStudent({ ...selectedStudent, address: e.target.value })
+              }
+            />
           </div>
         </div>
-      )}
+
+        {/* Image Preview */}
+        <div className="my-4 flex justify-center">
+          <img
+            className="w-32 h-32 rounded-full object-cover border border-gray-300"
+            src={selectedStudent.image_url || "https://via.placeholder.com/100"}
+            alt={selectedStudent.fullName}
+          />
+        </div>
+
+        {/* Buttons */}
+        <div className="flex justify-end gap-2">
+          <button
+            type="button"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full transition"
+            onClick={handleUpdate}
+          >
+            Update
+          </button>
+
+          <button
+            type="button"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full transition"
+          >
+            Print Id
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

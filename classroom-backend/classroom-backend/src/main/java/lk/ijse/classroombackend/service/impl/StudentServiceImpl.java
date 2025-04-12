@@ -69,35 +69,43 @@ public class StudentServiceImpl implements StudentService {
 
         studentRepo.save(student); // Save student after user
 
-        String htmlMsg = "<html>" +
-                "<body style=\"font-family: Arial, sans-serif; color: #202124;\">" +
-                "<h2>Hi " + user.getName() + ",</h2>" +
-                "<p>You are now registered to <b>Smart Class</b> 🎓</p>" +
-                "<p>Your user account has been created. Use the details below to log in:</p>" +
+        String htmlContent = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<body style=\"font-family: Arial, sans-serif; color: #202124; background-color: #f4f4f4; padding: 20px;\">\n" +
+                "<div style=\"max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #ddd; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);\">\n" +
+                "    <img src=\"https://res.cloudinary.com/dzkqfsaxo/image/upload/v1744253393/samples/food/fish-vegetables.png\" alt=\"Smart Class Logo\" style=\"width: 55px; height: auto; display: block; margin: 0 auto;\">\n" +
+                "    <h2 style=\"text-align: center; color: #276e04; margin: 10px 0;\">WELCOME TO SMART CLASS</h2>\n" +
 
-                "<table style=\"margin: 20px 0;\">" +
-                "<tr><td><strong>Email:</strong></td><td>" + user.getEmail() + "</td></tr>" +
-                "<tr><td><strong>Password:</strong></td><td>" + randomPassword + "</td></tr>" +
-                "</table>" +
+                "    <h3 style=\"margin: 10px 0;\">Hi " + user.getName() + ",</h3>\n" +
+                "    <p style=\"font-size: 15px; margin: 5px 0; color: #202124;\">You are now registered to <b style=\"color: #276e04;\">Smart Class</b> 🎓</p>\n" +
+                "    <p style=\"margin: 5px 0; color: #202124;\">Your user account has been created. Use the details below to log in:</p>\n" +
 
-                "<a href=\"http://localhost:5173/login\" style=\"" +
-                "background-color: #1a73e8;" +
-                "color: white;" +
-                "padding: 10px 20px;" +
-                "text-decoration: none;" +
-                "border-radius: 4px;" +
-                "display: inline-block;\">" +
-                "Login Now</a>" +
+                "    <table style=\"margin: 10px 0; font-size: 15px;\">\n" +
+                "        <tr>\n" +
+                "            <td style=\"padding: 4px 10px 4px 0;\"><strong>Email:</strong></td>\n" +
+                "            <td>" + user.getEmail() + "</td>\n" +
+                "        </tr>\n" +
+                "        <tr>\n" +
+                "            <td style=\"padding: 4px 10px 4px 0;\"><strong>Password:</strong></td>\n" +
+                "            <td>" + randomPassword + "</td>\n" +
+                "        </tr>\n" +
+                "    </table>\n" +
 
-                "<p style=\"margin-top: 20px;\">Please change your password after logging in.</p>" +
-                "<p style=\"font-size: 0.9em; color: #5f6368;\">Do not share this email with anyone.</p>" +
-                "</body>" +
+                "    <div style=\"text-align: center; margin-top: 20px;\">\n" +
+                "        <a href=\"http://localhost:5173/login\" style=\"background-color: #2a8f03; color: white; padding: 10px 22px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 15px;\">Login Now</a>\n" +
+                "    </div>\n" +
+
+                "    <p style=\"margin-top: 20px; font-size: 13px; color: #832020;\">Please change your password after logging in.</p>\n" +
+                "    <p style=\"font-size: 11px; color: #832020;\">Do not share this email with anyone.</p>\n" +
+                "</div>\n" +
+                "</body>\n" +
                 "</html>";
 
 
 
+
         // Send email with password
-        emailService.sendSimpleMail(user.getEmail(), "Registered and Your Account Credentials", htmlMsg);
+        emailService.sendSimpleMail(user.getEmail(), "Registered and Your Account Credentials", htmlContent);
 
         return new UserDTO(user.getEmail(), randomPassword, user.getName(), user.getRole());
 

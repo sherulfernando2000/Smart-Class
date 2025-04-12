@@ -13,6 +13,7 @@ import UserSetting from "./components/UserSetting";
 import AllTeacher from "./components/AllTeacher";
 import TeacherEnrollment from "./components/TeacherEnrollment";
 import StudentEnrollment from "./components/StudentEnrollment";
+import ADMINPayment from "./components/Payment";
 
 import TeacherIndexClass from "./teacher/TeacherIndexClass";
 import TeacherHomePage from "./teacher/teacherpages/TeacherHomePage";
@@ -20,6 +21,7 @@ import TeacherClassPage from "./teacher/teacherpages/TeacherClassPage";
 import TeacherAllStudent from "./teacher/othermain/TeacherAllStudent";
 import TeacherStudentEnrollment from "./teacher/othermain/TeacherStudentEnrollment";
 import TeacherUserSetting from "./teacher/othermain/TeacherUserSetting";
+
 
 import Classwork from "./components/pages/Classwork";
 import StudentWork from "./components/pages/StudentWork";
@@ -30,12 +32,26 @@ import StudentClassPage from "./student/studentpages/StudentClassPage";
 import StudentStudentWork from "./student/studentpages/StudentStudentWork";
 import StudentUserSetting from "./student/userSetting";
 import Payment from "./student/StudentPayment";
+ import { ToastContainer, toast } from 'react-toastify';
+//  import toast from "react-hot-toast";
+
 
 const App = () => {
   return (
     <Router>
       <div>
-        
+      <ToastContainer
+        position="top-center" // other options: top-left, bottom-right, etc.
+        autoClose={3000}      // time in ms
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"       // options: "light", "dark", "colored"
+      />
+
         {/* Routes define the main content for each route */}
         <Routes>
           {/* Home route */}
@@ -56,7 +72,7 @@ const App = () => {
           <Route path="allteacher" element={<AllTeacher/>}></Route>
           <Route path="studentenrollment" element={<StudentEnrollment/>}></Route>
           <Route path="teacherenrollment" element={<TeacherEnrollment/>}></Route>
-          <Route path="payment" element={<Payment/>}></Route>
+          <Route path="payment" element={<ADMINPayment/>}></Route>
           <Route path="usersetting" element={<UserSetting/>}></Route>
           <Route path="student-work/:assignementId" element={<StudentWork />} />
         </Route>

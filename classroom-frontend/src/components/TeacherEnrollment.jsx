@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { Search, Mail, User, BadgeInfo, UserPlus  } from "lucide-react"; // Or use @heroicons/react if preferred
 
 function TeacherEnrollment() {
   const [teacherEmail, setTeacherEmail] = useState("");
@@ -32,7 +34,7 @@ function TeacherEnrollment() {
       console.log("response", response.data.data);
       setTeachers(response.data.data);
     } catch (error) {
-      alert("Failed to fetch teachers.");
+      toast.error("Failed to fetch teachers.");
       console.error("Error fetching teachers:", error);
     }
   };
@@ -76,26 +78,29 @@ function TeacherEnrollment() {
 
   const fetchEnrollments = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/classTeachers/getAll", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/classTeachers/getAll",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       setEnrollments(response.data.data);
     } catch (error) {
       console.error("Error fetching teacher enrollments:", error);
     }
   };
-  
+
   const handleEnroll = async () => {
     if (!teacherEmail || !classSearch) {
-      alert("Please select a valid teacher and class.");
+      toast.error("Please select a valid teacher and class.");
       return;
     }
-    
+
     console.log("classSearch", classSearch);
     console.log("token", localStorage.getItem("token"));
-    
+
     try {
       const response = await axios.post(
         `http://localhost:8080/api/v1/classTeachers/teacher/enroll?email=${encodeURIComponent(teacherEmail)}&className=${encodeURIComponent(classSearch)}`,
@@ -106,23 +111,23 @@ function TeacherEnrollment() {
           },
         }
       );
-  
+
       console.log("Teacher enrollment successful:", response.data);
-  
+
       // Fetch updated enrollments
       fetchEnrollments();
-  
+
       // Reset form fields
       setTeacherEmail("");
       setTeacherId("");
       setTeacherName("");
       setClassSearch("");
       setClassId("");
-  
-      alert("Teacher successfully enrolled!");
+
+      toast.success("Teacher successfully enrolled!");
     } catch (error) {
       console.error("Error enrolling teacher:", error);
-      alert("Failed to enroll teacher. Please try again.");
+      toast.error("Failed to enroll teacher. Please try again.");
     }
   };
 
@@ -167,19 +172,21 @@ function TeacherEnrollment() {
   const handleClassChange = (e) => {
     const value = e.target.value;
     setClassSearch(value);
-  
+
     if (value) {
       const filtered = classes
-        .filter((c) => `${c.className}`.toLowerCase().includes(value.toLowerCase()))
+        .filter((c) =>
+          `${c.className}`.toLowerCase().includes(value.toLowerCase())
+        )
         .map((c) => `${c.className}`);
-  
+
       setClassSuggestions(filtered);
       setSelectedClassIndex(-1);
     } else {
       setClassSuggestions([]);
     }
   };
-  
+
   const handleClassKeyDown = (e) => {
     if (classSuggestions.length > 0) {
       if (e.key === "ArrowDown") {
@@ -193,7 +200,7 @@ function TeacherEnrollment() {
       }
     }
   };
-  
+
   const selectClass = (name) => {
     setClassSearch(name);
     handleClassSearch(name);
@@ -202,51 +209,83 @@ function TeacherEnrollment() {
 
   // Delete teacher enrollment
   const handleDeleteEnrollment = async (enrollmentId) => {
-    console.log("delete clicked", enrollmentId);
     if (!enrollmentId) return;
-  
-    const confirmDelete = window.confirm("Are you sure you want to delete this enrollment?");
-    if (!confirmDelete) return;
-  
-    try {
-      await axios.delete(`http://localhost:8080/api/v1/classTeachers/delete`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        params: {
-          teacherEnrollId: enrollmentId,
-        },
-      });
-      console.log("Teacher enrollment deleted successfully!");
-      fetchEnrollments(); // Refresh the enrollments list
-    } catch (error) {
-      console.error("Error deleting teacher enrollment:", error);
-    }
+
+    toast(
+      (t) => (
+        <span className="text-sm">
+          Are you sure you want to delete this enrollment?
+          <div className="mt-2 flex gap-2 justify-end">
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  await axios.delete(
+                    `http://localhost:8080/api/v1/classTeachers/delete`,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                      },
+                      params: {
+                        teacherEnrollId: enrollmentId,
+                      },
+                    }
+                  );
+
+                  toast.success("Teacher enrollment deleted successfully!");
+                  fetchEnrollments(); // Refresh list
+                } catch (error) {
+                  console.error("Error deleting teacher enrollment:", error);
+                  toast.error("Failed to delete teacher enrollment.");
+                }
+              }}
+              className="px-3 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1 bg-gray-300 text-black rounded text-xs hover:bg-gray-400"
+            >
+              No
+            </button>
+          </div>
+        </span>
+      ),
+      {
+        duration: 10000,
+      }
+    );
   };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold text-center mb-6">
+      <h1 className="text-2xl font-bold text-center mb-6 flex items-center justify-center gap-2 text-black">
+        <UserPlus className="w-6 h-6" />
         Teacher Enrollment
       </h1>
 
-      <div className="bg-white p-6 rounded-lg shadow-lg w-4/4 mx-auto">
-        {/* Teacher Search Row */}
-        <div className="flex gap-6 mb-4">
-          <div className="relative w-1/3 mb-4">
-            <label className="block text-gray-700 font-medium">
+      <div className="bg-slate-300 p-6 rounded-xl shadow-lg w-full max-w-5xl mx-auto">
+        <div className="flex gap-4 flex-wrap lg:flex-nowrap">
+          {/* Search Teacher by Email */}
+          <div className="w-full lg:w-1/3">
+            <label className="block text-black font-medium mb-1 flex items-center gap-1">
+              <Mail className="w-4 h-4 text-black " />
               Search Teacher by Email
             </label>
-            <input
-              type="text"
-              className="border p-2 rounded w-full hover:border-blue-500 transition"
-              placeholder="Enter teacher email..."
-              value={teacherEmail}
-              onChange={handleEmailChange}
-              onKeyDown={handleKeyDown}
-            />
+            <div className="relative">
+              <input
+                type="text"
+                className="border p-2 pr-10 rounded-full w-full hover:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+                placeholder="Enter teacher email..."
+                value={teacherEmail}
+                onChange={handleEmailChange}
+                onKeyDown={handleKeyDown}
+              />
+              <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            </div>
             {emailSuggestions.length > 0 && (
-              <ul className="absolute z-10 bg-white border border-gray-300 w-full mt-1 rounded shadow-lg">
+              <ul className="absolute z-10 bg-white border border-gray-300 w-full mt-1 rounded shadow-md max-h-40 overflow-y-auto">
                 {emailSuggestions.map((email, index) => (
                   <li
                     key={email}
@@ -261,24 +300,30 @@ function TeacherEnrollment() {
               </ul>
             )}
           </div>
-          <div className="w-1/3">
-            <label className="block text-gray-700 font-medium">
+
+          {/* Teacher ID */}
+          <div className="w-full lg:w-1/3">
+            <label className="block text-black  font-medium mb-1 flex items-center gap-1">
+              <BadgeInfo className="w-4 h-4 text-black " />
               Teacher ID
             </label>
             <input
               type="text"
-              className="border p-2 rounded w-full bg-gray-100 cursor-not-allowed"
+              className="border p-2 rounded-full w-full bg-gray-100 text-gray-600 cursor-not-allowed"
               value={teacherId}
               disabled
             />
           </div>
-          <div className="w-1/3">
-            <label className="block text-gray-700 font-medium">
+
+          {/* Teacher Name */}
+          <div className="w-full lg:w-1/3">
+            <label className="block text-black  font-medium mb-1 flex items-center gap-1">
+              <User className="w-4 h-4 text-black " />
               Teacher Name
             </label>
             <input
               type="text"
-              className="border p-2 rounded w-full bg-gray-100 cursor-not-allowed"
+              className="border p-2 rounded-full w-full bg-gray-100 text-gray-600 cursor-not-allowed"
               value={teacherName}
               disabled
             />
@@ -291,12 +336,12 @@ function TeacherEnrollment() {
         {/* Class Search Row */}
         <div className="flex gap-6 mb-4">
           <div className="relative w-2/3">
-            <label className="block text-gray-700 font-medium">
+            <label className="block text-black  font-medium">
               Search Class
             </label>
             <input
               type="text"
-              className="border p-2 rounded w-full hover:border-blue-500 transition"
+              className="border p-2 rounded-full w-full hover:border-blue-500 transition"
               placeholder="Enter class name..."
               value={classSearch}
               onChange={handleClassChange}
@@ -319,12 +364,10 @@ function TeacherEnrollment() {
             )}
           </div>
           <div className="w-1/3">
-            <label className="block text-gray-700 font-medium">
-              Class ID
-            </label>
+            <label className="block text-black  font-medium">Class ID</label>
             <input
               type="text"
-              className="border p-2 rounded w-full bg-gray-100 cursor-not-allowed"
+              className="border p-2 rounded-full w-full bg-gray-100 cursor-not-allowed"
               value={classId}
               disabled
             />
@@ -345,16 +388,14 @@ function TeacherEnrollment() {
       {/* Enrollment Table */}
       <div className="mt-8 w-4/4 mx-auto">
         <h2 className="text-xl font-bold mb-4">Teacher Enrollment Records</h2>
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="w-full  rounded-2xl border-collapse  ">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-gray-300 px-4 py-2">
-                Teacher ID
-              </th>
-              <th className="border border-gray-300 px-4 py-2">Teacher Name</th>
-              <th className="border border-gray-300 px-4 py-2">Class Name</th>
-              <th className="border border-gray-300 px-4 py-2">Date</th>
-              <th className="border border-gray-300 px-4 py-2"></th>
+            <tr className="bg-slate-300">
+              <th className=" rounded-2xl px-4 py-2">Teacher ID</th>
+              <th className=" rounded-2xl  px-4 py-2">Teacher Name</th>
+              <th className=" rounded-2xl  px-4 py-2">Class Name</th>
+              <th className=" rounded-2xl  px-4 py-2">Date</th>
+              <th className=" rounded-2xl  px-4 py-2"></th>
             </tr>
           </thead>
           <tbody>
@@ -364,21 +405,24 @@ function TeacherEnrollment() {
                   key={enrollment.classTeacherId}
                   className="text-center hover:bg-gray-200 transition"
                 >
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className=" border-gray-300 px-4 py-2">
                     {enrollment.teacherId}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className=" border-gray-300 px-4 py-2">
                     {enrollment.teacherName}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className=" border-gray-300 px-4 py-2">
                     {enrollment.className}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className=" border-gray-300 px-4 py-2">
                     {enrollment.enrollmentDate}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-                      onClick={() => handleDeleteEnrollment(enrollment.classTeacherId)}
+                  <td className=" border-gray-300 px-4 py-2">
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                      onClick={() =>
+                        handleDeleteEnrollment(enrollment.classTeacherId)
+                      }
                     >
                       delete
                     </button>

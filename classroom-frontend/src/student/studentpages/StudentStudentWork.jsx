@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaFilePdf } from "react-icons/fa"; // Import PDF icon
 import axios from "axios"; // Import Axios
+import { toast } from "react-toastify"; // Import toast for notifications
 
 const StudentStudentWork = () => {
   const location = useLocation();
@@ -86,12 +87,13 @@ const StudentStudentWork = () => {
           },
         }
       );
-      alert("Submission successful!");
+      toast.success("Submission successful!");
+      console.log("Submission successful!");
       setShowPopup(false); // Close the popup on success
       fetchSubmissionDetails();
     } catch (error) {
       console.error("Error submitting work:", error);
-      alert("Failed to submit. Please try again.");
+      toast.error("Failed to submit. Please try again.");
     }
   };
 
@@ -106,11 +108,12 @@ const StudentStudentWork = () => {
           },
         }
       );
-      alert("Submission deleted successfully!");
+      toast.success("Submission deleted successfully!");
+      console.log("Submission deleted successfully!");
       setSubmissionDetails(null); // Clear submission details after deletion
     } catch (error) {
       console.error("Error deleting submission:", error);
-      alert("Failed to delete submission. Please try again.");
+      toast.error("Failed to delete submission. Please try again.");
     }
   }
 

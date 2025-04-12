@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-
+import { toast } from "react-toastify";
 
 function StudentPayment() {
 
@@ -14,6 +14,8 @@ function StudentPayment() {
     const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
     const [addedClasses, setAddedClasses] = useState([]);
     const suggestionsRef = useRef(null);
+    const [subtotal, setSubtotal] = useState(0);
+
 
     const fetchStudent = async () => {
         try {
@@ -62,6 +64,15 @@ function StudentPayment() {
         fetchClasses();
     
     },[])
+
+    useEffect(() => {
+      const total = addedClasses.reduce(
+        (sum, classItem) => sum + parseFloat(classItem.fees || 0),
+        0
+      );
+      setSubtotal(total);
+      console.log("subtotal", total);
+    }, [addedClasses]);
 
     
     
@@ -168,7 +179,7 @@ function StudentPayment() {
   
     try {
       const response = await axios.post('http://localhost:8080/api/payment/payhere', {
-        amount: 3000,   //subtotal,
+        amount: subtotal,   //subtotal,
         firstName:getStudentById(studentId).fullName,                //student.name.split(" ")[0] || "Test",
         lastName:" ",                //student.name.split(" ")[1] || "User",
         email: getStudentById(studentId).email,                               //student.email,
@@ -180,16 +191,20 @@ function StudentPayment() {
   
       // Setup PayHere events
       payhere.onCompleted = function(orderId) {
-        alert("Payment completed. Order ID: " + orderId);
+        toast.success("Payment completed successfully!");
+        console.log("Payment completed. Order ID: " + orderId);
         // Optionally reset state or navigate to a success page
       };
   
       payhere.onDismissed = function() {
-        alert("Payment dismissed");
+        toast.error("Payment dismissed.");
+        console.log("Payment dismissed.");
+       
       };
   
       payhere.onError = function(error) {
-        alert("Error: " + error);
+        console.error("Payment error:", error);
+        toast.error("Error: " + error);
       };
   
       // Start PayHere payment
@@ -197,7 +212,7 @@ function StudentPayment() {
   
     } catch (err) {
       console.error("Payment Error:", err);
-      alert("Something went wrong with the payment.");
+      toast.error("Something went wrong with the payment.");
     }
   };
   
@@ -215,7 +230,7 @@ function StudentPayment() {
               type="text"
               value={studentId}
               onChange={handleStudentIdChange}
-              className="mt-1 block w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 block w-full border rounded-full bg-blue-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -224,7 +239,7 @@ function StudentPayment() {
               type="text"
               value={getStudentById(studentId).fullName}
               readOnly
-              className="mt-1 block w-full border rounded-md p-2 bg-gray-100 focus:outline-none"
+              className="mt-1 block w-full border rounded-full bg-blue-300 p-2 focus:outline-none"
             />
           </div>
           <div>
@@ -233,7 +248,7 @@ function StudentPayment() {
               type="email"
               value={getStudentById(studentId).email}
               readOnly
-              className="mt-1 block w-full border rounded-md p-2 bg-gray-100 focus:outline-none"
+              className="mt-1 block w-full border rounded-full bg-blue-300 p-2 bg-gray-100 focus:outline-none"
             />
           </div>
         </div>
@@ -249,7 +264,7 @@ function StudentPayment() {
               onKeyDown={handleKeyDown}
               onFocus={() => setShowSuggestions(classDetails.className.trim().length > 0)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              className="mt-1 block w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 block w-full border rounded-full bg-blue-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Search class..."
             />
             {showSuggestions && filteredClasses.length > 0 && (
@@ -277,14 +292,14 @@ function StudentPayment() {
               type="number"
               value={classDetails.fees}
               onChange={(e) => setClassDetails({ ...classDetails, fees: e.target.value })}
-              className="mt-1 block w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 block w-full border rounded-full bg-blue-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               readOnly
             />
           </div>
           <div className="flex items-end">
             <button
               onClick={handleAddClass}
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="w-full px-2 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
             >
               Add Class
             </button>

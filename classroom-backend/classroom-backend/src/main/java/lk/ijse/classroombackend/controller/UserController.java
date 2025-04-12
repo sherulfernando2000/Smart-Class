@@ -11,7 +11,10 @@ import lk.ijse.classroombackend.util.JwtUtil;
 import lk.ijse.classroombackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -52,5 +55,30 @@ public class UserController {
                     .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
         }
     }
+
+    @GetMapping(value = "/get/{email}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER','STUDENT')")
+    public ResponseEntity<ResponseDTO> getUser(@PathVariable String email) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseDTO(VarList.OK, "Success", userService.loadUserDetailsByUsername(email)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
+        }
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String currentPassword = body.get("currentPassword");
+        String newPassword = body.get("newPassword");
+
+        // Validate and process password change
+        userService.changePassword(email,currentPassword,newPassword);
+
+        return ResponseEntity.ok("Password changed successfully.");
+    }
+
 
 }

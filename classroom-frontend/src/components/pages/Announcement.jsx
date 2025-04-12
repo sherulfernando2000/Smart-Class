@@ -6,6 +6,9 @@ import { jwtDecode } from "jwt-decode";
 import ProfilePicture from "../ProfilePicture";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import { toast } from "react-toastify";
+import LoadingOverlay from '../LoadingOverlay'; 
+// import toast from 'react-hot-toast';
 
 const Announcement = ({ id }) => {
   const [showForm, setShowForm] = useState(false);
@@ -20,6 +23,7 @@ const Announcement = ({ id }) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editedText, setEditedText] = useState("");
   const [menuOpen, setMenuOpen] = useState(null);
+  const [isSaving, setIsSaving] = useState(false); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -93,6 +97,7 @@ const Announcement = ({ id }) => {
     formData.append("file", file);
 
     try {
+      setIsSaving(true); 
       const response = await axios.post(
         "http://localhost:8080/api/v1/announcement/save",
         formData,
@@ -103,13 +108,17 @@ const Announcement = ({ id }) => {
           },
         }
       );
-      alert(response.data.msg);
+      toast.success("Announcement send successfully")
+      console.log(response.data.msg);
       fetchAnnouncements();
       setAnnouncementText("");
       setFile(null);
       setShowForm(false);
     } catch (error) {
+      toast.error("Failed to post announcement")
       alert("Failed to post announcement", error.message);
+    }finally{
+      setIsSaving(false); 
     }
   };
 
@@ -135,36 +144,63 @@ const Announcement = ({ id }) => {
           },
         }
       );
-        alert("Announcement updated successfully");
+      toast.success("Announcement updated successfully");
+      console.log("Announcement updated successfully");
       fetchAnnouncements();
       setEditModalOpen(false);
     } catch (error) {
+      toast.error("Failed to update announcement");
       console.error("Failed to update announcement", error);
     }
   };
 
-  const handleDelete = async (announcementId) => {
-    console.log("clicke delete ",announcementId);
-    const confirmDelete = confirm("Are you sure you want to delete this announcement?");
-    if (!confirmDelete) {
-      console.log("Deletion canceled.");
-      return; // Stops the function execution
-    }
-    try {
-      await axios.delete(
-        `http://localhost:8080/api/v1/announcement/delete/${announcementId}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      fetchAnnouncements();
-    } catch (error) {
-      console.error("Failed to delete announcement", error);
-    }
-  };
+  const handleDelete = (announcementId) => {
+    toast(
+      (t) => (
+        <div className="text-sm">
+          <p>Are you sure you want to delete this announcement?</p>
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id); // Dismiss the toast
+                try {
+                  await axios.delete(
+                    `http://localhost:8080/api/v1/announcement/delete/${announcementId}`,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                      },
+                    }
+                  );
+                  fetchAnnouncements();
+                  toast.success("Announcement deleted successfully!");
+                } catch (error) {
+                  toast.error("Failed to delete announcement.");
+                  console.error("Delete error:", error);
+                }
+              }}
+              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs"
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="bg-gray-300 hover:bg-gray-400 text-black px-3 py-1 rounded text-xs"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        duration: 10000, // how long the toast stays
+      }
+    );
+  }
 
   return (
     <div className="container mx-auto p-6">
+      <LoadingOverlay isLoading={isSaving} message="Saving..." />
       {/* Class Header */}
       <div
         className="p-4 bg-white rounded shadow mb-4 flex justify-between items-center bg-cover bg-center"

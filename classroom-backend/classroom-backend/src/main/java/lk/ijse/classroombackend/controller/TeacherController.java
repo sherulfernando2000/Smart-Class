@@ -1,5 +1,6 @@
 package lk.ijse.classroombackend.controller;
 
+import jakarta.validation.Valid;
 import lk.ijse.classroombackend.dto.StudentDTO;
 import lk.ijse.classroombackend.dto.TeacherDTO;
 import lk.ijse.classroombackend.dto.UserDTO;
@@ -40,14 +41,14 @@ public class TeacherController {
 
     @PostMapping("save")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseUtil save(@RequestBody TeacherDTO teacherDTO){
+    public ResponseUtil save(@Valid @RequestBody TeacherDTO teacherDTO){
         UserDTO userDTO = teacherService.registerTeacher(teacherDTO);
         return new ResponseUtil(201,"Teacher saved successfully",userDTO);
     }
 
     @PutMapping("update")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseUtil updateTeacher(@RequestBody TeacherDTO teacherDTO){
+    public ResponseUtil updateTeacher(@Valid @RequestBody TeacherDTO teacherDTO){
         System.out.println("teachercontroller, teacherId"+teacherDTO.getTeacherId());
         System.out.println("teachercontroller, teacherId"+teacherDTO);
         teacherService.updateTeacher(teacherDTO);
