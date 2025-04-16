@@ -2,6 +2,7 @@ package lk.ijse.classroombackend.dto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 import lk.ijse.classroombackend.entity.Student;
 
 /**
@@ -16,9 +17,13 @@ import lk.ijse.classroombackend.entity.Student;
 
 public class AttendanceDTO {
     private String attendanceId;
+    @NotBlank(message = "Date is required")
     private String date;
+    @NotBlank(message = "Status is required")
     private String status;
+    @NotBlank(message = "Student ID is required")
     private String studentId;
+    @NotBlank(message = "Class ID is required")
     private String classId;
     private String studentName;
 

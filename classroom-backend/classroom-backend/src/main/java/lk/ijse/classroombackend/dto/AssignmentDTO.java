@@ -3,6 +3,10 @@ package lk.ijse.classroombackend.dto;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lk.ijse.classroombackend.entity.CourseClass;
 import lk.ijse.classroombackend.entity.Material;
 import lk.ijse.classroombackend.entity.Submission;
@@ -19,10 +23,15 @@ import java.util.List;
  * Project: classroom-backend
  * ------------------------------------------------
  */
+
 public class AssignmentDTO {
     private String assignmentId;
+    @NotBlank(message = "Title is required")
+    @Size(max = 100, message = "Title must be less than 100 characters")
     private String title;
     private String description;
+    @NotNull(message = "Due date is required")
+    @Future(message = "Due date must be in the future")
     private Date dueDate;
     private String url;
     private String classId;

@@ -1,5 +1,6 @@
 package lk.ijse.classroombackend.controller;
 
+import jakarta.validation.Valid;
 import lk.ijse.classroombackend.dto.AttendanceDTO;
 import lk.ijse.classroombackend.service.AttendanceService;
 import lk.ijse.classroombackend.util.ResponseUtil;
@@ -41,7 +42,7 @@ public class AttendanceController {
 
     @PostMapping("save")
     @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
-    public ResponseUtil save(@RequestBody AttendanceDTO attendanceDTO){
+    public ResponseUtil save(@Valid @RequestBody AttendanceDTO attendanceDTO){
         AttendanceDTO attendance = attendanceService.saveAttendance(attendanceDTO);
         return new ResponseUtil(201,"Attendance saved successfully",attendance);
     }

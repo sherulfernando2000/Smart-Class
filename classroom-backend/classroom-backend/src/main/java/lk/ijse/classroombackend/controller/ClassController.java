@@ -1,6 +1,7 @@
 package lk.ijse.classroombackend.controller;
 
 
+import jakarta.validation.Valid;
 import lk.ijse.classroombackend.dto.ClassDTO;
 import lk.ijse.classroombackend.dto.StudentDTO;
 import lk.ijse.classroombackend.dto.TeacherDTO;
@@ -38,7 +39,7 @@ public class ClassController {
 
     @PostMapping("save")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseUtil save(@RequestBody ClassDTO classDTO){
+    public ResponseUtil save(@Valid @RequestBody ClassDTO classDTO){
         String classId = "C-" + UUID.randomUUID().toString();
 
         classDTO.setClassId(classId);

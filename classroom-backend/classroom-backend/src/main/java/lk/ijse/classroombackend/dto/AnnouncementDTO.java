@@ -2,6 +2,8 @@ package lk.ijse.classroombackend.dto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lk.ijse.classroombackend.entity.CourseClass;
 import lk.ijse.classroombackend.entity.Teacher;
 
@@ -18,11 +20,15 @@ import java.time.LocalDateTime;
 
 
 public class AnnouncementDTO {
+
     private String announcementId;
+    @NotBlank(message = "Message must not be blank")
     private String message;
+    @NotBlank(message = "Email is required")
     private String email;
     private String url;
     private LocalDateTime postedAt;
+    @NotBlank(message = "Class ID is required")
     private String classId;
     private Teacher postedBy;
 

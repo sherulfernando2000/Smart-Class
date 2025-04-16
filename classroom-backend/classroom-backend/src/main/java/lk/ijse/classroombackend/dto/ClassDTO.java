@@ -1,11 +1,15 @@
 package lk.ijse.classroombackend.dto;
 
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
 public class ClassDTO {
 
     private String classId;
+    @NotBlank(message = "Class name is required")
     private String className;
     private String subject;
     private Date created_at;
